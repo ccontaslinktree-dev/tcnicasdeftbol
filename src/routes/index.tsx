@@ -1,24 +1,675 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import {
+  CheckCircle2,
+  XCircle,
+  ShieldCheck,
+  Zap,
+  Trophy,
+  Target,
+  Users,
+  Clock,
+  Mail,
+  Lock,
+  PlayCircle,
+  Eye,
+  Sparkles,
+  Flame,
+  Star,
+} from "lucide-react";
+import heroProduct from "@/assets/hero-product.png";
+import bonus1 from "@/assets/bonus-1.jpg";
+import bonus2 from "@/assets/bonus-2.jpg";
+import bonus3 from "@/assets/bonus-3.jpg";
+import bonusSurprise from "@/assets/bonus-surprise.png";
+import testimonial1 from "@/assets/testimonial-1.jpg";
+import testimonial2 from "@/assets/testimonial-2.webp";
+import testimonial3 from "@/assets/testimonial-3.webp";
+import testimonial4 from "@/assets/testimonial-4.jpg";
+import previewAsset from "@/assets/preview.mov.asset.json";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const CHECKOUT_URL = "https://pay.hotmart.com/D106764059R?checkoutMode=10";
+
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+function useCountdown(minutes: number) {
+  const [left, setLeft] = useState(minutes * 60);
+  useEffect(() => {
+    const t = setInterval(() => setLeft((s) => (s > 0 ? s - 1 : 0)), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const mm = String(Math.floor(left / 60)).padStart(2, "0");
+  const ss = String(left % 60).padStart(2, "0");
+  return { mm, ss };
+}
+
+function useLiveViewers(base = 1247) {
+  const [n, setN] = useState(base);
+  useEffect(() => {
+    const t = setInterval(() => setN((v) => v + Math.floor(Math.random() * 5 - 2)), 3000);
+    return () => clearInterval(t);
+  }, []);
+  return n;
+}
+
+function eid() {
+  return `evt_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function fireEvent(name: string, value?: number) {
+  if (typeof window === "undefined") return;
+  const event_id = eid();
+  // @ts-expect-error fbq global
+  window.fbq?.("track", name, value ? { value, currency: "USD" } : undefined, {
+    eventID: event_id,
+  });
+  // CAPI relay via edge function (dedup by event_id)
+  const supaUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supaKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  if (!supaUrl || !supaKey) return;
+  const getCookie = (k: string) => {
+    const m = document.cookie.match(new RegExp("(^| )" + k + "=([^;]+)"));
+    return m ? decodeURIComponent(m[2]) : undefined;
+  };
+  fetch(`${supaUrl}/functions/v1/meta-capi`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", apikey: supaKey, Authorization: `Bearer ${supaKey}` },
+    body: JSON.stringify({
+      event_name: name,
+      event_id,
+      event_source_url: window.location.href,
+      user_agent: navigator.userAgent,
+      fbp: getCookie("_fbp"),
+      fbc: getCookie("_fbc"),
+      value,
+      currency: "USD",
+    }),
+    keepalive: true,
+  }).catch(() => {});
+}
+
+function goCheckout(source: string) {
+  fireEvent("InitiateCheckout", 3.9);
+  try {
+    sessionStorage.setItem("cta_source", source);
+  } catch {}
+  window.location.href = CHECKOUT_URL;
+}
+
+const testimonials = [testimonial1, testimonial2, testimonial3, testimonial4];
+
+const faqs = [
+  {
+    q: "¿Cómo recibo el material después de la compra?",
+    a: "Al finalizar la compra recibes inmediatamente por e-mail el acceso a toda la biblioteca digital con los +2.000 ejercicios y los 4 bonos. Sin esperas, sin envíos.",
+  },
+  {
+    q: "¿En qué dispositivos puedo verlo?",
+    a: "Puedes acceder desde móvil, tablet u ordenador — 100% online, en cualquier momento y desde donde quieras.",
+  },
+  {
+    q: "¿Necesito conocimientos previos de fútbol?",
+    a: "No. El método completo está organizado por posición, edad y nivel — desde principiantes hasta jugadores avanzados y entrenadores profesionales.",
+  },
+  {
+    q: "¿Cuánto tiempo tengo acceso al contenido?",
+    a: "Acceso vitalicio. Pagas una sola vez y usas el material organizado siempre que lo necesites, con actualizaciones incluidas.",
+  },
+  {
+    q: "¿Y si no me gusta o no es para mí?",
+    a: "Tienes 7 días completos de garantía incondicional. Si sientes que no es para ti, nos escribes un email y te devolvemos hasta el último céntimo.",
+  },
+  {
+    q: "¿Los ejercicios sirven para entrenadores y jugadores?",
+    a: "Sí. Cada ejercicio incluye la variante para entrenamiento colectivo y también para trabajo individual, con progresión clara.",
+  },
+  {
+    q: "¿El pago es seguro?",
+    a: "Sí. El pago se procesa por Hotmart con cifrado bancario. Aceptamos tarjeta, transferencia y otros medios locales según tu país.",
+  },
+];
+
 function Index() {
+  useEffect(() => {
+    fireEvent("ViewContent");
+  }, []);
+
+  const { mm, ss } = useCountdown(29);
+  const viewers = useLiveViewers();
+  const today = useMemo(() => {
+    const d = new Date();
+    return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
+  }, []);
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] antialiased overflow-x-hidden">
+      {/* Top banner */}
+      <div className="fixed top-0 inset-x-0 z-[90] bg-[#16a34a] text-white text-center font-black uppercase tracking-wide border-b-2 border-[#15803d] py-2.5 px-2 text-[clamp(10px,3vw,15px)]">
+        Descuento Exclusivo Solo Hoy • {today}
+      </div>
+      <div style={{ height: 44 }} />
+
+      {/* HERO */}
+      <section className="px-5 pt-6 pb-8 text-center">
+        <div className="max-w-[1100px] mx-auto">
+          <h1 className="font-black uppercase leading-[1.12] tracking-tight text-[#0a0a0a] mb-6 text-[clamp(22px,5.2vw,48px)]">
+            Domina el Fútbol con{" "}
+            <span className="bg-[#facc15] text-[#0a0a0a] px-2 py-0.5 rounded-md">
+              +2.000 Ejercicios Profesionales
+            </span>{" "}
+            para Jugadores y Entrenadores — Listos para Aplicar en solo 15 Minutos
+          </h1>
+          <p className="text-slate-600 font-medium max-w-[640px] mx-auto mb-7 leading-relaxed text-[clamp(14px,3.6vw,19px)]">
+            Accede a la <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">biblioteca digital</span> completa por{" "}
+            <b className="text-[#0a0a0a]">posición y categoría</b> — método profesional, resultados reales{" "}
+            <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">+ Bonos exclusivos</span>
+          </p>
+
+          <img
+            src={heroProduct}
+            alt="+2.000 Ejercicios de Fútbol"
+            className="mx-auto max-w-[520px] w-full rounded-2xl shadow-2xl"
+            width={1024}
+            height={1536}
+            loading="eager"
+          />
+
+          <button
+            onClick={() => goCheckout("hero")}
+            className="mt-8 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,22px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)] active:scale-[0.98]"
+          >
+            <Flame className="w-6 h-6" /> Quiero Empezar a Entrenar Ahora
+          </button>
+          <p className="mt-3 text-xs text-slate-500 flex items-center justify-center gap-1.5">
+            <Lock className="w-3.5 h-3.5" /> Pago 100% seguro · Acceso inmediato por e-mail
+          </p>
+        </div>
+      </section>
+
+      {/* Urgency badge */}
+      <div className="px-5">
+        <div className="max-w-[720px] mx-auto bg-white border-2 border-[#facc15] rounded-2xl p-4 flex items-center gap-3 shadow-sm">
+          <div className="animate-pulse w-2.5 h-2.5 rounded-full bg-red-500" />
+          <p className="text-sm sm:text-base font-bold text-[#0a0a0a]">
+            🔥 Últimas <span className="text-[#dc2626]">37 plazas</span> del cupo de hoy — {viewers} personas viendo esta oferta ahora
+          </p>
+        </div>
+      </div>
+
+      {/* Includes */}
+      <section className="px-5 py-14">
+        <div className="max-w-[1100px] mx-auto">
+          <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Lo que Incluye tu Kit</p>
+          <h2 className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3">
+            Todo para <span className="text-[#16a34a]">jugar mejor</span>
+          </h2>
+          <p className="text-center text-slate-600 max-w-xl mx-auto mb-10">
+            Un método completo, organizado y profesional. Sin adivinar, sin perder el tiempo.
+          </p>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { i: Trophy, t: "+2.000 ejercicios en vídeo HD", d: "Biblioteca digital completa lista para ver en cualquier dispositivo." },
+              { i: Target, t: "Organizados por posición y categorías", d: "Portero, defensa, mediocampo, delantero — desde Sub-8 hasta Adulto." },
+              { i: Zap, t: "Técnica individual y colectiva", d: "Control, regate, pase y jugadas de conjunto." },
+              { i: Users, t: "Entrenamiento táctico", d: "Sistemas de juego, posicionamiento y jugadas ensayadas." },
+              { i: Flame, t: "Preparación física y prevención", d: "Velocidad, fuerza, resistencia y menos lesiones." },
+              { i: Sparkles, t: "Ejercicios con y sin balón", d: "Rutinas completas para entrenar solo, en pareja o en equipo." },
+              { i: Star, t: "4 Bonos exclusivos incluidos", d: "Materiales extra para acelerar tu evolución." },
+              { i: Mail, t: "Acceso instantáneo por e-mail", d: "Al finalizar la compra recibes al instante toda la biblioteca digital." },
+            ].map(({ i: Icon, t, d }) => (
+              <div key={t} className="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-lg transition-shadow">
+                <div className="w-11 h-11 rounded-xl bg-[#16a34a]/10 text-[#16a34a] flex items-center justify-center mb-3">
+                  <Icon className="w-5 h-5" />
+                </div>
+                <h3 className="font-black text-[15px] leading-snug mb-1">{t}</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">{d}</p>
+              </div>
+            ))}
+          </div>
+
+          <button
+            onClick={() => goCheckout("includes")}
+            className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
+          >
+            Quiero mi Kit Completo Hoy
+          </button>
+        </div>
+      </section>
+
+      {/* Product carousel */}
+      <section className="px-5 py-10 bg-white">
+        <div className="max-w-[1100px] mx-auto">
+          <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">
+            +2.000 Ejercicios Profesionales
+          </p>
+          <h2 className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-8">
+            El <span className="text-[#16a34a]">método completo</span> para evolucionar en el fútbol en{" "}
+            <span className="text-[#16a34a]">un solo lugar</span>
+          </h2>
+          <Carousel className="max-w-2xl mx-auto">
+            <CarouselContent>
+              {[heroProduct, bonus1, bonus2, bonus3].map((src, i) => (
+                <CarouselItem key={i}>
+                  <img src={src} alt={`Vista ${i + 1}`} className="rounded-2xl w-full object-cover" loading="lazy" />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
+          <button
+            onClick={() => goCheckout("carousel")}
+            className="mt-8 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
+          >
+            Desbloquear los Videos
+          </button>
+        </div>
+      </section>
+
+      {/* Video preview with live viewers */}
+      <section className="px-5 py-14">
+        <div className="max-w-[900px] mx-auto text-center">
+          <p className="text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Vista previa exclusiva</p>
+          <h2 className="font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3">
+            Mira los <span className="text-[#16a34a]">entrenamientos</span> que vas a recibir
+          </h2>
+          <p className="text-slate-600 mb-6">Haz clic para ver el vídeo y descubre el método completo 👇</p>
+
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-black">
+            <video
+              src={previewAsset.url}
+              controls
+              playsInline
+              preload="metadata"
+              className="w-full aspect-[3/4] object-cover"
+            />
+            <div className="absolute top-3 left-3 bg-black/70 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+              EN VIVO · <Eye className="w-3.5 h-3.5" /> {viewers} viendo
+            </div>
+          </div>
+
+          <button
+            onClick={() => goCheckout("video")}
+            className="mt-8 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
+          >
+            <PlayCircle className="w-6 h-6" /> Desbloquear los Videos
+          </button>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="px-5 py-14 bg-white">
+        <div className="max-w-[1100px] mx-auto">
+          <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Paso a paso</p>
+          <h2 className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-10">
+            Cómo funciona en <span className="text-[#16a34a]">3 pasos</span>
+          </h2>
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              { n: 1, t: "Accede desde donde quieras", d: "Móvil, tablet u ordenador — 100% online, acceso inmediato tras la compra." },
+              { n: 2, t: "Elige por posición y categoría", d: "Filtra el ejercicio ideal según edad, posición y objetivo del día." },
+              { n: 3, t: "Mira el vídeo y entrena", d: "Sesiones en vídeo HD con material organizado listo para aplicar en el campo." },
+            ].map((s) => (
+              <div key={s.n} className="bg-[#f8fafc] rounded-2xl p-6 border border-slate-200">
+                <div className="w-12 h-12 rounded-full bg-[#16a34a] text-white font-black text-xl flex items-center justify-center mb-4">
+                  {s.n}
+                </div>
+                <h3 className="font-black text-lg mb-1">{s.t}</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">{s.d}</p>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={() => goCheckout("how")}
+            className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
+          >
+            Quiero acceder ahora
+          </button>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="px-5 py-14">
+        <div className="max-w-[1100px] mx-auto">
+          <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Resultados reales</p>
+          <h2 className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3">
+            Mira <span className="text-[#16a34a]">quiénes ya están entrenando</span> con nosotros
+          </h2>
+          <p className="text-center text-slate-600 max-w-xl mx-auto mb-10">
+            Capturas reales de jugadores, entrenadores y padres que transformaron su juego.
+          </p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {testimonials.map((src, i) => (
+              <div key={i} className="rounded-2xl overflow-hidden shadow-md bg-white border border-slate-200">
+                <img src={src} alt={`Testimonio ${i + 1}`} className="w-full h-full object-cover aspect-[3/4]" loading="lazy" />
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={() => goCheckout("testimonials")}
+            className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
+          >
+            Quiero Empezar Ahora Mismo
+          </button>
+        </div>
+      </section>
+
+      {/* 4 Bonus */}
+      <section className="px-5 py-14 bg-white">
+        <div className="max-w-[1100px] mx-auto">
+          <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">
+            🎁 Regalos Exclusivos
+          </p>
+          <h2 className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3">
+            4 <span className="text-[#16a34a]">Bonos</span> por tu compra hoy
+          </h2>
+          <p className="text-center text-slate-600 max-w-xl mx-auto mb-10">
+            Materiales complementarios diseñados para acelerar tus resultados dentro y fuera del campo.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-5">
+            {[
+              { n: "01", t: "Guía de Entrenamiento", d: "Manual completo con planificación semanal y progresión paso a paso.", price: 19, img: bonus1 },
+              { n: "02", t: "50 Ejercicios de Técnica Individual", d: "Ejercicios prácticos para dominar el balón y mejorar tu técnica base.", price: 15, img: bonus2 },
+              { n: "03", t: "Pack de Circuitos de Preparación Física", d: "Circuitos completos para ganar resistencia, fuerza y explosividad.", price: 21, img: bonus3 },
+              { n: "04", t: "Bono Sorpresa Exclusivo", d: "🎁 Un regalo secreto que sólo descubrirás al entrar. Vale la pena, te lo prometemos.", price: 17, img: bonusSurprise },
+            ].map((b) => (
+              <div key={b.n} className="rounded-2xl bg-[#0a0a0a] text-white overflow-hidden border border-[#facc15]/30">
+                <img src={b.img} alt={b.t} className="w-full aspect-[4/3] object-cover" loading="lazy" />
+                <div className="p-5">
+                  <div className="text-xs font-black uppercase tracking-widest text-[#facc15] mb-1">
+                    BONO {b.n}
+                  </div>
+                  <h3 className="font-black text-lg mb-1">{b.t}</h3>
+                  <p className="text-sm text-slate-300 leading-relaxed mb-3">{b.d}</p>
+                  <div className="flex items-center gap-3">
+                    <span className="line-through text-slate-400 font-bold">${b.price}</span>
+                    <span className="bg-[#facc15] text-[#0a0a0a] font-black px-3 py-1 rounded-md text-sm">GRATIS</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-8 text-center">
+            <p className="text-slate-600">Valor total de los bonos <span className="line-through">$72</span></p>
+            <p className="font-black text-2xl mt-1">
+              hoy los recibes <span className="text-[#16a34a]">GRATIS</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Who we are */}
+      <section className="px-5 py-14">
+        <div className="max-w-[900px] mx-auto text-center">
+          <p className="text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Quiénes somos</p>
+          <h2 className="font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-4">
+            Equipo{" "}
+            <span className="text-[#16a34a]">2000 Ejercicios de Fútbol</span> — Metodología que forma jugadores de verdad
+          </h2>
+          <p className="text-slate-600 leading-relaxed max-w-2xl mx-auto mb-4">
+            Somos un equipo apasionado por el fútbol formativo. Reunimos en un solo lugar una biblioteca digital con{" "}
+            <b>+2.000 ejercicios</b> organizados por posición, edad y objetivo — la misma progresión y los mismos
+            vídeos que se aplican en canteras y academias profesionales.
+          </p>
+          <p className="text-slate-600 leading-relaxed max-w-2xl mx-auto mb-8">
+            Sin relleno, sin teoría vacía. Solo material organizado que funciona en el campo, listo para aplicar en solo 15 minutos.
+          </p>
+          <div className="flex justify-center gap-8">
+            <div>
+              <p className="text-3xl font-black text-[#16a34a]">+2.000</p>
+              <p className="text-xs uppercase text-slate-500 font-bold">Ejercicios</p>
+            </div>
+            <div>
+              <p className="text-3xl font-black text-[#16a34a]">100%</p>
+              <p className="text-xs uppercase text-slate-500 font-bold">Digital</p>
+            </div>
+            <div>
+              <p className="text-3xl font-black text-[#16a34a]">15 min</p>
+              <p className="text-xs uppercase text-slate-500 font-bold">Para aplicar</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Offer / pricing */}
+      <section className="px-5 py-14 bg-gradient-to-b from-[#0a0a0a] to-[#0f172a] text-white">
+        <div className="max-w-[720px] mx-auto text-center">
+          <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">🔥 Precio Especial Solo Hoy</p>
+          <h2 className="font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3">
+            Paquete <span className="text-[#facc15]">Completo</span>
+          </h2>
+          <p className="text-slate-300 mb-6">
+            Precio promocional válido solo por hoy. Mañana vuelve al valor normal — no dejes escapar esta oportunidad.
+          </p>
+
+          <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 mb-8">
+            <Clock className="w-4 h-4 text-[#facc15]" />
+            <span className="text-sm">Promoción terminando en</span>
+            <span className="font-mono font-black text-[#facc15]">{mm}:{ss}</span>
+          </div>
+
+          <div className="bg-white text-[#0f172a] rounded-3xl p-6 sm:p-8 text-left shadow-2xl border-4 border-[#facc15]">
+            <div className="bg-[#dc2626] text-white text-xs font-black uppercase tracking-widest inline-block px-3 py-1 rounded-full mb-3">
+              🔥 84% de descuento
+            </div>
+            <h3 className="font-black text-2xl mb-1">Paquete Completo</h3>
+
+            <label className="block text-xs font-bold uppercase text-slate-500 mt-4 mb-1">🌎 Elige tu país</label>
+            <select className="w-full border-2 border-slate-200 rounded-xl px-3 py-2.5 font-semibold bg-white">
+              <option>🇲🇽 México</option>
+              <option>🇨🇴 Colombia</option>
+              <option>🇦🇷 Argentina</option>
+              <option>🇨🇱 Chile</option>
+              <option>🇵🇪 Perú</option>
+              <option>🇧🇷 Brasil</option>
+              <option>🇺🇾 Uruguay</option>
+              <option>🇧🇴 Bolivia</option>
+              <option>🇵🇾 Paraguay</option>
+              <option>🇪🇸 España</option>
+            </select>
+
+            <div className="my-5">
+              <p className="text-slate-500">
+                De <span className="line-through font-bold">$24,90</span> sólo por hoy
+              </p>
+              <p className="font-black text-5xl text-[#16a34a] mt-1">
+                $3,90 <span className="text-2xl">USD</span>
+              </p>
+              <p className="text-sm font-bold text-[#dc2626] mt-1">84% DESCUENTO · Ahorras $21</p>
+            </div>
+
+            <ul className="space-y-2 text-sm">
+              {[
+                "+2.000 ejercicios en vídeo HD",
+                "Todas las posiciones",
+                "Todas las categorías",
+                "Ejercicios técnicos, tácticos y preparación física",
+                "Acceso vitalicio e inmediato por e-mail",
+                "Actualizaciones semanales GRATIS",
+                "Garantía incondicional de 7 días",
+              ].map((li) => (
+                <li key={li} className="flex gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-[#16a34a] flex-shrink-0 mt-0.5" />
+                  <span>{li}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-5 border-t border-slate-200 pt-4">
+              <p className="text-xs font-black uppercase text-slate-500 mb-2">🎁 Bonos exclusivos incluidos</p>
+              {[
+                ["01", "Guía de Entrenamiento"],
+                ["02", "50 Ejercicios de Técnica Individual"],
+                ["03", "Pack de Circuitos de Preparación Física"],
+                ["04", "Bono Sorpresa Exclusivo"],
+              ].map(([n, t]) => (
+                <div key={n} className="flex items-center justify-between text-sm py-1.5 border-b border-slate-100 last:border-0">
+                  <span>
+                    <b>BONO {n}</b> · {t}
+                  </span>
+                  <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md text-xs">GRATIS</span>
+                </div>
+              ))}
+            </div>
+
+            <button
+              onClick={() => goCheckout("offer")}
+              className="mt-6 w-full flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
+            >
+              Quiero el Paquete Completo
+            </button>
+            <p className="mt-3 text-xs text-slate-500 text-center flex items-center justify-center gap-1.5">
+              <Lock className="w-3.5 h-3.5" /> Pago 100% seguro vía tarjeta o transferencia
+            </p>
+            <p className="mt-2 text-xs text-slate-500 text-center">
+              ✅ Acceso inmediato después de la compra — revisa tu e-mail
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Guarantee */}
+      <section className="px-5 py-14 bg-white">
+        <div className="max-w-[900px] mx-auto text-center">
+          <div className="w-40 h-40 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#facc15] to-[#f59e0b] flex items-center justify-center shadow-2xl">
+            <div className="w-32 h-32 rounded-full bg-white flex flex-col items-center justify-center border-4 border-[#facc15]">
+              <ShieldCheck className="w-10 h-10 text-[#16a34a]" />
+              <p className="font-black text-xl leading-none mt-1">7 DÍAS</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Garantía</p>
+            </div>
+          </div>
+          <p className="text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Compra protegida</p>
+          <h2 className="font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-4">
+            Prueba el Kit sin Ningún Riesgo
+          </h2>
+          <p className="text-slate-600 leading-relaxed max-w-2xl mx-auto mb-6">
+            Tienes <b>7 días completos</b> para explorar los +2.000 ejercicios, los 4 bonos y todo el método. Si sientes que no es para ti — por cualquier motivo — nos escribes un email y te devolvemos <b>hasta el último céntimo</b>.
+          </p>
+          <button
+            onClick={() => goCheckout("guarantee")}
+            className="w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
+          >
+            Empezar sin Riesgo
+          </button>
+        </div>
+      </section>
+
+      {/* Comparison */}
+      <section className="px-5 py-14">
+        <div className="max-w-[1100px] mx-auto">
+          <h2 className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-10">
+            La <span className="text-[#16a34a]">diferencia</span> en el campo
+          </h2>
+          <div className="grid md:grid-cols-2 gap-5">
+            <div className="bg-white rounded-2xl p-6 border-2 border-red-200">
+              <p className="font-black uppercase text-red-600 mb-4">Sin el Kit</p>
+              <ul className="space-y-3">
+                {[
+                  "Vídeos sueltos en YouTube, sin orden ni criterio profesional",
+                  "Ejercicios genéricos que no encajan con tu posición ni edad",
+                  "Sin progresión clara: entrenas mucho y avanzas poco",
+                  "Horas planificando cada sesión, con dudas y sin resultados",
+                  "Estancamiento y frustración temporada tras temporada",
+                ].map((t) => (
+                  <li key={t} className="flex gap-2 text-sm text-slate-700">
+                    <XCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" /> {t}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="bg-[#0a0a0a] text-white rounded-2xl p-6 border-2 border-[#16a34a]">
+              <p className="font-black uppercase text-[#facc15] mb-4">Con el Kit</p>
+              <ul className="space-y-3">
+                {[
+                  "Método completo por posición y categoría — todo organizado",
+                  "Ejercicios profesionales listos para aplicar en 15 minutos",
+                  "Progresión clara: ves resultados semana a semana",
+                  "Ahorras horas: la biblioteca digital hace el trabajo por ti",
+                  "Confianza y evolución real dentro y fuera del campo",
+                ].map((t) => (
+                  <li key={t} className="flex gap-2 text-sm">
+                    <CheckCircle2 className="w-5 h-5 text-[#16a34a] flex-shrink-0 mt-0.5" /> {t}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="px-5 py-14 bg-white">
+        <div className="max-w-[820px] mx-auto">
+          <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">FAQ</p>
+          <h2 className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-10">
+            Preguntas <span className="text-[#16a34a]">frecuentes</span>
+          </h2>
+          <Accordion type="single" collapsible className="w-full">
+            {faqs.map((f, i) => (
+              <AccordionItem key={i} value={`item-${i}`} className="border-b border-slate-200">
+                <AccordionTrigger className="text-left font-bold text-base py-4 hover:no-underline">
+                  {f.q}
+                </AccordionTrigger>
+                <AccordionContent className="text-slate-600 leading-relaxed pb-4">{f.a}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+          <button
+            onClick={() => goCheckout("faq")}
+            className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
+          >
+            Quiero mi Kit Completo Hoy
+          </button>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="px-5 py-10 bg-[#0a0a0a] text-slate-400 text-xs leading-relaxed">
+        <div className="max-w-[900px] mx-auto text-center space-y-3">
+          <p className="font-black text-white uppercase tracking-widest">2000 Ejercicios de Fútbol</p>
+          <p>
+            Este sitio no forma parte del sitio web de Facebook o Facebook Inc. Además, este sitio NO está patrocinado
+            por Facebook de ninguna manera. FACEBOOK™ es una marca registrada de FACEBOOK, Inc.
+          </p>
+          <p>
+            Este sitio no forma parte del sitio web de Meta Platforms, Inc. o Instagram. Además, no está patrocinado ni
+            avalado por Meta™ ni Instagram™ de ninguna manera.
+          </p>
+          <p>
+            Los resultados mencionados son ejemplos y no garantizan ganancias o resultados idénticos. Cada persona tiene
+            un compromiso, dedicación y esfuerzo individual.
+          </p>
+          <p className="pt-2">© {new Date().getFullYear()} 2000 Ejercicios de Fútbol · Todos los derechos reservados.</p>
+        </div>
+      </footer>
+
+      {/* Meta Pixel noscript */}
+      <noscript>
+        <img
+          height="1"
+          width="1"
+          style={{ display: "none" }}
+          src="https://www.facebook.com/tr?id=889185807027175&ev=PageView&noscript=1"
+          alt=""
+        />
+      </noscript>
     </div>
   );
 }
