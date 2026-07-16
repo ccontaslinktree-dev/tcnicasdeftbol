@@ -79,17 +79,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "+2.000 Ejercicios de Fútbol — Método Completo para Jugadores y Entrenadores" },
       { name: "description", content: "Accede a +2.000 ejercicios profesionales de fútbol por posición y categoría — método completo listo para aplicar en solo 15 minutos." },
-      { property: "og:title", content: "+2.000 Ejercicios de Fútbol — Método Completo" },
-      { property: "og:description", content: "+2.000 ejercicios profesionales organizados por posición, edad y objetivo. Acceso instantáneo por e-mail." },
+      { property: "og:title", content: "+2.000 Ejercicios de Fútbol — Método Completo para Jugadores y Entrenadores" },
+      { property: "og:description", content: "Accede a +2.000 ejercicios profesionales de fútbol por posición y categoría — método completo listo para aplicar en solo 15 minutos." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "+2.000 Ejercicios de Fútbol — Método Completo para Jugadores y Entrenadores" },
+      { name: "twitter:description", content: "Accede a +2.000 ejercicios profesionales de fútbol por posición y categoría — método completo listo para aplicar en solo 15 minutos." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/44038a08-e049-46f1-8273-eed12814fc04/id-preview-996f82b4--9688cdb4-d0ab-4c73-bd12-0c417c465517.lovable.app-1784181108713.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/44038a08-e049-46f1-8273-eed12814fc04/id-preview-996f82b4--9688cdb4-d0ab-4c73-bd12-0c417c465517.lovable.app-1784181108713.png" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
     scripts: [
       {
