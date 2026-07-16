@@ -551,7 +551,7 @@ function Index() {
       {/* Guarantee */}
       <section className="px-5 py-14 bg-white">
         <div className="max-w-[900px] mx-auto text-center">
-          <div className="w-64 h-64 sm:w-72 sm:h-72 mx-auto mb-6 rounded-full bg-gradient-to-br from-[#facc15] to-[#f59e0b] flex items-center justify-center shadow-[0_20px_60px_-10px_rgba(250,204,21,0.55)] animate-pulse-slow">
+          <div className="w-64 h-64 sm:w-72 sm:h-72 mx-auto mb-6 rounded-full bg-gradient-to-br from-[#facc15] to-[#f59e0b] flex items-center justify-center shadow-[0_20px_60px_-10px_rgba(250,204,21,0.55)] hover:scale-105 transition-transform duration-500">
             <div className="w-56 h-56 sm:w-64 sm:h-64 rounded-full bg-white flex flex-col items-center justify-center border-[6px] border-[#facc15]">
               <ShieldCheck className="w-16 h-16 sm:w-20 sm:h-20 text-[#16a34a]" />
               <p className="font-black text-4xl sm:text-5xl leading-none mt-2">7 DÍAS</p>
