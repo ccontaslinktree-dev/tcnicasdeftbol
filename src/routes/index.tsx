@@ -151,16 +151,12 @@ function Index() {
 
   const { mm, ss } = useCountdown(29);
   const viewers = useLiveViewers();
-  const today = useMemo(() => {
-    const d = new Date();
-    return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
-  }, []);
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] antialiased overflow-x-hidden">
       {/* Top banner */}
       <div className="fixed top-0 inset-x-0 z-[90] bg-[#16a34a] text-white text-center font-black uppercase tracking-wide border-b-2 border-[#15803d] py-2.5 px-2 text-[clamp(10px,3vw,15px)]">
-        Descuento Exclusivo Solo Hoy • {today}
+        Descuento Exclusivo Solo Hoy
       </div>
       <div style={{ height: 44 }} />
 
