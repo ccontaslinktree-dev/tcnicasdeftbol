@@ -120,11 +120,11 @@ const faqs = [
   },
   {
     q: "¿En qué dispositivos puedo verlo?",
-    a: "Puedes acceder desde móvil, tablet u ordenador — 100% online, en cualquier momento y desde donde quieras.",
+    a: "Puedes acceder desde móvil, tablet u ordenador, 100% online, en cualquier momento y desde donde quieras.",
   },
   {
     q: "¿Necesito conocimientos previos de fútbol?",
-    a: "No. El método completo está organizado por posición, edad y nivel — desde principiantes hasta jugadores avanzados y entrenadores profesionales.",
+    a: "No. El método completo está organizado por posición, edad y nivel, desde principiantes hasta jugadores avanzados y entrenadores profesionales.",
   },
   {
     q: "¿Cuánto tiempo tengo acceso al contenido?",
@@ -424,7 +424,7 @@ function Index() {
           <p className="text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Quiénes somos</p>
           <h2 className="font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-4">
             Equipo{" "}
-            <span className="text-[#16a34a]">2000 Ejercicios de Fútbol</span> — Metodología que forma jugadores de verdad
+            <span className="text-[#16a34a]">2000 Ejercicios de Fútbol</span>, Metodología que forma jugadores de verdad
           </h2>
           <p className="text-slate-600 leading-relaxed max-w-2xl mx-auto mb-4">
             Somos un equipo apasionado por el fútbol formativo. Reunimos en un solo lugar una biblioteca digital con{" "}
@@ -542,7 +542,7 @@ function Index() {
               <Lock className="w-3.5 h-3.5" /> Pago 100% seguro vía tarjeta o transferencia
             </p>
             <p className="mt-2 text-xs text-slate-500 text-center">
-              ✅ Acceso inmediato después de la compra — revisa tu e-mail
+              ✅ Acceso inmediato después de la compra, revisa tu e-mail
             </p>
           </div>
         </div>
