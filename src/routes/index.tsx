@@ -434,12 +434,12 @@ function Index() {
           </p>
           <div className="grid sm:grid-cols-2 gap-5">
             {[
-              { n: "01", t: "Guía de Entrenamiento", d: "Manual completo con planificación semanal y progresión paso a paso.", oldPrice: 47, newPrice: 1.9, img: bonus1 },
-              { n: "02", t: "50 Ejercicios de Técnica Individual", d: "Ejercicios prácticos para dominar el balón y mejorar tu técnica base.", oldPrice: 39, newPrice: 1.9, img: bonus2 },
-              { n: "03", t: "Pack de Circuitos de Preparación Física", d: "Circuitos completos para ganar resistencia, fuerza y explosividad.", oldPrice: 49, newPrice: 1.9, img: bonus3 },
-              { n: "04", t: "Bono Sorpresa Exclusivo", d: "🎁 Un regalo secreto que sólo descubrirás al entrar. Vale la pena, te lo prometemos.", oldPrice: 45, newPrice: 1.9, img: bonusSurprise },
+              { n: "01", t: "Guía de Entrenamiento", d: "Manual completo con planificación semanal y progresión paso a paso.", price1: 47, price2: 19, img: bonus1 },
+              { n: "02", t: "50 Ejercicios de Técnica Individual", d: "Ejercicios prácticos para dominar el balón y mejorar tu técnica base.", price1: 39, price2: 17, img: bonus2 },
+              { n: "03", t: "Circuitos de Preparación Física", d: "Circuitos completos para ganar resistencia, fuerza y explosividad.", price1: 49, price2: 21, img: bonus3 },
+              { n: "04", t: "Bono Sorpresa Exclusivo", d: "🎁 Un regalo secreto que solo descubrirás al entrar.", price1: 45, price2: 18, img: bonusSurprise },
             ].map((b) => (
-              <div key={b.n} className="group rounded-2xl bg-[#0a0a0a] text-white overflow-hidden border border-[#facc15]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:border-[#facc15]">
+              <div key={b.n} className="group rounded-2xl bg-[#0a0a0a] text-white overflow-hidden border border-[#facc15]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:border-[#facc15] active:scale-[0.98]">
                 <div className="overflow-hidden">
                   <img src={b.img} alt={b.t} className="w-full aspect-[4/3] object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
                 </div>
@@ -450,9 +450,10 @@ function Index() {
                   <h3 className="font-black text-lg mb-1">{b.t}</h3>
                   <p className="text-sm text-slate-300 leading-relaxed mb-3">{b.d}</p>
                   <div className="flex items-center gap-3 flex-wrap">
-                    <span className="line-through text-slate-400 font-bold">${b.oldPrice}</span>
-                    <span className="bg-[#facc15] text-[#0a0a0a] font-black px-3 py-1.5 rounded-md text-base shadow-lg">
-                      ${b.newPrice} HOY
+                    <span className="line-through text-slate-400 font-bold text-lg">${b.price1}</span>
+                    <span className="line-through text-slate-400 font-bold text-lg">${b.price2}</span>
+                    <span className="bg-[#facc15] text-[#0a0a0a] font-black px-3 py-1.5 rounded-md text-sm shadow-lg uppercase tracking-wide">
+                      Incluido en tu compra
                     </span>
                   </div>
                 </div>
@@ -460,9 +461,9 @@ function Index() {
             ))}
           </div>
           <div className="mt-8 text-center">
-            <p className="text-slate-600">Valor total de los bonos <span className="line-through">$180</span></p>
+            <p className="text-slate-600">Valor real de los bonos <span className="line-through font-bold">$180</span> <span className="line-through font-bold">$75</span></p>
             <p className="font-black text-2xl mt-1">
-              hoy incluidos por <span className="text-[#16a34a]">$0</span> extra
+              hoy <span className="text-[#16a34a]">incluidos en tu pedido</span>
             </p>
           </div>
         </div>
