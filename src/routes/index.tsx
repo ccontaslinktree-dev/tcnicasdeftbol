@@ -371,7 +371,7 @@ function Index() {
             {[
               { n: 1, t: "Accede desde donde quieras", d: "Móvil, tablet u ordenador, 100% online y con acceso inmediato tras la compra." },
               { n: 2, t: "Elige por posición y categoría", d: "Filtra el ejercicio ideal según edad, posición y objetivo del día." },
-              { n: 3, t: "Mira el vídeo y entrena", d: "Sesiones en vídeo HD con material organizado listo para aplicar en el campo." },
+              { n: 3, t: "Abre el material y entrena", d: "Material completo organizado, listo para aplicar directamente en el campo." },
             ].map((s) => (
               <div key={s.n} className="bg-[#f8fafc] rounded-2xl p-6 border border-slate-200">
                 <div className="w-12 h-12 rounded-full bg-[#16a34a] text-white font-black text-xl flex items-center justify-center mb-4">
@@ -383,7 +383,7 @@ function Index() {
             ))}
           </div>
           <button
-            onClick={() => goCheckout("how")}
+            onClick={scrollToOffer}
             className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             Quiero acceder ahora
@@ -414,7 +414,7 @@ function Index() {
             ))}
           </div>
           <button
-            onClick={() => goCheckout("testimonials")}
+            onClick={scrollToOffer}
             className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             Quiero Empezar Ahora Mismo
@@ -436,10 +436,10 @@ function Index() {
           </p>
           <div className="grid sm:grid-cols-2 gap-5">
             {[
-              { n: "01", t: "Guía de Entrenamiento", d: "Manual completo con planificación semanal y progresión paso a paso.", price: 19, img: bonus1 },
-              { n: "02", t: "50 Ejercicios de Técnica Individual", d: "Ejercicios prácticos para dominar el balón y mejorar tu técnica base.", price: 15, img: bonus2 },
-              { n: "03", t: "Pack de Circuitos de Preparación Física", d: "Circuitos completos para ganar resistencia, fuerza y explosividad.", price: 21, img: bonus3 },
-              { n: "04", t: "Bono Sorpresa Exclusivo", d: "🎁 Un regalo secreto que sólo descubrirás al entrar. Vale la pena, te lo prometemos.", price: 17, img: bonusSurprise },
+              { n: "01", t: "Guía de Entrenamiento", d: "Manual completo con planificación semanal y progresión paso a paso.", oldPrice: 47, newPrice: 1.9, img: bonus1 },
+              { n: "02", t: "50 Ejercicios de Técnica Individual", d: "Ejercicios prácticos para dominar el balón y mejorar tu técnica base.", oldPrice: 39, newPrice: 1.9, img: bonus2 },
+              { n: "03", t: "Pack de Circuitos de Preparación Física", d: "Circuitos completos para ganar resistencia, fuerza y explosividad.", oldPrice: 49, newPrice: 1.9, img: bonus3 },
+              { n: "04", t: "Bono Sorpresa Exclusivo", d: "🎁 Un regalo secreto que sólo descubrirás al entrar. Vale la pena, te lo prometemos.", oldPrice: 45, newPrice: 1.9, img: bonusSurprise },
             ].map((b) => (
               <div key={b.n} className="group rounded-2xl bg-[#0a0a0a] text-white overflow-hidden border border-[#facc15]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:border-[#facc15]">
                 <div className="overflow-hidden">
@@ -451,18 +451,20 @@ function Index() {
                   </div>
                   <h3 className="font-black text-lg mb-1">{b.t}</h3>
                   <p className="text-sm text-slate-300 leading-relaxed mb-3">{b.d}</p>
-                  <div className="flex items-center gap-3">
-                    <span className="line-through text-slate-400 font-bold">${b.price}</span>
-                    <span className="bg-[#facc15] text-[#0a0a0a] font-black px-3 py-1 rounded-md text-sm">GRATIS</span>
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="line-through text-slate-400 font-bold">${b.oldPrice}</span>
+                    <span className="bg-[#facc15] text-[#0a0a0a] font-black px-3 py-1.5 rounded-md text-base shadow-lg">
+                      ${b.newPrice} HOY
+                    </span>
                   </div>
                 </div>
               </div>
             ))}
           </div>
           <div className="mt-8 text-center">
-            <p className="text-slate-600">Valor total de los bonos <span className="line-through">$72</span></p>
+            <p className="text-slate-600">Valor total de los bonos <span className="line-through">$180</span></p>
             <p className="font-black text-2xl mt-1">
-              hoy los recibes <span className="text-[#16a34a]">GRATIS</span>
+              hoy incluidos por <span className="text-[#16a34a]">$0</span> extra
             </p>
           </div>
         </div>
@@ -482,47 +484,48 @@ function Index() {
             vídeos que se aplican en canteras y academias profesionales.
           </p>
           <p className="text-slate-600 leading-relaxed max-w-2xl mx-auto mb-8">
-            Sin relleno, sin teoría vacía. Solo material organizado que funciona en el campo, listo para aplicar en solo 15 minutos.
+            Sin relleno, sin teoría vacía. Solo material organizado que funciona en el campo, listo para aplicar.
           </p>
           <div className="flex justify-center gap-8">
             <div>
               <p className="text-3xl font-black text-[#16a34a]">+2.000</p>
-              <p className="text-xs uppercase text-slate-500 font-bold">Ejercicios</p>
+              <p className="text-xs uppercase text-slate-500 font-bold">Entrenamientos</p>
             </div>
             <div>
               <p className="text-3xl font-black text-[#16a34a]">100%</p>
-              <p className="text-xs uppercase text-slate-500 font-bold">Digital</p>
+              <p className="text-xs uppercase text-slate-500 font-bold">Organizado</p>
             </div>
             <div>
-              <p className="text-3xl font-black text-[#16a34a]">15 min</p>
-              <p className="text-xs uppercase text-slate-500 font-bold">Para aplicar</p>
+              <p className="text-3xl font-black text-[#16a34a]">24/7</p>
+              <p className="text-xs uppercase text-slate-500 font-bold">Acceso inmediato</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Offer / pricing */}
-      <section className="px-5 py-14 bg-gradient-to-b from-[#0a0a0a] to-[#0f172a] text-white">
+      <section id="oferta" className="px-5 py-14 bg-gradient-to-b from-[#0a0a0a] to-[#0f172a] text-white scroll-mt-16">
         <div className="max-w-[720px] mx-auto text-center">
           <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">🔥 Precio Especial Solo Hoy</p>
           <h2 className="font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3">
-            Paquete <span className="text-[#facc15]">Completo</span>
+            Elige tu paquete y <span className="text-[#facc15]">empieza ahora</span>
           </h2>
           <p className="text-slate-300 mb-6">
-            Precio promocional válido solo por hoy. Mañana vuelve al valor normal, no dejes escapar esta oportunidad.
+            Precio promocional válido <b className="text-white">solo por hoy</b>. Mañana vuelve al valor normal, no dejes escapar esta oportunidad.
           </p>
 
-          <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 mb-8">
-            <Clock className="w-4 h-4 text-[#facc15]" />
-            <span className="text-sm">Promoción terminando en</span>
-            <span className="font-mono font-black text-[#facc15]">{mm}:{ss}</span>
+          <div className="inline-flex items-center gap-2 bg-red-600/20 border-2 border-red-500 rounded-full px-5 py-2.5 mb-8 animate-pulse">
+            <Clock className="w-5 h-5 text-red-400" />
+            <span className="text-sm font-bold">⏰ ¡Promoción terminando! Acaba en</span>
+            <span className="font-mono font-black text-red-400 text-lg">{mm}:{ss}</span>
           </div>
 
           <div className="bg-white text-[#0f172a] rounded-3xl p-6 sm:p-8 text-left shadow-2xl border-4 border-[#facc15]">
             <div className="bg-[#dc2626] text-white text-xs font-black uppercase tracking-widest inline-block px-3 py-1 rounded-full mb-3">
-              🔥 84% de descuento
+              🔥 ¡84% DE DESCUENTO!
             </div>
-            <h3 className="font-black text-2xl mb-1">Paquete Completo</h3>
+            <h3 className="font-black text-2xl mb-1">Paquete Premium</h3>
+            <p className="text-sm text-slate-500">+2.000 entrenamientos + 4 bonos exclusivos</p>
 
             <label className="block text-xs font-bold uppercase text-slate-500 mt-4 mb-1">🌎 Elige tu país</label>
             <select className="w-full border-2 border-slate-200 rounded-xl px-3 py-2.5 font-semibold bg-white">
@@ -546,14 +549,15 @@ function Index() {
                 $3,90 <span className="text-2xl">USD</span>
               </p>
               <p className="text-sm font-bold text-[#dc2626] mt-1">84% DESCUENTO · Ahorras $21</p>
+              <p className="text-xs text-slate-500 mt-2">✅ Pago único · Acceso vitalicio</p>
             </div>
 
             <ul className="space-y-2 text-sm">
               {[
-                "+2.000 ejercicios en vídeo HD",
+                "+2.000 entrenamientos organizados",
                 "Todas las posiciones",
                 "Todas las categorías",
-                "Ejercicios técnicos, tácticos y preparación física",
+                "Entrenamientos técnicos, tácticos y preparación física",
                 "Acceso vitalicio e inmediato por e-mail",
                 "Actualizaciones semanales GRATIS",
                 "Garantía incondicional de 7 días",
@@ -568,31 +572,34 @@ function Index() {
             <div className="mt-5 border-t border-slate-200 pt-4">
               <p className="text-xs font-black uppercase text-slate-500 mb-2">🎁 Bonos exclusivos incluidos</p>
               {[
-                ["01", "Guía de Entrenamiento"],
-                ["02", "50 Ejercicios de Técnica Individual"],
-                ["03", "Pack de Circuitos de Preparación Física"],
-                ["04", "Bono Sorpresa Exclusivo"],
-              ].map(([n, t]) => (
-                <div key={n} className="flex items-center justify-between text-sm py-1.5 border-b border-slate-100 last:border-0">
-                  <span>
+                ["01", "Guía de Entrenamiento", 47],
+                ["02", "50 Ejercicios de Técnica Individual", 39],
+                ["03", "Pack de Circuitos de Preparación Física", 49],
+                ["04", "Bono Sorpresa Exclusivo", 45],
+              ].map(([n, t, p]) => (
+                <div key={n as string} className="flex items-center justify-between text-sm py-1.5 border-b border-slate-100 last:border-0 gap-2">
+                  <span className="min-w-0">
                     <b>BONO {n}</b> · {t}
                   </span>
-                  <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md text-xs">GRATIS</span>
+                  <span className="shrink-0 flex items-center gap-2">
+                    <span className="line-through text-slate-400 text-xs">${p}</span>
+                    <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md text-xs">INCLUIDO</span>
+                  </span>
                 </div>
               ))}
             </div>
 
             <button
               onClick={() => goCheckout("offer")}
-              className="mt-6 w-full flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
+              className="mt-6 w-full flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-all hover:scale-[1.02] text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)] animate-pulse"
             >
-              Quiero el Paquete Completo
+              Quiero el Paquete Premium
             </button>
             <p className="mt-3 text-xs text-slate-500 text-center flex items-center justify-center gap-1.5">
               <Lock className="w-3.5 h-3.5" /> Pago 100% seguro vía tarjeta o transferencia
             </p>
             <p className="mt-2 text-xs text-slate-500 text-center">
-              ✅ Acceso inmediato después de la compra, revisa tu e-mail
+              ✅ Acceso inmediato después de la compra! ¿Finalizaste el pedido? Revisa tu e-mail y accede ahora mismo.
             </p>
           </div>
         </div>
@@ -616,7 +623,7 @@ function Index() {
             Tienes <b>7 días completos</b> para explorar los +2.000 ejercicios, los 4 bonos y todo el método. Si sientes que no es para ti, por cualquier motivo, nos escribes un email y te devolvemos <b>hasta el último céntimo</b>.
           </p>
           <button
-            onClick={() => goCheckout("guarantee")}
+            onClick={scrollToOffer}
             className="w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             Empezar sin Riesgo
@@ -652,9 +659,9 @@ function Index() {
               <ul className="space-y-3">
                 {[
                   "Método completo por posición y categoría, todo organizado",
-                  "Ejercicios profesionales listos para aplicar en 15 minutos",
+                  "Entrenamientos profesionales listos para aplicar hoy mismo",
                   "Progresión clara: ves resultados semana a semana",
-                  "Ahorras horas: la biblioteca digital hace el trabajo por ti",
+                  "Ahorras horas: la biblioteca organizada hace el trabajo por ti",
                   "Confianza y evolución real dentro y fuera del campo",
                 ].map((t) => (
                   <li key={t} className="flex gap-2 text-sm">
@@ -685,7 +692,7 @@ function Index() {
             ))}
           </Accordion>
           <button
-            onClick={() => goCheckout("faq")}
+            onClick={scrollToOffer}
             className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             Quiero mi Kit Completo Hoy
