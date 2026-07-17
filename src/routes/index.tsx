@@ -40,6 +40,12 @@ import testimonial2 from "@/assets/testimonial-2.webp";
 import testimonial3 from "@/assets/testimonial-3.webp";
 import testimonial4 from "@/assets/testimonial-4.jpg";
 import previewAsset from "@/assets/preview.mov.asset.json";
+import featFisico from "@/assets/feature-fisico.jpg";
+import featTactico from "@/assets/feature-tactico.jpg";
+import featDribles from "@/assets/feature-dribles.jpg";
+import featAgilidad from "@/assets/feature-agilidad.jpg";
+import featChutes from "@/assets/feature-chutes.jpg";
+import featPasses from "@/assets/feature-passes.jpg";
 
 const CHECKOUT_URL = "https://pay.hotmart.com/D106764059R?checkoutMode=10";
 
