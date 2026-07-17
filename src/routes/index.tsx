@@ -284,7 +284,7 @@ function Index() {
           <h2 className="font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3">
             Descubre la <span className="text-[#16a34a]">biblioteca</span> que vas a recibir
           </h2>
-          <p className="text-slate-600 mb-6">Un adelanto de la biblioteca completa de entrenamientos que tendrás disponible 👇</p>
+          <p className="text-slate-600 mb-6">Un adelanto real del material completo que tendrás organizado y listo para aplicar 👇</p>
 
           <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-black">
             <video
@@ -301,10 +301,61 @@ function Index() {
           </div>
 
           <button
-            onClick={() => goCheckout("video")}
+            onClick={scrollToOffer}
             className="mt-8 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             <PlayCircle className="w-6 h-6" /> Desbloquear la Biblioteca Completa
+          </button>
+        </div>
+      </section>
+
+      {/* What you get - scrolling marquee */}
+      <section className="py-14 bg-[#0a0a0a] text-white overflow-hidden">
+        <div className="max-w-[1100px] mx-auto px-5 text-center mb-8">
+          <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">Lo que vas a recibir</p>
+          <h2 className="font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3">
+            +2.000 entrenamientos <span className="text-[#facc15]">organizados</span> para aplicar hoy mismo
+          </h2>
+          <p className="text-slate-300 max-w-2xl mx-auto">
+            Físicos, tácticos, dribles, agilidad, estrategias, pases, chutes y mucho más. Todo listo, sin adivinar.
+          </p>
+        </div>
+
+        <div className="relative w-full">
+          <div className="flex gap-4 animate-[marquee_35s_linear_infinite] hover:[animation-play-state:paused] w-max">
+            {[
+              { img: featFisico, t: "Entrenamientos Físicos" },
+              { img: featTactico, t: "Tácticas y Estrategias" },
+              { img: featDribles, t: "Dribles y Regates" },
+              { img: featAgilidad, t: "Agilidad y Velocidad" },
+              { img: featChutes, t: "Chutes y Definición" },
+              { img: featPasses, t: "Pases y Juego Colectivo" },
+              { img: featFisico, t: "Entrenamientos Físicos" },
+              { img: featTactico, t: "Tácticas y Estrategias" },
+              { img: featDribles, t: "Dribles y Regates" },
+              { img: featAgilidad, t: "Agilidad y Velocidad" },
+              { img: featChutes, t: "Chutes y Definición" },
+              { img: featPasses, t: "Pases y Juego Colectivo" },
+            ].map((f, i) => (
+              <div
+                key={i}
+                className="relative shrink-0 w-[240px] sm:w-[280px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border-2 border-[#facc15]/30"
+              >
+                <img src={f.img} alt={f.t} className="w-full h-full object-cover" loading="lazy" />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/70 to-transparent p-4">
+                  <p className="font-black text-white text-sm sm:text-base uppercase tracking-wide">{f.t}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="max-w-[900px] mx-auto px-5 mt-10 text-center">
+          <button
+            onClick={scrollToOffer}
+            className="w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#facc15] hover:bg-[#eab308] transition-colors text-[#0a0a0a] font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(250,204,21,0.55)]"
+          >
+            Quiero acceso ahora
           </button>
         </div>
       </section>
