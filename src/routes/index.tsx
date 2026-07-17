@@ -117,6 +117,12 @@ function goCheckout(source: string) {
   window.location.href = CHECKOUT_URL;
 }
 
+function scrollToOffer() {
+  if (typeof document === "undefined") return;
+  const el = document.getElementById("oferta");
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 const testimonials = [testimonial1, testimonial2, testimonial3, testimonial4];
 
 const faqs = [
