@@ -35,6 +35,7 @@ import bonus1 from "@/assets/bonus-1.jpg";
 import bonus2 from "@/assets/bonus-2.jpg";
 import bonus3 from "@/assets/bonus-3.jpg";
 import bonusSurprise from "@/assets/bonus-surprise.png";
+import methodList from "@/assets/method-list.jpg";
 import testimonial1 from "@/assets/testimonial-1.jpg";
 import testimonial2 from "@/assets/testimonial-2.webp";
 import testimonial3 from "@/assets/testimonial-3.webp";
@@ -110,7 +111,7 @@ function fireEvent(name: string, value?: number) {
 }
 
 function goCheckout(source: string) {
-  fireEvent("InitiateCheckout", 3.9);
+  fireEvent("InitiateCheckout", 5);
   try {
     sessionStorage.setItem("cta_source", source);
   } catch {}
