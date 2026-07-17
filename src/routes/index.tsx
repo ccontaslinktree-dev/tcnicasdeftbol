@@ -131,7 +131,7 @@ const faqs = [
     a: "Al finalizar la compra recibes inmediatamente por e-mail el acceso a toda la biblioteca digital con los +2.000 ejercicios y los 4 bonos. Sin esperas, sin envíos.",
   },
   {
-    q: "¿En qué dispositivos puedo verlo?",
+    q: "¿En qué dispositivos puedo acceder?",
     a: "Puedes acceder desde móvil, tablet u ordenador, 100% online, en cualquier momento y desde donde quieras.",
   },
   {
