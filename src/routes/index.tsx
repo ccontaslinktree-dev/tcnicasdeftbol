@@ -178,19 +178,19 @@ function Index() {
           <h1 className="font-black uppercase leading-[1.12] tracking-tight text-[#0a0a0a] mb-6 text-[clamp(22px,5.2vw,48px)]">
             Domina el Fútbol con{" "}
             <span className="bg-[#facc15] text-[#0a0a0a] px-2 py-0.5 rounded-md">
-              +2.000 Ejercicios Profesionales
+              +2.000 Entrenamientos Profesionales
             </span>{" "}
-            para Jugadores y Entrenadores, Listos para Aplicar en solo 15 Minutos
+            organizados para Jugadores y Entrenadores, listos para aplicar
           </h1>
           <p className="text-slate-600 font-medium max-w-[640px] mx-auto mb-7 leading-relaxed text-[clamp(14px,3.6vw,19px)]">
-            Accede a la <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">biblioteca digital</span> completa por{" "}
-            <b className="text-[#0a0a0a]">posición y categoría</b>, método profesional, resultados reales{" "}
-            <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">+ Bonos exclusivos</span>
+            Accede a la <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">biblioteca completa</span> organizada por{" "}
+            <b className="text-[#0a0a0a]">posición y categoría</b>, método profesional, acceso inmediato{" "}
+            <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">+ 4 Bonos exclusivos</span>
           </p>
 
           <img
             src={heroProduct}
-            alt="+2.000 Ejercicios de Fútbol"
+            alt="+2.000 Entrenamientos de Fútbol"
             className="mx-auto max-w-[520px] w-full rounded-2xl shadow-2xl transition-transform duration-500 hover:scale-[1.03] hover:-rotate-1"
             width={1024}
             height={1536}
@@ -225,14 +225,14 @@ function Index() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { i: Trophy, t: "+2.000 ejercicios en vídeo HD", d: "Biblioteca digital completa lista para ver en cualquier dispositivo." },
+              { i: Trophy, t: "+2.000 entrenamientos organizados", d: "Biblioteca completa lista para acceder desde cualquier dispositivo." },
               { i: Target, t: "Organizados por posición y categorías", d: "Portero, defensa, mediocampo y delantero, desde Sub-8 hasta Adulto." },
               { i: Zap, t: "Técnica individual y colectiva", d: "Control, regate, pase y jugadas de conjunto." },
               { i: Users, t: "Entrenamiento táctico", d: "Sistemas de juego, posicionamiento y jugadas ensayadas." },
               { i: Flame, t: "Preparación física y prevención", d: "Velocidad, fuerza, resistencia y menos lesiones." },
               { i: Sparkles, t: "Ejercicios con y sin balón", d: "Rutinas completas para entrenar solo, en pareja o en equipo." },
               { i: Star, t: "4 Bonos exclusivos incluidos", d: "Materiales extra para acelerar tu evolución." },
-              { i: Mail, t: "Acceso instantáneo por e-mail", d: "Al finalizar la compra recibes al instante toda la biblioteca digital." },
+              { i: Mail, t: "Acceso instantáneo por e-mail", d: "Al finalizar la compra recibes al instante toda la biblioteca." },
             ].map(({ i: Icon, t, d }) => (
               <div key={t} className="group bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl hover:-translate-y-1 hover:border-[#16a34a]/40 transition-all duration-300">
                 <div className="w-11 h-11 rounded-xl bg-[#16a34a]/10 text-[#16a34a] flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-[#16a34a] group-hover:text-white transition-all duration-300">
@@ -243,13 +243,6 @@ function Index() {
               </div>
             ))}
           </div>
-
-          <button
-            onClick={() => goCheckout("includes")}
-            className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
-          >
-            Quiero mi Kit Completo Hoy
-          </button>
         </div>
       </section>
 
@@ -257,7 +250,7 @@ function Index() {
       <section className="px-5 py-10 bg-white">
         <div className="max-w-[1100px] mx-auto">
           <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">
-            +2.000 Ejercicios Profesionales
+            +2.000 Entrenamientos Profesionales
           </p>
           <h2 className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-8">
             El <span className="text-[#16a34a]">método completo</span> para evolucionar en el fútbol en{" "}
@@ -281,12 +274,6 @@ function Index() {
             <CarouselPrevious />
             <CarouselNext />
           </Carousel>
-          <button
-            onClick={() => goCheckout("carousel")}
-            className="mt-8 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
-          >
-            Desbloquear los Videos
-          </button>
         </div>
       </section>
 
