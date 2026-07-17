@@ -521,7 +521,7 @@ function Index() {
 
           <div className="bg-white text-[#0f172a] rounded-3xl p-6 sm:p-8 text-left shadow-2xl border-4 border-[#facc15]">
             <div className="bg-[#dc2626] text-white text-xs font-black uppercase tracking-widest inline-block px-3 py-1 rounded-full mb-3">
-              🔥 ¡84% DE DESCUENTO!
+              🔥 ¡83% DE DESCUENTO!
             </div>
             <h3 className="font-black text-2xl mb-1">Paquete Premium</h3>
             <p className="text-sm text-slate-500">+2.000 entrenamientos + 4 bonos exclusivos</p>
