@@ -35,6 +35,7 @@ import bonus1 from "@/assets/bonus-1.jpg";
 import bonus2 from "@/assets/bonus-2.jpg";
 import bonus3 from "@/assets/bonus-3.jpg";
 import bonusSurprise from "@/assets/bonus-surprise.png";
+import methodList from "@/assets/method-list.jpg";
 import testimonial1 from "@/assets/testimonial-1.jpg";
 import testimonial2 from "@/assets/testimonial-2.webp";
 import testimonial3 from "@/assets/testimonial-3.webp";
@@ -110,7 +111,7 @@ function fireEvent(name: string, value?: number) {
 }
 
 function goCheckout(source: string) {
-  fireEvent("InitiateCheckout", 3.9);
+  fireEvent("InitiateCheckout", 5);
   try {
     sessionStorage.setItem("cta_source", source);
   } catch {}
@@ -212,59 +213,107 @@ function Index() {
         </div>
       </div>
 
+      {/* What you get - scrolling marquee (moved up as 3rd section) */}
+      <section className="py-12 sm:py-14 bg-[#0a0a0a] text-white overflow-hidden mt-10">
+        <div className="max-w-[1100px] mx-auto px-5 text-center mb-6 sm:mb-8">
+          <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">Lo que vas a recibir</p>
+          <h2 className="font-black uppercase text-[clamp(24px,5vw,40px)] leading-tight mb-3">
+            +2.000 entrenamientos <span className="text-[#facc15]">organizados</span> para aplicar hoy
+          </h2>
+          <p className="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base">
+            Físicos, tácticos, dribles, agilidad, chutes, pases y mucho más.
+          </p>
+        </div>
+
+        <div className="relative w-full">
+          <div className="flex gap-4 animate-[marquee_35s_linear_infinite] hover:[animation-play-state:paused] w-max">
+            {[
+              { img: featFisico, t: "Entrenamientos Físicos" },
+              { img: featTactico, t: "Tácticas y Estrategias" },
+              { img: featDribles, t: "Dribles y Regates" },
+              { img: featAgilidad, t: "Agilidad y Velocidad" },
+              { img: featChutes, t: "Chutes y Definición" },
+              { img: featPasses, t: "Pases y Juego Colectivo" },
+              { img: featFisico, t: "Entrenamientos Físicos" },
+              { img: featTactico, t: "Tácticas y Estrategias" },
+              { img: featDribles, t: "Dribles y Regates" },
+              { img: featAgilidad, t: "Agilidad y Velocidad" },
+              { img: featChutes, t: "Chutes y Definición" },
+              { img: featPasses, t: "Pases y Juego Colectivo" },
+            ].map((f, i) => (
+              <div
+                key={i}
+                className="relative shrink-0 w-[200px] sm:w-[280px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border-2 border-[#facc15]/30 transition-transform duration-300 hover:scale-105 active:scale-95"
+              >
+                <img src={f.img} alt={f.t} className="w-full h-full object-cover" loading="lazy" />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/70 to-transparent p-3 sm:p-4">
+                  <p className="font-black text-white text-xs sm:text-base uppercase tracking-wide">{f.t}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="max-w-[900px] mx-auto px-5 mt-8 sm:mt-10 text-center">
+          <button
+            onClick={scrollToOffer}
+            className="w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[clamp(15px,4vw,20px)] py-4 sm:py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(250,204,21,0.55)]"
+          >
+            Quiero acceso ahora
+          </button>
+        </div>
+      </section>
+
       {/* Includes */}
-      <section className="px-5 py-14">
+      <section className="px-5 py-12 sm:py-14">
         <div className="max-w-[1100px] mx-auto">
           <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Lo que Incluye tu Kit</p>
-          <h2 className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3">
+          <h2 className="text-center font-black uppercase text-[clamp(24px,5vw,40px)] leading-tight mb-3">
             Todo para <span className="text-[#16a34a]">jugar mejor</span>
           </h2>
-          <p className="text-center text-slate-600 max-w-xl mx-auto mb-10">
-            Un método completo, organizado y profesional. Sin adivinar, sin perder el tiempo.
+          <p className="text-center text-slate-600 max-w-xl mx-auto mb-8 sm:mb-10 text-sm sm:text-base">
+            Método completo, organizado y profesional.
           </p>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {[
               { i: Trophy, t: "+2.000 entrenamientos organizados", d: "Biblioteca completa lista para acceder desde cualquier dispositivo." },
               { i: Target, t: "Organizados por posición y categorías", d: "Portero, defensa, mediocampo y delantero, desde Sub-8 hasta Adulto." },
               { i: Zap, t: "Técnica individual y colectiva", d: "Control, regate, pase y jugadas de conjunto." },
-              { i: Users, t: "Entrenamiento táctico", d: "Sistemas de juego, posicionamiento y jugadas ensayadas." },
               { i: Flame, t: "Preparación física y prevención", d: "Velocidad, fuerza, resistencia y menos lesiones." },
-              { i: Sparkles, t: "Ejercicios con y sin balón", d: "Rutinas completas para entrenar solo, en pareja o en equipo." },
               { i: Star, t: "4 Bonos exclusivos incluidos", d: "Materiales extra para acelerar tu evolución." },
               { i: Mail, t: "Acceso instantáneo por e-mail", d: "Al finalizar la compra recibes al instante toda la biblioteca." },
             ].map(({ i: Icon, t, d }) => (
-              <div key={t} className="group bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl hover:-translate-y-1 hover:border-[#16a34a]/40 transition-all duration-300">
-                <div className="w-11 h-11 rounded-xl bg-[#16a34a]/10 text-[#16a34a] flex items-center justify-center mb-3 group-hover:scale-110 group-hover:bg-[#16a34a] group-hover:text-white transition-all duration-300">
+              <div key={t} className="group bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] hover:border-[#16a34a]/40 transition-all duration-300">
+                <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#16a34a]/10 text-[#16a34a] flex items-center justify-center mb-2 sm:mb-3 group-hover:scale-110 group-hover:bg-[#16a34a] group-hover:text-white transition-all duration-300">
                   <Icon className="w-5 h-5" />
                 </div>
-                <h3 className="font-black text-[15px] leading-snug mb-1">{t}</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">{d}</p>
+                <h3 className="font-black text-[13px] sm:text-[15px] leading-snug mb-1">{t}</h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{d}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Product carousel */}
-      <section className="px-5 py-10 bg-white">
+      {/* Product carousel - method visual */}
+      <section className="px-5 py-10 sm:py-12 bg-white">
         <div className="max-w-[1100px] mx-auto">
           <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">
             +2.000 Entrenamientos Profesionales
           </p>
-          <h2 className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-8">
-            El <span className="text-[#16a34a]">método completo</span> para evolucionar en el fútbol en{" "}
-            <span className="text-[#16a34a]">un solo lugar</span>
+          <h2 className="text-center font-black uppercase text-[clamp(24px,5vw,40px)] leading-tight mb-6 sm:mb-8">
+            El <span className="text-[#16a34a]">método completo</span> en un solo lugar
           </h2>
           <Carousel className="max-w-2xl mx-auto">
             <CarouselContent>
-              {[heroProduct, bonus1, bonus2, bonus3].map((src, i) => (
+              {[methodList, bonus1, bonus2, bonus3].map((src, i) => (
                 <CarouselItem key={i}>
-                  <div className="overflow-hidden rounded-2xl">
+                  <div className="overflow-hidden rounded-2xl bg-white">
                     <img
                       src={src}
                       alt={`Vista ${i + 1}`}
-                      className="w-full object-cover transition-transform duration-500 hover:scale-[1.06]"
+                      className="w-full object-contain sm:object-cover transition-transform duration-500 hover:scale-[1.06] active:scale-95"
                       loading="lazy"
                     />
                   </div>
@@ -305,57 +354,6 @@ function Index() {
             className="mt-8 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             <PlayCircle className="w-6 h-6" /> Desbloquear la Biblioteca Completa
-          </button>
-        </div>
-      </section>
-
-      {/* What you get - scrolling marquee */}
-      <section className="py-14 bg-[#0a0a0a] text-white overflow-hidden">
-        <div className="max-w-[1100px] mx-auto px-5 text-center mb-8">
-          <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">Lo que vas a recibir</p>
-          <h2 className="font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3">
-            +2.000 entrenamientos <span className="text-[#facc15]">organizados</span> para aplicar hoy mismo
-          </h2>
-          <p className="text-slate-300 max-w-2xl mx-auto">
-            Físicos, tácticos, dribles, agilidad, estrategias, pases, chutes y mucho más. Todo listo, sin adivinar.
-          </p>
-        </div>
-
-        <div className="relative w-full">
-          <div className="flex gap-4 animate-[marquee_35s_linear_infinite] hover:[animation-play-state:paused] w-max">
-            {[
-              { img: featFisico, t: "Entrenamientos Físicos" },
-              { img: featTactico, t: "Tácticas y Estrategias" },
-              { img: featDribles, t: "Dribles y Regates" },
-              { img: featAgilidad, t: "Agilidad y Velocidad" },
-              { img: featChutes, t: "Chutes y Definición" },
-              { img: featPasses, t: "Pases y Juego Colectivo" },
-              { img: featFisico, t: "Entrenamientos Físicos" },
-              { img: featTactico, t: "Tácticas y Estrategias" },
-              { img: featDribles, t: "Dribles y Regates" },
-              { img: featAgilidad, t: "Agilidad y Velocidad" },
-              { img: featChutes, t: "Chutes y Definición" },
-              { img: featPasses, t: "Pases y Juego Colectivo" },
-            ].map((f, i) => (
-              <div
-                key={i}
-                className="relative shrink-0 w-[240px] sm:w-[280px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border-2 border-[#facc15]/30"
-              >
-                <img src={f.img} alt={f.t} className="w-full h-full object-cover" loading="lazy" />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/70 to-transparent p-4">
-                  <p className="font-black text-white text-sm sm:text-base uppercase tracking-wide">{f.t}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="max-w-[900px] mx-auto px-5 mt-10 text-center">
-          <button
-            onClick={scrollToOffer}
-            className="w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#facc15] hover:bg-[#eab308] transition-colors text-[#0a0a0a] font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(250,204,21,0.55)]"
-          >
-            Quiero acceso ahora
           </button>
         </div>
       </section>
@@ -436,12 +434,12 @@ function Index() {
           </p>
           <div className="grid sm:grid-cols-2 gap-5">
             {[
-              { n: "01", t: "Guía de Entrenamiento", d: "Manual completo con planificación semanal y progresión paso a paso.", oldPrice: 47, newPrice: 1.9, img: bonus1 },
-              { n: "02", t: "50 Ejercicios de Técnica Individual", d: "Ejercicios prácticos para dominar el balón y mejorar tu técnica base.", oldPrice: 39, newPrice: 1.9, img: bonus2 },
-              { n: "03", t: "Pack de Circuitos de Preparación Física", d: "Circuitos completos para ganar resistencia, fuerza y explosividad.", oldPrice: 49, newPrice: 1.9, img: bonus3 },
-              { n: "04", t: "Bono Sorpresa Exclusivo", d: "🎁 Un regalo secreto que sólo descubrirás al entrar. Vale la pena, te lo prometemos.", oldPrice: 45, newPrice: 1.9, img: bonusSurprise },
+              { n: "01", t: "Guía de Entrenamiento", d: "Manual completo con planificación semanal y progresión paso a paso.", price1: 47, price2: 19, img: bonus1 },
+              { n: "02", t: "50 Ejercicios de Técnica Individual", d: "Ejercicios prácticos para dominar el balón y mejorar tu técnica base.", price1: 39, price2: 17, img: bonus2 },
+              { n: "03", t: "Circuitos de Preparación Física", d: "Circuitos completos para ganar resistencia, fuerza y explosividad.", price1: 49, price2: 21, img: bonus3 },
+              { n: "04", t: "Bono Sorpresa Exclusivo", d: "🎁 Un regalo secreto que solo descubrirás al entrar.", price1: 45, price2: 18, img: bonusSurprise },
             ].map((b) => (
-              <div key={b.n} className="group rounded-2xl bg-[#0a0a0a] text-white overflow-hidden border border-[#facc15]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:border-[#facc15]">
+              <div key={b.n} className="group rounded-2xl bg-[#0a0a0a] text-white overflow-hidden border border-[#facc15]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:border-[#facc15] active:scale-[0.98]">
                 <div className="overflow-hidden">
                   <img src={b.img} alt={b.t} className="w-full aspect-[4/3] object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
                 </div>
@@ -452,9 +450,10 @@ function Index() {
                   <h3 className="font-black text-lg mb-1">{b.t}</h3>
                   <p className="text-sm text-slate-300 leading-relaxed mb-3">{b.d}</p>
                   <div className="flex items-center gap-3 flex-wrap">
-                    <span className="line-through text-slate-400 font-bold">${b.oldPrice}</span>
-                    <span className="bg-[#facc15] text-[#0a0a0a] font-black px-3 py-1.5 rounded-md text-base shadow-lg">
-                      ${b.newPrice} HOY
+                    <span className="line-through text-slate-400 font-bold text-lg">${b.price1}</span>
+                    <span className="line-through text-slate-400 font-bold text-lg">${b.price2}</span>
+                    <span className="bg-[#facc15] text-[#0a0a0a] font-black px-3 py-1.5 rounded-md text-sm shadow-lg uppercase tracking-wide">
+                      Incluido en tu compra
                     </span>
                   </div>
                 </div>
@@ -462,9 +461,9 @@ function Index() {
             ))}
           </div>
           <div className="mt-8 text-center">
-            <p className="text-slate-600">Valor total de los bonos <span className="line-through">$180</span></p>
+            <p className="text-slate-600">Valor real de los bonos <span className="line-through font-bold">$180</span> <span className="line-through font-bold">$75</span></p>
             <p className="font-black text-2xl mt-1">
-              hoy incluidos por <span className="text-[#16a34a]">$0</span> extra
+              hoy <span className="text-[#16a34a]">incluidos en tu pedido</span>
             </p>
           </div>
         </div>
@@ -522,7 +521,7 @@ function Index() {
 
           <div className="bg-white text-[#0f172a] rounded-3xl p-6 sm:p-8 text-left shadow-2xl border-4 border-[#facc15]">
             <div className="bg-[#dc2626] text-white text-xs font-black uppercase tracking-widest inline-block px-3 py-1 rounded-full mb-3">
-              🔥 ¡84% DE DESCUENTO!
+              🔥 ¡83% DE DESCUENTO!
             </div>
             <h3 className="font-black text-2xl mb-1">Paquete Premium</h3>
             <p className="text-sm text-slate-500">+2.000 entrenamientos + 4 bonos exclusivos</p>
@@ -543,12 +542,12 @@ function Index() {
 
             <div className="my-5">
               <p className="text-slate-500">
-                De <span className="line-through font-bold">$24,90</span> sólo por hoy
+                De <span className="line-through font-bold">$29,90</span> solo por hoy
               </p>
               <p className="font-black text-5xl text-[#16a34a] mt-1">
-                $3,90 <span className="text-2xl">USD</span>
+                $5 <span className="text-2xl">USD</span>
               </p>
-              <p className="text-sm font-bold text-[#dc2626] mt-1">84% DESCUENTO · Ahorras $21</p>
+              <p className="text-sm font-bold text-[#dc2626] mt-1">83% DESCUENTO · Ahorras $24,90</p>
               <p className="text-xs text-slate-500 mt-2">✅ Pago único · Acceso vitalicio</p>
             </div>
 
