@@ -542,12 +542,12 @@ function Index() {
 
             <div className="my-5">
               <p className="text-slate-500">
-                De <span className="line-through font-bold">$24,90</span> sólo por hoy
+                De <span className="line-through font-bold">$29,90</span> solo por hoy
               </p>
               <p className="font-black text-5xl text-[#16a34a] mt-1">
-                $3,90 <span className="text-2xl">USD</span>
+                $5 <span className="text-2xl">USD</span>
               </p>
-              <p className="text-sm font-bold text-[#dc2626] mt-1">84% DESCUENTO · Ahorras $21</p>
+              <p className="text-sm font-bold text-[#dc2626] mt-1">83% DESCUENTO · Ahorras $24,90</p>
               <p className="text-xs text-slate-500 mt-2">✅ Pago único · Acceso vitalicio</p>
             </div>
 
