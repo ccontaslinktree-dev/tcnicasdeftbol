@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "sdk_version": "0.23.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "futbol-ejercicios-mcp",
+      "version": "0.1.0",
+      "title": "+2.000 Ejercicios de Fútbol"
+    },
+    "tools": [
+      {
+        "name": "get_offer",
+        "title": "Get current offer",
+        "description": "Returns the current landing page offer: product name, pricing, discount, checkout URL, and value propositions.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_checkout_link",
+        "title": "Get checkout link",
+        "description": "Returns the direct checkout URL where users can purchase the +2.000 Ejercicios de Fútbol library.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
