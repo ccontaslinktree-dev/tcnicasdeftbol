@@ -183,6 +183,12 @@ function Index() {
             </span>{" "}
             organizados para Jugadores y Entrenadores, listos para aplicar
           </h1>
+          <div className="max-w-[680px] mx-auto mb-6 bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white rounded-2xl px-4 py-3 sm:px-5 sm:py-4 shadow-lg border border-[#facc15]/40 flex items-start gap-3 text-left">
+            <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 text-[#facc15] mt-0.5 animate-pulse" />
+            <p className="font-bold leading-snug text-[clamp(12px,3.4vw,15px)]">
+              <span className="text-[#facc15] font-black uppercase">Actualizaciones automáticas:</span> añadimos nuevos ejercicios constantemente, además de las estrategias clásicas que grandes clubes usan para lograr resultados de élite. Tu biblioteca crece contigo, siempre.
+            </p>
+          </div>
           <p className="text-slate-600 font-medium max-w-[640px] mx-auto mb-7 leading-relaxed text-[clamp(14px,3.6vw,19px)]">
             Accede a la <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">biblioteca completa</span> organizada por{" "}
             <b className="text-[#0a0a0a]">posición y categoría</b>, método profesional, acceso inmediato{" "}
@@ -200,6 +206,30 @@ function Index() {
           <p className="mt-6 text-sm text-slate-500 flex items-center justify-center gap-1.5">
             <Lock className="w-4 h-4" /> Pago 100% seguro · Acceso inmediato por e-mail
           </p>
+        </div>
+      </section>
+
+      {/* Video preview - moved to 2nd section for stronger conversion */}
+      <section className="px-5 pb-4 pt-2">
+        <div className="max-w-[900px] mx-auto text-center">
+          <p className="text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Vista previa exclusiva</p>
+          <h2 className="font-black uppercase text-[clamp(22px,5vw,38px)] leading-tight mb-3">
+            Mira por dentro la <span className="text-[#16a34a]">biblioteca</span> que vas a recibir
+          </h2>
+          <p className="text-slate-600 mb-5 text-sm sm:text-base">Un adelanto real del material organizado y listo para aplicar 👇</p>
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-black max-w-[520px] mx-auto">
+            <video
+              src={previewAsset.url}
+              controls
+              playsInline
+              preload="metadata"
+              className="w-full aspect-[3/4] object-cover"
+            />
+            <div className="absolute top-3 left-3 bg-black/70 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+              EN VIVO · <Eye className="w-3.5 h-3.5" /> {viewers} viendo
+            </div>
+          </div>
         </div>
       </section>
 
@@ -326,29 +356,9 @@ function Index() {
         </div>
       </section>
 
-      {/* Video preview with live viewers */}
-      <section className="px-5 py-14">
+      {/* CTA after value stack */}
+      <section className="px-5 py-10">
         <div className="max-w-[900px] mx-auto text-center">
-          <p className="text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Vista previa exclusiva</p>
-          <h2 className="font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3">
-            Descubre la <span className="text-[#16a34a]">biblioteca</span> que vas a recibir
-          </h2>
-          <p className="text-slate-600 mb-6">Un adelanto real del material completo que tendrás organizado y listo para aplicar 👇</p>
-
-          <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-black">
-            <video
-              src={previewAsset.url}
-              controls
-              playsInline
-              preload="metadata"
-              className="w-full aspect-[3/4] object-cover"
-            />
-            <div className="absolute top-3 left-3 bg-black/70 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-              EN VIVO · <Eye className="w-3.5 h-3.5" /> {viewers} viendo
-            </div>
-          </div>
-
           <button
             onClick={scrollToOffer}
             className="mt-8 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
