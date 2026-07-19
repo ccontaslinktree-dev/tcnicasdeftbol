@@ -183,6 +183,12 @@ function Index() {
             </span>{" "}
             organizados para Jugadores y Entrenadores, listos para aplicar
           </h1>
+          <div className="max-w-[680px] mx-auto mb-6 bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white rounded-2xl px-4 py-3 sm:px-5 sm:py-4 shadow-lg border border-[#facc15]/40 flex items-start gap-3 text-left">
+            <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 text-[#facc15] mt-0.5 animate-pulse" />
+            <p className="font-bold leading-snug text-[clamp(12px,3.4vw,15px)]">
+              <span className="text-[#facc15] font-black uppercase">Actualizaciones automáticas:</span> añadimos nuevos ejercicios constantemente, además de las estrategias clásicas que grandes clubes usan para lograr resultados de élite. Tu biblioteca crece contigo, siempre.
+            </p>
+          </div>
           <p className="text-slate-600 font-medium max-w-[640px] mx-auto mb-7 leading-relaxed text-[clamp(14px,3.6vw,19px)]">
             Accede a la <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">biblioteca completa</span> organizada por{" "}
             <b className="text-[#0a0a0a]">posición y categoría</b>, método profesional, acceso inmediato{" "}
