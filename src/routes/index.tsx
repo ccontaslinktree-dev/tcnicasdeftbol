@@ -651,7 +651,7 @@ function Index() {
               </div>
 
               <button
-                onClick={() => goCheckout(BASIC_CHECKOUT_URL)}
+                onClick={openBasicOffer}
                 className="w-full bg-white hover:bg-slate-100 active:scale-[0.98] text-[#0a0a0a] font-black uppercase py-5 rounded-2xl shadow-xl transition-all flex items-center justify-center gap-3 text-lg"
               >
                 Quiero el Plan Básico
