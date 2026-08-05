@@ -378,7 +378,7 @@ function Index() {
       <section className="px-5 py-10">
         <div className="max-w-[900px] mx-auto text-center">
           <button
-            onClick={scrollToOffer}
+            onClick={openOffer}
             className="mt-8 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             <PlayCircle className="w-6 h-6" /> Desbloquear la Biblioteca Completa
