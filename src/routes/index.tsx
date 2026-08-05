@@ -304,7 +304,7 @@ function Index() {
 
         <div className="max-w-[900px] mx-auto px-5 mt-8 sm:mt-10 text-center">
           <button
-            onClick={scrollToOffer}
+            onClick={openOffer}
             className="w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[clamp(15px,4vw,20px)] py-4 sm:py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(250,204,21,0.55)]"
           >
             Quiero acceso ahora
