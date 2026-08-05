@@ -14,6 +14,13 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
   CheckCircle2,
   XCircle,
   ShieldCheck,
@@ -29,6 +36,9 @@ import {
   Sparkles,
   Flame,
   Star,
+  ArrowRight,
+  TrendingUp,
+  X,
 } from "lucide-react";
 import heroProduct from "@/assets/hero-product.png";
 import bonus1 from "@/assets/bonus-1.jpg";
