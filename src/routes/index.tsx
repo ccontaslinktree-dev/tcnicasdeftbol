@@ -171,8 +171,12 @@ function Index() {
   const [showPremiumPopout, setShowPremiumPopout] = useState(false);
   const [showBasicPopout, setShowBasicPopout] = useState(false);
 
-  const openOffer = useCallback(() => {
+  const openPremiumOffer = useCallback(() => {
     setShowPremiumPopout(true);
+  }, []);
+
+  const openBasicOffer = useCallback(() => {
+    setShowBasicPopout(true);
   }, []);
 
   const handleClosePremium = useCallback(() => {
@@ -303,7 +307,7 @@ function Index() {
 
         <div className="max-w-[900px] mx-auto px-5 mt-8 sm:mt-10 text-center">
           <button
-            onClick={openOffer}
+            onClick={openPremiumOffer}
             className="w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[clamp(15px,4vw,20px)] py-4 sm:py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(250,204,21,0.55)]"
           >
             Quiero acceso ahora
@@ -377,7 +381,7 @@ function Index() {
       <section className="px-5 py-10">
         <div className="max-w-[900px] mx-auto text-center">
           <button
-            onClick={openOffer}
+            onClick={openPremiumOffer}
             className="mt-8 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             <PlayCircle className="w-6 h-6" /> Desbloquear la Biblioteca Completa
@@ -408,7 +412,7 @@ function Index() {
             ))}
           </div>
           <button
-            onClick={openOffer}
+            onClick={openPremiumOffer}
             className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             Quiero acceder ahora
@@ -439,7 +443,7 @@ function Index() {
             ))}
           </div>
           <button
-            onClick={openOffer}
+            onClick={openPremiumOffer}
             className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             Quiero Empezar Ahora Mismo
@@ -589,7 +593,7 @@ function Index() {
               </div>
 
               <button
-                onClick={() => goCheckout(PREMIUM_CHECKOUT_URL)}
+                onClick={openPremiumOffer}
                 className="w-full bg-[#16a34a] hover:bg-[#15803d] active:scale-[0.98] text-white font-black uppercase py-5 rounded-2xl shadow-[0_10px_25px_-5px_rgba(22,163,74,0.4)] transition-all flex items-center justify-center gap-3 text-lg"
               >
                 Quiero el Plan Premium
@@ -647,7 +651,7 @@ function Index() {
               </div>
 
               <button
-                onClick={() => goCheckout(BASIC_CHECKOUT_URL)}
+                onClick={openBasicOffer}
                 className="w-full bg-white hover:bg-slate-100 active:scale-[0.98] text-[#0a0a0a] font-black uppercase py-5 rounded-2xl shadow-xl transition-all flex items-center justify-center gap-3 text-lg"
               >
                 Quiero el Plan Básico
@@ -823,7 +827,7 @@ function Index() {
             Tienes <b>7 días completos</b> para explorar los +2.000 ejercicios, los 4 bonos y todo el método. Si sientes que no es para ti, por cualquier motivo, nos escribes un email y te devolvemos <b>hasta el último céntimo</b>.
           </p>
           <button
-            onClick={openOffer}
+            onClick={openPremiumOffer}
             className="w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             Empezar sin Riesgo
@@ -892,7 +896,7 @@ function Index() {
             ))}
           </Accordion>
           <button
-            onClick={openOffer}
+            onClick={openPremiumOffer}
             className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             Quiero mi Kit Completo Hoy
