@@ -168,6 +168,20 @@ function Index() {
 
   const { mm, ss } = useCountdown(29);
   const viewers = useLiveViewers();
+  const [showPremiumPopout, setShowPremiumPopout] = useState(false);
+  const [showBasicPopout, setShowBasicPopout] = useState(false);
+
+  const openOffer = () => {
+    setShowPremiumPopout(true);
+  };
+
+  const handleClosePremium = () => {
+    setShowPremiumPopout(false);
+    // When premium is closed, show basic pop-out to influence the sale
+    setTimeout(() => {
+      setShowBasicPopout(true);
+    }, 300);
+  };
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] antialiased overflow-x-hidden">
