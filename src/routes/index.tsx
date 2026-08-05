@@ -171,8 +171,12 @@ function Index() {
   const [showPremiumPopout, setShowPremiumPopout] = useState(false);
   const [showBasicPopout, setShowBasicPopout] = useState(false);
 
-  const openOffer = useCallback(() => {
+  const openPremiumOffer = useCallback(() => {
     setShowPremiumPopout(true);
+  }, []);
+
+  const openBasicOffer = useCallback(() => {
+    setShowBasicPopout(true);
   }, []);
 
   const handleClosePremium = useCallback(() => {
