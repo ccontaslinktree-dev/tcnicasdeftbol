@@ -593,7 +593,7 @@ function Index() {
               </div>
 
               <button
-                onClick={() => goCheckout(PREMIUM_CHECKOUT_URL)}
+                onClick={openPremiumOffer}
                 className="w-full bg-[#16a34a] hover:bg-[#15803d] active:scale-[0.98] text-white font-black uppercase py-5 rounded-2xl shadow-[0_10px_25px_-5px_rgba(22,163,74,0.4)] transition-all flex items-center justify-center gap-3 text-lg"
               >
                 Quiero el Plan Premium
