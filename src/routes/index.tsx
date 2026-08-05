@@ -896,7 +896,7 @@ function Index() {
             ))}
           </Accordion>
           <button
-            onClick={openOffer}
+            onClick={openPremiumOffer}
             className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             Quiero mi Kit Completo Hoy
