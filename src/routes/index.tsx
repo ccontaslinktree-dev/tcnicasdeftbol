@@ -530,15 +530,132 @@ function Index() {
       </section>
 
       {/* Offer / pricing */}
-      <section id="oferta" className="px-5 py-14 bg-gradient-to-b from-[#0a0a0a] to-[#0f172a] text-white scroll-mt-16">
-        <div className="max-w-[720px] mx-auto text-center">
-          <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">🔥 Precio Especial Solo Hoy</p>
-          <h2 className="font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3">
-            Elige tu paquete y <span className="text-[#facc15]">empieza ahora</span>
-          </h2>
-          <p className="text-slate-300 mb-6">
-            Precio promocional válido <b className="text-white">solo por hoy</b>. Mañana vuelve al valor normal, no dejes escapar esta oportunidad.
-          </p>
+      <section id="oferta" className="px-5 py-16 sm:py-20 bg-gradient-to-b from-[#0a0a0a] to-[#0f172a] text-white scroll-mt-16">
+        <div className="max-w-[1100px] mx-auto">
+          <div className="text-center mb-10 sm:mb-14">
+            <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">🔥 Precio Especial Solo Hoy</p>
+            <h2 className="font-black uppercase text-[clamp(26px,5vw,44px)] leading-tight mb-4">
+              Elige tu paquete y <span className="text-[#facc15]">empieza ahora</span>
+            </h2>
+            <p className="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base">
+              Precio promocional válido <b className="text-white">solo por hoy</b>. Mañana vuelve al valor normal, no dejes escapar esta oportunidad.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-[960px] mx-auto">
+            {/* Plan Premium - On page */}
+            <div className="relative group bg-white rounded-[32px] p-6 sm:p-8 flex flex-col border-2 border-[#16a34a] shadow-[0_20px_50px_-12px_rgba(22,163,74,0.3)] transform transition-all duration-500 hover:scale-[1.02]">
+              <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#16a34a] text-white px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest shadow-lg flex items-center gap-2 whitespace-nowrap">
+                <Sparkles className="w-4 h-4 text-[#facc15]" />
+                RECOMENDADO · MEJOR VALOR
+              </div>
+              
+              <div className="mb-8">
+                <h3 className="text-[#0a0a0a] font-black uppercase text-2xl sm:text-3xl mb-1">Plan Premium</h3>
+                <p className="text-slate-500 font-bold italic text-sm">Biblioteca Completa + Todos los Bonos</p>
+              </div>
+
+              <div className="space-y-4 mb-10 flex-grow">
+                {[
+                  "+2.000 Ejercicios Profesionales",
+                  "4 Bonos Sorpresa Incluidos",
+                  "Acceso Vitalicio e Inmediato",
+                  "Actualizaciones Automáticas",
+                  "Garantía de 7 Días",
+                ].map((item) => (
+                  <div key={item} className="flex items-center gap-3">
+                    <div className="bg-[#16a34a] rounded-full p-1 shrink-0">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+                    </div>
+                    <span className="text-[#0f172a] font-bold text-sm tracking-tight">{item}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bg-slate-50 rounded-2xl p-6 mb-8 border border-slate-100">
+                <p className="text-slate-400 font-bold text-xl line-through leading-none">$29.90</p>
+                <div className="flex items-baseline gap-2 mt-1">
+                  <span className="text-5xl font-black text-[#0f172a]">$7.90</span>
+                  <span className="text-2xl font-black text-[#16a34a]">USD</span>
+                </div>
+                <div className="mt-4 flex items-center gap-3">
+                  <div className="bg-[#facc15] text-[#0a0a0a] px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider shadow-sm">
+                    Ahorras 73%
+                  </div>
+                  <div className="flex items-center gap-1 text-[#dc2626] font-black text-xs uppercase tracking-tight animate-pulse">
+                    <Clock className="w-4 h-4" /> Oferta por tiempo limitado
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => goCheckout(PREMIUM_CHECKOUT_URL)}
+                className="w-full bg-[#16a34a] hover:bg-[#15803d] active:scale-[0.98] text-white font-black uppercase py-5 rounded-2xl shadow-[0_10px_25px_-5px_rgba(22,163,74,0.4)] transition-all flex items-center justify-center gap-3 text-lg"
+              >
+                Quiero el Plan Premium
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Plan Fútbol 360 - On page */}
+            <div className="relative group bg-slate-900 rounded-[32px] p-6 sm:p-8 flex flex-col border-2 border-slate-800 shadow-2xl transform transition-all duration-500 hover:scale-[1.02]">
+              <div className="mb-8">
+                <h3 className="text-white font-black uppercase text-2xl sm:text-3xl mb-1">Fútbol 360</h3>
+                <p className="text-slate-400 font-bold italic text-sm">Acceso Esencial al Método</p>
+              </div>
+
+              <div className="bg-blue-500/10 border border-blue-500/20 p-4 rounded-2xl mb-8">
+                <div className="flex items-center gap-2 text-blue-400 mb-2">
+                  <Target className="w-5 h-5" />
+                  <p className="font-black uppercase text-xs tracking-wider">¿Qué incluye?</p>
+                </div>
+                <p className="text-slate-300 text-sm font-bold leading-relaxed">
+                  Entrenamiento completo para niños, mujeres y preparación física; mejora en todas las áreas.
+                </p>
+              </div>
+
+              <div className="space-y-3 mb-10 flex-grow">
+                {[
+                  "Ejercicios Seleccionados",
+                  "Preparación Física Base",
+                  "Ideal para Niños y Mujeres",
+                  "Acceso Inmediato",
+                ].map((item) => (
+                  <div key={item} className="flex items-center gap-3">
+                    <div className="bg-white/10 rounded-full p-1 shrink-0">
+                      <CheckCircle2 className="w-3 h-3 text-white/50" />
+                    </div>
+                    <span className="text-slate-300 font-bold text-sm tracking-tight">{item}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bg-white/5 rounded-2xl p-6 mb-8 border border-white/10 flex items-center justify-between">
+                <div>
+                  <p className="text-slate-500 font-bold text-lg line-through leading-none">$19.90</p>
+                  <div className="flex items-baseline gap-1.5 mt-1">
+                    <span className="text-4xl font-black text-white">$5.50</span>
+                    <span className="text-xl font-black text-slate-400">USD</span>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="bg-white/10 text-white/80 px-2.5 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider mb-2">
+                    Económico
+                  </div>
+                  <p className="text-slate-400 font-black text-xs uppercase tracking-tight">72% OFF</p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => goCheckout(BASIC_CHECKOUT_URL)}
+                className="w-full bg-white hover:bg-slate-100 active:scale-[0.98] text-[#0a0a0a] font-black uppercase py-5 rounded-2xl shadow-xl transition-all flex items-center justify-center gap-3 text-lg"
+              >
+                Quiero el Plan Básico
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
 
       {/* Pop-out Premium */}
       <Dialog open={showPremiumPopout} onOpenChange={setShowPremiumPopout}>
