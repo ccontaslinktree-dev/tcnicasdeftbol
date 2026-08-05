@@ -126,15 +126,7 @@ function goCheckout(url: string) {
   window.location.href = url;
 }
 
-function scrollToOffer() {
-  // We'll update buttons to open the pop-out instead
-}
-
-function scrollToOffer() {
-  if (typeof document === "undefined") return;
-  const el = document.getElementById("oferta");
-  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-}
+// scrollToOffer removed in favor of pop-out
 
 const testimonials = [testimonial1, testimonial2, testimonial3, testimonial4];
 
