@@ -121,12 +121,13 @@ function fireEvent(name: string, value?: number) {
   }).catch(() => {});
 }
 
-function goCheckout(source: string) {
-  fireEvent("InitiateCheckout", 5);
-  try {
-    sessionStorage.setItem("cta_source", source);
-  } catch {}
-  window.location.href = CHECKOUT_URL;
+function goCheckout(url: string) {
+  fireEvent("InitiateCheckout", url === PREMIUM_CHECKOUT_URL ? 7.90 : 5.50);
+  window.location.href = url;
+}
+
+function scrollToOffer() {
+  // We'll update buttons to open the pop-out instead
 }
 
 function scrollToOffer() {
