@@ -171,17 +171,16 @@ function Index() {
   const [showPremiumPopout, setShowPremiumPopout] = useState(false);
   const [showBasicPopout, setShowBasicPopout] = useState(false);
 
-  const openOffer = () => {
+  const openOffer = useCallback(() => {
     setShowPremiumPopout(true);
-  };
+  }, []);
 
-  const handleClosePremium = () => {
+  const handleClosePremium = useCallback(() => {
     setShowPremiumPopout(false);
-    // When premium is closed, show basic pop-out to influence the sale
     setTimeout(() => {
       setShowBasicPopout(true);
     }, 300);
-  };
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] antialiased overflow-x-hidden">
