@@ -760,7 +760,7 @@ function Index() {
               </p>
             </div>
 
-            <div className="space-y-3 mb-8">
+            <div className="grid grid-cols-1 gap-2.5 mb-6">
               {[
                 "Ejercicios Seleccionados",
                 "Preparación Física Base",
@@ -768,7 +768,7 @@ function Index() {
                 "Acceso Inmediato",
               ].map((item) => (
                 <div key={item} className="flex items-center gap-3">
-                  <div className="bg-slate-200 rounded-full p-1">
+                  <div className="bg-slate-200 rounded-full p-1 shrink-0">
                     <CheckCircle2 className="w-3 h-3 text-slate-600" />
                   </div>
                   <span className="text-slate-600 font-bold text-sm tracking-tight">{item}</span>
