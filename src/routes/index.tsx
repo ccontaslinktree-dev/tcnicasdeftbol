@@ -663,7 +663,7 @@ function Index() {
 
       {/* Pop-out Premium */}
       <Dialog open={showPremiumPopout} onOpenChange={setShowPremiumPopout}>
-        <DialogContent className="max-w-[500px] p-0 overflow-hidden border-none rounded-3xl bg-white shadow-2xl">
+        <DialogContent className="max-w-[92vw] sm:max-w-[450px] max-h-[90vh] overflow-y-auto p-0 border-none rounded-3xl bg-white shadow-2xl">
           <div className="bg-[#16a34a] p-4 text-center relative">
             <button 
               onClick={handleClosePremium}
@@ -685,7 +685,7 @@ function Index() {
               <p className="text-sm font-black uppercase tracking-tight">¡Vence en {mm}:{ss}!</p>
             </div>
 
-            <div className="space-y-4 mb-8">
+            <div className="grid grid-cols-1 gap-3 mb-6">
               {[
                 "+2.000 Ejercicios Profesionales",
                 "4 Bonos Sorpresa Incluidos",
@@ -694,7 +694,7 @@ function Index() {
                 "Garantía de 7 Días",
               ].map((item) => (
                 <div key={item} className="flex items-center gap-3">
-                  <div className="bg-[#16a34a] rounded-full p-1">
+                  <div className="bg-[#16a34a] rounded-full p-1 shrink-0">
                     <CheckCircle2 className="w-3.5 h-3.5 text-white" />
                   </div>
                   <span className="text-[#0f172a] font-bold text-sm tracking-tight">{item}</span>
@@ -733,7 +733,7 @@ function Index() {
 
       {/* Pop-out Basic */}
       <Dialog open={showBasicPopout} onOpenChange={setShowBasicPopout}>
-        <DialogContent className="max-w-[500px] p-0 overflow-hidden border-none rounded-3xl bg-white shadow-2xl">
+        <DialogContent className="max-w-[92vw] sm:max-w-[450px] max-h-[90vh] overflow-y-auto p-0 border-none rounded-3xl bg-white shadow-2xl">
           <div className="bg-slate-900 p-4 text-center relative">
             <button 
               onClick={() => setShowBasicPopout(false)}
@@ -760,7 +760,7 @@ function Index() {
               </p>
             </div>
 
-            <div className="space-y-3 mb-8">
+            <div className="grid grid-cols-1 gap-2.5 mb-6">
               {[
                 "Ejercicios Seleccionados",
                 "Preparación Física Base",
@@ -768,7 +768,7 @@ function Index() {
                 "Acceso Inmediato",
               ].map((item) => (
                 <div key={item} className="flex items-center gap-3">
-                  <div className="bg-slate-200 rounded-full p-1">
+                  <div className="bg-slate-200 rounded-full p-1 shrink-0">
                     <CheckCircle2 className="w-3 h-3 text-slate-600" />
                   </div>
                   <span className="text-slate-600 font-bold text-sm tracking-tight">{item}</span>
