@@ -685,7 +685,7 @@ function Index() {
               <p className="text-sm font-black uppercase tracking-tight">¡Vence en {mm}:{ss}!</p>
             </div>
 
-            <div className="space-y-4 mb-8">
+            <div className="grid grid-cols-1 gap-3 mb-6">
               {[
                 "+2.000 Ejercicios Profesionales",
                 "4 Bonos Sorpresa Incluidos",
@@ -694,7 +694,7 @@ function Index() {
                 "Garantía de 7 Días",
               ].map((item) => (
                 <div key={item} className="flex items-center gap-3">
-                  <div className="bg-[#16a34a] rounded-full p-1">
+                  <div className="bg-[#16a34a] rounded-full p-1 shrink-0">
                     <CheckCircle2 className="w-3.5 h-3.5 text-white" />
                   </div>
                   <span className="text-[#0f172a] font-bold text-sm tracking-tight">{item}</span>
