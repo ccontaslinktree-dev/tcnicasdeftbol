@@ -663,7 +663,7 @@ function Index() {
 
       {/* Pop-out Premium */}
       <Dialog open={showPremiumPopout} onOpenChange={setShowPremiumPopout}>
-        <DialogContent className="max-w-[500px] p-0 overflow-hidden border-none rounded-3xl bg-white shadow-2xl">
+        <DialogContent className="max-w-[92vw] sm:max-w-[450px] max-h-[90vh] overflow-y-auto p-0 border-none rounded-3xl bg-white shadow-2xl">
           <div className="bg-[#16a34a] p-4 text-center relative">
             <button 
               onClick={handleClosePremium}
