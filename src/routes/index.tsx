@@ -733,7 +733,7 @@ function Index() {
 
       {/* Pop-out Basic */}
       <Dialog open={showBasicPopout} onOpenChange={setShowBasicPopout}>
-        <DialogContent className="max-w-[500px] p-0 overflow-hidden border-none rounded-3xl bg-white shadow-2xl">
+        <DialogContent className="max-w-[92vw] sm:max-w-[450px] max-h-[90vh] overflow-y-auto p-0 border-none rounded-3xl bg-white shadow-2xl">
           <div className="bg-slate-900 p-4 text-center relative">
             <button 
               onClick={() => setShowBasicPopout(false)}
