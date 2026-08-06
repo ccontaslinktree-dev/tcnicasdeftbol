@@ -662,7 +662,10 @@ function Index() {
 
 
       {/* Pop-out Premium */}
-      <Dialog open={showPremiumPopout} onOpenChange={setShowPremiumPopout}>
+      <Dialog open={showPremiumPopout} onOpenChange={(open) => {
+        if (!open) handleClosePremium();
+        else setShowPremiumPopout(true);
+      }}>
         <DialogContent className="max-w-[92vw] sm:max-w-[450px] max-h-[90vh] overflow-y-auto p-0 border-none rounded-3xl bg-white shadow-2xl">
           <div className="bg-[#16a34a] p-4 text-center relative">
             <button 
