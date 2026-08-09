@@ -58,8 +58,8 @@ import featAgilidad from "@/assets/feature-agilidad.jpg";
 import featChutes from "@/assets/feature-chutes.jpg";
 import featPasses from "@/assets/feature-passes.jpg";
 
-const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/D106820400M?checkoutMode=10&utm_source=facebook&utm_medium=cpc&utm_campaign={{campaign.name}}&utm_content={{ad.name}}";
-const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/D106795605Y?checkoutMode=10&utm_source=facebook&utm_medium=cpc&utm_campaign={{campaign.name}}&utm_content={{ad.name}}";
+const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/D106820400M?checkoutMode=10";
+const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/D106795605Y?checkoutMode=10";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -123,7 +123,28 @@ function fireEvent(name: string, value?: number) {
 
 function goCheckout(url: string) {
   fireEvent("InitiateCheckout", url === PREMIUM_CHECKOUT_URL ? 7.90 : 5.50);
-  window.location.href = url;
+  
+  if (typeof window !== "undefined") {
+    const searchParams = new URLSearchParams(window.location.search);
+    const utms = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+    const targetUrl = new URL(url);
+    
+    // Add SCK for Hotmart tracking if any UTM exists
+    let hasUtm = false;
+    utms.forEach(param => {
+      const val = searchParams.get(param);
+      if (val) {
+        targetUrl.searchParams.set(param, val);
+        hasUtm = true;
+      }
+    });
+
+    if (hasUtm) {
+      targetUrl.searchParams.set("sck", "meta_ads");
+    }
+
+    window.location.href = targetUrl.toString();
+  }
 }
 
 // scrollToOffer removed in favor of pop-out
