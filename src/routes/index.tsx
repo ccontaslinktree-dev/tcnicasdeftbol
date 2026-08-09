@@ -58,8 +58,8 @@ import featAgilidad from "@/assets/feature-agilidad.jpg";
 import featChutes from "@/assets/feature-chutes.jpg";
 import featPasses from "@/assets/feature-passes.jpg";
 
-const PREMIUM_CHECKOUT_URL = "https://pay.kiwify.com/DdeFcSY";
-const BASIC_CHECKOUT_URL = "https://pay.kiwify.com/eQoQd0Y";
+const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/D106820400M?checkoutMode=10&utm_source=facebook&utm_medium=cpc&utm_campaign={{campaign.name}}&utm_content={{ad.name}}";
+const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/D106795605Y?checkoutMode=10&utm_source=facebook&utm_medium=cpc&utm_campaign={{campaign.name}}&utm_content={{ad.name}}";
 
 export const Route = createFileRoute("/")({
   component: Index,
