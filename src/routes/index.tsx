@@ -61,6 +61,70 @@ import featPasses from "@/assets/feature-passes.jpg";
 const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/D106820400M?checkoutMode=10";
 const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/D106795605Y?checkoutMode=10";
 
+const BUYERS = [
+  "Juan M.", "Carlos R.", "Sofia G.", "Mateo L.", "Valentina P.", 
+  "Lucas B.", "Martina S.", "Thiago D.", "Isabella M.", "Joaquín V.",
+  "Elena F.", "Nicolás T.", "Camila O.", "Bautista H.", "Victoria Q."
+];
+
+function PurchaseNotification() {
+  const [purchase, setPurchase] = useState<{name: string, product: string} | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
+
+  useEffect(() => {
+    const showNotification = () => {
+      const name = BUYERS[Math.floor(Math.random() * BUYERS.length)];
+      const product = Math.random() > 0.3 ? "Plan Premium" : "Plan Básico";
+      setPurchase({ name, product });
+      setShowConfetti(true);
+      
+      setTimeout(() => setPurchase(null), 5000);
+      setTimeout(() => setShowConfetti(false), 3000);
+    };
+
+    const timer = setInterval(() => {
+      if (Math.random() > 0.6) showNotification();
+    }, 12000);
+
+    // Show one shortly after load
+    const initial = setTimeout(showNotification, 5000);
+
+    return () => {
+      clearInterval(timer);
+      clearTimeout(initial);
+    };
+  }, []);
+
+  if (!purchase) return null;
+
+  return (
+    <>
+      {showConfetti && (
+        <div className="fixed inset-0 pointer-events-none z-[200] flex items-center justify-center">
+          <div className="absolute top-1/4 left-1/4 animate-bounce text-2xl">🎉</div>
+          <div className="absolute top-1/3 right-1/4 animate-bounce delay-75 text-2xl">⭐</div>
+          <div className="absolute bottom-1/4 left-1/3 animate-bounce delay-150 text-2xl">🔥</div>
+          <div className="absolute bottom-1/3 right-1/3 animate-bounce delay-300 text-2xl">⚽</div>
+        </div>
+      )}
+      <div className="fixed bottom-4 left-4 z-[100] animate-in fade-in slide-in-from-left-10 duration-500">
+        <div className="bg-white rounded-2xl p-4 shadow-2xl border border-slate-200 flex items-center gap-3 max-w-[280px]">
+          <div className="w-10 h-10 bg-[#16a34a] rounded-full flex items-center justify-center shrink-0">
+            <CheckCircle2 className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <p className="text-xs font-black text-[#0f172a]">{purchase.name} acaba de comprar</p>
+            <p className="text-[11px] text-[#16a34a] font-bold">{purchase.product}</p>
+            <p className="text-[9px] text-slate-400 mt-0.5 flex items-center gap-1">
+              <Clock className="w-2.5 h-2.5" /> hace unos segundos
+            </p>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 export const Route = createFileRoute("/")({
   component: Index,
 });
