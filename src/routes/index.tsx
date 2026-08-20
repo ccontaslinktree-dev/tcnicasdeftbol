@@ -673,7 +673,7 @@ function Index() {
                 </div>
                 <div className="mt-4 flex items-center gap-3">
                   <div className="bg-[#facc15] text-[#0a0a0a] px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider shadow-sm">
-                    Ahorras 73%
+                    Ahorras 81%
                   </div>
                   <div className="flex items-center gap-1 text-[#dc2626] font-black text-xs uppercase tracking-tight animate-pulse">
                     <Clock className="w-4 h-4" /> Oferta por tiempo limitado
