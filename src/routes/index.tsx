@@ -319,7 +319,7 @@ function Index() {
                 key={i}
                 className="relative shrink-0 w-[200px] sm:w-[280px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border-2 border-[#facc15]/30 transition-transform duration-300 hover:scale-105 active:scale-95"
               >
-                <img src={f.img} alt={f.t} className="w-full h-full object-cover" loading="lazy" />
+                <img src={f.img} alt={f.t} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/70 to-transparent p-3 sm:p-4">
                   <p className="font-black text-white text-xs sm:text-base uppercase tracking-wide">{f.t}</p>
                 </div>
