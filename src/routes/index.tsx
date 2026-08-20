@@ -347,7 +347,7 @@ function Index() {
         <div className="max-w-[720px] mx-auto bg-white border-2 border-[#facc15] rounded-2xl p-4 flex items-center gap-3 shadow-sm">
           <div className="animate-pulse w-2.5 h-2.5 rounded-full bg-red-500" />
           <p className="text-sm sm:text-base font-bold text-[#0a0a0a]">
-            🔥 Últimas <span className="text-[#dc2626]">37 plazas</span> del cupo de hoy · {viewers} personas viendo esta oferta ahora
+            🔥 Últimas <span className="text-[#dc2626]">12 plazas</span> del cupo de hoy · {viewers} personas viendo esta oferta ahora
           </p>
         </div>
       </div>
