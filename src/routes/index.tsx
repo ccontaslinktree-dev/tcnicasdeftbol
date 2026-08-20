@@ -114,7 +114,7 @@ function PurchaseNotification() {
             <CheckCircle2 className="w-6 h-6 text-white" />
           </div>
           <div>
-            <p className="text-xs font-black text-[#0f172a]">{purchase.name} acaba de comprar</p>
+            <p className="text-xs font-black text-[#0f172a]">{purchase.name} acaba de inscribirse</p>
             <p className="text-[11px] text-[#16a34a] font-bold">{purchase.product}</p>
             <p className="text-[9px] text-slate-400 mt-0.5 flex items-center gap-1">
               <Clock className="w-2.5 h-2.5" /> hace unos segundos
