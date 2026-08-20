@@ -389,6 +389,7 @@ function Index() {
                       alt={`Vista ${i + 1}`}
                       className="w-full object-contain sm:object-cover transition-transform duration-500 hover:scale-[1.06] active:scale-95"
                       loading="lazy"
+                      decoding="async"
                     />
                   </div>
                 </CarouselItem>
