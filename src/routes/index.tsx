@@ -244,6 +244,8 @@ function Index() {
             width={1024}
             height={1536}
             loading="eager"
+            fetchPriority="high"
+            decoding="async"
           />
           <p className="mt-6 text-sm text-slate-500 flex items-center justify-center gap-1.5">
             <Lock className="w-4 h-4" /> Pago 100% seguro · Acceso inmediato por e-mail
