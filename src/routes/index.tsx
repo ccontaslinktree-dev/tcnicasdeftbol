@@ -1031,6 +1031,28 @@ function Index() {
         </div>
       </footer>
 
+      {/* Sticky Bottom CTA */}
+      <div 
+        className={`fixed bottom-0 inset-x-0 z-[80] bg-white/95 backdrop-blur-md border-t border-slate-200 p-4 transition-transform duration-500 transform ${
+          isFooterVisible ? 'translate-y-0' : 'translate-y-full'
+        }`}
+      >
+        <div className="max-w-[560px] mx-auto flex gap-2">
+          <button
+            onClick={openPremiumOffer}
+            className="flex-1 bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[13px] py-3.5 px-2 rounded-xl shadow-lg flex items-center justify-center gap-2"
+          >
+            <Zap className="w-4 h-4 fill-current" /> Plan Premium
+          </button>
+          <button
+            onClick={openBasicOffer}
+            className="flex-1 bg-slate-900 hover:bg-black active:scale-[0.98] transition-all text-white font-black uppercase text-[13px] py-3.5 px-2 rounded-xl shadow-lg flex items-center justify-center gap-2"
+          >
+            Plan Básico
+          </button>
+        </div>
+      </div>
+
       {/* Meta Pixel noscript */}
       <noscript>
         <img
