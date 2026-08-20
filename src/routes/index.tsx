@@ -256,6 +256,20 @@ function Index() {
   const viewers = useLiveViewers();
   const [showPremiumPopout, setShowPremiumPopout] = useState(false);
   const [showBasicPopout, setShowBasicPopout] = useState(false);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show sticky button after hero section
+      if (window.scrollY > 600) {
+        setIsFooterVisible(true);
+      } else {
+        setIsFooterVisible(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const openPremiumOffer = useCallback(() => {
     setShowPremiumPopout(true);
