@@ -84,8 +84,8 @@ function PurchaseNotification() {
     };
 
     const timer = setInterval(() => {
-      if (Math.random() > 0.6) showNotification();
-    }, 12000);
+      if (Math.random() > 0.4) showNotification();
+    }, 8000);
 
     // Show one shortly after load
     const initial = setTimeout(showNotification, 5000);
