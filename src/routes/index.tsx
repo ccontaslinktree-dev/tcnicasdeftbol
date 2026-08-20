@@ -797,7 +797,7 @@ function Index() {
             <div className="bg-slate-50 rounded-2xl p-5 mb-8 border border-slate-100">
               <p className="text-slate-400 font-bold text-lg line-through leading-none">$29.90</p>
               <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-4xl font-black text-[#0f172a]">$7.90</span>
+                <span className="text-4xl font-black text-[#0f172a]">$5.50</span>
                 <span className="text-xl font-black text-[#16a34a]">USD</span>
               </div>
               <div className="mt-3 flex items-center gap-2">
