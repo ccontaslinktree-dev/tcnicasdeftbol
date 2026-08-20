@@ -186,7 +186,7 @@ function fireEvent(name: string, value?: number) {
 }
 
 function goCheckout(url: string) {
-  fireEvent("InitiateCheckout", url === PREMIUM_CHECKOUT_URL ? 7.90 : 5.50);
+  fireEvent("InitiateCheckout", url === PREMIUM_CHECKOUT_URL ? 5.50 : 4.50);
   
   if (typeof window !== "undefined") {
     const searchParams = new URLSearchParams(window.location.search);
