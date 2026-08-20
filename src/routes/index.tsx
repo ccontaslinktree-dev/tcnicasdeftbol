@@ -62,9 +62,10 @@ const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/D106820400M?checkoutMode=1
 const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/D106795605Y?checkoutMode=10";
 
 const BUYERS = [
-  "Juan M.", "Carlos R.", "Sofia G.", "Mateo L.", "Valentina P.", 
-  "Lucas B.", "Martina S.", "Thiago D.", "Isabella M.", "Joaquín V.",
-  "Elena F.", "Nicolás T.", "Camila O.", "Bautista H.", "Victoria Q."
+  "Juan Mendoza", "Carlos Rodríguez", "Sofía García", "Mateo López", "Valentina Peña", 
+  "Lucas Blanco", "Martina Silva", "Thiago Díaz", "Isabella Méndez", "Joaquín Valenzuela",
+  "Elena Figueroa", "Nicolás Torres", "Camila Ortiz", "Bautista Herrera", "Victoria Quintana",
+  "Facundo Morales", "Julieta Romero", "Santiago Castro", "Lucía Navarro", "Diego Acosta"
 ];
 
 function PurchaseNotification() {
@@ -83,8 +84,8 @@ function PurchaseNotification() {
     };
 
     const timer = setInterval(() => {
-      if (Math.random() > 0.6) showNotification();
-    }, 12000);
+      if (Math.random() > 0.4) showNotification();
+    }, 8000);
 
     // Show one shortly after load
     const initial = setTimeout(showNotification, 5000);
@@ -113,7 +114,7 @@ function PurchaseNotification() {
             <CheckCircle2 className="w-6 h-6 text-white" />
           </div>
           <div>
-            <p className="text-xs font-black text-[#0f172a]">{purchase.name} acaba de comprar</p>
+            <p className="text-xs font-black text-[#0f172a]">{purchase.name} acaba de inscribirse</p>
             <p className="text-[11px] text-[#16a34a] font-bold">{purchase.product}</p>
             <p className="text-[9px] text-slate-400 mt-0.5 flex items-center gap-1">
               <Clock className="w-2.5 h-2.5" /> hace unos segundos
@@ -255,6 +256,20 @@ function Index() {
   const viewers = useLiveViewers();
   const [showPremiumPopout, setShowPremiumPopout] = useState(false);
   const [showBasicPopout, setShowBasicPopout] = useState(false);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show sticky button after hero section
+      if (window.scrollY > 600) {
+        setIsFooterVisible(true);
+      } else {
+        setIsFooterVisible(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const openPremiumOffer = useCallback(() => {
     setShowPremiumPopout(true);
@@ -1015,6 +1030,28 @@ function Index() {
           <p className="pt-2">© {new Date().getFullYear()} 2000 Ejercicios de Fútbol · Todos los derechos reservados.</p>
         </div>
       </footer>
+
+      {/* Sticky Bottom CTA */}
+      <div 
+        className={`fixed bottom-0 inset-x-0 z-[80] bg-white/95 backdrop-blur-md border-t border-slate-200 p-4 transition-transform duration-500 transform ${
+          isFooterVisible ? 'translate-y-0' : 'translate-y-full'
+        }`}
+      >
+        <div className="max-w-[560px] mx-auto flex gap-2">
+          <button
+            onClick={openPremiumOffer}
+            className="flex-1 bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[13px] py-3.5 px-2 rounded-xl shadow-lg flex items-center justify-center gap-2"
+          >
+            <Zap className="w-4 h-4 fill-current" /> Plan Premium
+          </button>
+          <button
+            onClick={openBasicOffer}
+            className="flex-1 bg-slate-900 hover:bg-black active:scale-[0.98] transition-all text-white font-black uppercase text-[13px] py-3.5 px-2 rounded-xl shadow-lg flex items-center justify-center gap-2"
+          >
+            Plan Básico
+          </button>
+        </div>
+      </div>
 
       {/* Meta Pixel noscript */}
       <noscript>
