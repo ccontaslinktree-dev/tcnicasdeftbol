@@ -61,6 +61,70 @@ import featPasses from "@/assets/feature-passes.jpg";
 const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/D106820400M?checkoutMode=10";
 const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/D106795605Y?checkoutMode=10";
 
+const BUYERS = [
+  "Juan M.", "Carlos R.", "Sofia G.", "Mateo L.", "Valentina P.", 
+  "Lucas B.", "Martina S.", "Thiago D.", "Isabella M.", "Joaquín V.",
+  "Elena F.", "Nicolás T.", "Camila O.", "Bautista H.", "Victoria Q."
+];
+
+function PurchaseNotification() {
+  const [purchase, setPurchase] = useState<{name: string, product: string} | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
+
+  useEffect(() => {
+    const showNotification = () => {
+      const name = BUYERS[Math.floor(Math.random() * BUYERS.length)];
+      const product = Math.random() > 0.3 ? "Plan Premium" : "Plan Básico";
+      setPurchase({ name, product });
+      setShowConfetti(true);
+      
+      setTimeout(() => setPurchase(null), 5000);
+      setTimeout(() => setShowConfetti(false), 3000);
+    };
+
+    const timer = setInterval(() => {
+      if (Math.random() > 0.6) showNotification();
+    }, 12000);
+
+    // Show one shortly after load
+    const initial = setTimeout(showNotification, 5000);
+
+    return () => {
+      clearInterval(timer);
+      clearTimeout(initial);
+    };
+  }, []);
+
+  if (!purchase) return null;
+
+  return (
+    <>
+      {showConfetti && (
+        <div className="fixed inset-0 pointer-events-none z-[200] flex items-center justify-center">
+          <div className="absolute top-1/4 left-1/4 animate-bounce text-2xl">🎉</div>
+          <div className="absolute top-1/3 right-1/4 animate-bounce delay-75 text-2xl">⭐</div>
+          <div className="absolute bottom-1/4 left-1/3 animate-bounce delay-150 text-2xl">🔥</div>
+          <div className="absolute bottom-1/3 right-1/3 animate-bounce delay-300 text-2xl">⚽</div>
+        </div>
+      )}
+      <div className="fixed bottom-4 left-4 z-[100] animate-in fade-in slide-in-from-left-10 duration-500">
+        <div className="bg-white rounded-2xl p-4 shadow-2xl border border-slate-200 flex items-center gap-3 max-w-[280px]">
+          <div className="w-10 h-10 bg-[#16a34a] rounded-full flex items-center justify-center shrink-0">
+            <CheckCircle2 className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <p className="text-xs font-black text-[#0f172a]">{purchase.name} acaba de comprar</p>
+            <p className="text-[11px] text-[#16a34a] font-bold">{purchase.product}</p>
+            <p className="text-[9px] text-slate-400 mt-0.5 flex items-center gap-1">
+              <Clock className="w-2.5 h-2.5" /> hace unos segundos
+            </p>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 export const Route = createFileRoute("/")({
   component: Index,
 });
@@ -122,7 +186,7 @@ function fireEvent(name: string, value?: number) {
 }
 
 function goCheckout(url: string) {
-  fireEvent("InitiateCheckout", url === PREMIUM_CHECKOUT_URL ? 7.90 : 5.50);
+  fireEvent("InitiateCheckout", url === PREMIUM_CHECKOUT_URL ? 5.50 : 4.50);
   
   if (typeof window !== "undefined") {
     const searchParams = new URLSearchParams(window.location.search);
@@ -209,6 +273,7 @@ function Index() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] antialiased overflow-x-hidden">
+      <PurchaseNotification />
       {/* Top banner */}
       <div className="fixed top-0 inset-x-0 z-[90] bg-[#16a34a] text-white text-center font-black uppercase tracking-wide border-b-2 border-[#15803d] py-2.5 px-2 text-[clamp(10px,3vw,15px)]">
         Descuento Exclusivo Solo Hoy
@@ -282,7 +347,7 @@ function Index() {
         <div className="max-w-[720px] mx-auto bg-white border-2 border-[#facc15] rounded-2xl p-4 flex items-center gap-3 shadow-sm">
           <div className="animate-pulse w-2.5 h-2.5 rounded-full bg-red-500" />
           <p className="text-sm sm:text-base font-bold text-[#0a0a0a]">
-            🔥 Últimas <span className="text-[#dc2626]">37 plazas</span> del cupo de hoy · {viewers} personas viendo esta oferta ahora
+            🔥 Últimas <span className="text-[#dc2626]">12 plazas</span> del cupo de hoy · {viewers} personas viendo esta oferta ahora
           </p>
         </div>
       </div>
@@ -603,12 +668,12 @@ function Index() {
               <div className="bg-slate-50 rounded-2xl p-6 mb-8 border border-slate-100">
                 <p className="text-slate-400 font-bold text-xl line-through leading-none">$29.90</p>
                 <div className="flex items-baseline gap-2 mt-1">
-                  <span className="text-5xl font-black text-[#0f172a]">$7.90</span>
+                  <span className="text-5xl font-black text-[#0f172a]">$5.50</span>
                   <span className="text-2xl font-black text-[#16a34a]">USD</span>
                 </div>
                 <div className="mt-4 flex items-center gap-3">
                   <div className="bg-[#facc15] text-[#0a0a0a] px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider shadow-sm">
-                    Ahorras 73%
+                    Ahorras 81%
                   </div>
                   <div className="flex items-center gap-1 text-[#dc2626] font-black text-xs uppercase tracking-tight animate-pulse">
                     <Clock className="w-4 h-4" /> Oferta por tiempo limitado
@@ -662,7 +727,7 @@ function Index() {
                 <div>
                   <p className="text-slate-500 font-bold text-lg line-through leading-none">$19.90</p>
                   <div className="flex items-baseline gap-1.5 mt-1">
-                    <span className="text-4xl font-black text-white">$5.50</span>
+                    <span className="text-4xl font-black text-white">$4.50</span>
                     <span className="text-xl font-black text-slate-400">USD</span>
                   </div>
                 </div>
@@ -670,7 +735,7 @@ function Index() {
                   <div className="bg-white/10 text-white/80 px-2.5 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider mb-2">
                     Económico
                   </div>
-                  <p className="text-slate-400 font-black text-xs uppercase tracking-tight">72% OFF</p>
+                  <p className="text-slate-400 font-black text-xs uppercase tracking-tight">77% OFF</p>
                 </div>
               </div>
 
@@ -732,14 +797,14 @@ function Index() {
             <div className="bg-slate-50 rounded-2xl p-5 mb-8 border border-slate-100">
               <p className="text-slate-400 font-bold text-lg line-through leading-none">$29.90</p>
               <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-4xl font-black text-[#0f172a]">$7.90</span>
+                <span className="text-4xl font-black text-[#0f172a]">$5.50</span>
                 <span className="text-xl font-black text-[#16a34a]">USD</span>
               </div>
               <div className="mt-3 flex items-center gap-2">
                 <div className="bg-[#facc15] text-[#0a0a0a] px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-wider">
                   Mejor Oferta
                 </div>
-                <p className="text-[#dc2626] font-black text-xs uppercase tracking-tight">Ahorras 73%</p>
+                <p className="text-[#dc2626] font-black text-xs uppercase tracking-tight">Ahorras 81%</p>
               </div>
             </div>
 
@@ -807,7 +872,7 @@ function Index() {
               <div>
                 <p className="text-slate-400 font-bold text-sm line-through leading-none">$19.90</p>
                 <div className="flex items-baseline gap-1.5 mt-1">
-                  <span className="text-3xl font-black text-[#0f172a]">$5.50</span>
+                  <span className="text-3xl font-black text-[#0f172a]">$4.50</span>
                   <span className="text-lg font-black text-slate-500">USD</span>
                 </div>
               </div>
@@ -815,7 +880,7 @@ function Index() {
                 <div className="bg-slate-200 text-slate-600 px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-wider mb-1">
                   Económico
                 </div>
-                <p className="text-slate-400 font-black text-xs uppercase tracking-tight">Ahorras 72%</p>
+                <p className="text-slate-400 font-black text-xs uppercase tracking-tight">Ahorras 77%</p>
               </div>
             </div>
 
