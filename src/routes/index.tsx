@@ -735,7 +735,7 @@ function Index() {
                   <div className="bg-white/10 text-white/80 px-2.5 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider mb-2">
                     Económico
                   </div>
-                  <p className="text-slate-400 font-black text-xs uppercase tracking-tight">72% OFF</p>
+                  <p className="text-slate-400 font-black text-xs uppercase tracking-tight">77% OFF</p>
                 </div>
               </div>
 
