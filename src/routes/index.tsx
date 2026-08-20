@@ -244,6 +244,8 @@ function Index() {
             width={1024}
             height={1536}
             loading="eager"
+            fetchPriority="high"
+            decoding="async"
           />
           <p className="mt-6 text-sm text-slate-500 flex items-center justify-center gap-1.5">
             <Lock className="w-4 h-4" /> Pago 100% seguro · Acceso inmediato por e-mail
@@ -317,7 +319,7 @@ function Index() {
                 key={i}
                 className="relative shrink-0 w-[200px] sm:w-[280px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border-2 border-[#facc15]/30 transition-transform duration-300 hover:scale-105 active:scale-95"
               >
-                <img src={f.img} alt={f.t} className="w-full h-full object-cover" loading="lazy" />
+                <img src={f.img} alt={f.t} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/70 to-transparent p-3 sm:p-4">
                   <p className="font-black text-white text-xs sm:text-base uppercase tracking-wide">{f.t}</p>
                 </div>
@@ -387,6 +389,7 @@ function Index() {
                       alt={`Vista ${i + 1}`}
                       className="w-full object-contain sm:object-cover transition-transform duration-500 hover:scale-[1.06] active:scale-95"
                       loading="lazy"
+                      decoding="async"
                     />
                   </div>
                 </CarouselItem>
