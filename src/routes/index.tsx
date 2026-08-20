@@ -62,9 +62,10 @@ const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/D106820400M?checkoutMode=1
 const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/D106795605Y?checkoutMode=10";
 
 const BUYERS = [
-  "Juan M.", "Carlos R.", "Sofia G.", "Mateo L.", "Valentina P.", 
-  "Lucas B.", "Martina S.", "Thiago D.", "Isabella M.", "Joaquín V.",
-  "Elena F.", "Nicolás T.", "Camila O.", "Bautista H.", "Victoria Q."
+  "Juan Mendoza", "Carlos Rodríguez", "Sofía García", "Mateo López", "Valentina Peña", 
+  "Lucas Blanco", "Martina Silva", "Thiago Díaz", "Isabella Méndez", "Joaquín Valenzuela",
+  "Elena Figueroa", "Nicolás Torres", "Camila Ortiz", "Bautista Herrera", "Victoria Quintana",
+  "Facundo Morales", "Julieta Romero", "Santiago Castro", "Lucía Navarro", "Diego Acosta"
 ];
 
 function PurchaseNotification() {
