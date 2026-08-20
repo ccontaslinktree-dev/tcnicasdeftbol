@@ -804,7 +804,7 @@ function Index() {
                 <div className="bg-[#facc15] text-[#0a0a0a] px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-wider">
                   Mejor Oferta
                 </div>
-                <p className="text-[#dc2626] font-black text-xs uppercase tracking-tight">Ahorras 73%</p>
+                <p className="text-[#dc2626] font-black text-xs uppercase tracking-tight">Ahorras 81%</p>
               </div>
             </div>
 
