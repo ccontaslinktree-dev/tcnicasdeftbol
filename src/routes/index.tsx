@@ -253,7 +253,7 @@ function Index() {
   const { mm, ss } = useCountdown(29);
   const viewers = useLiveViewers();
   const [showPremiumPopout, setShowPremiumPopout] = useState(false);
-  const [showBasicPopout, setShowBasicPopout] = useState(false);
+  
   const [isFooterVisible, setIsFooterVisible] = useState(false);
 
   useEffect(() => {
