@@ -74,8 +74,7 @@ function PurchaseNotification() {
   useEffect(() => {
     const showNotification = () => {
       const name = BUYERS[Math.floor(Math.random() * BUYERS.length)];
-      const product = Math.random() > 0.3 ? "Plan Premium" : "Plan Básico";
-      setPurchase({ name, product });
+      setPurchase({ name, product: "Plan Premium" });
       setShowConfetti(true);
       
       setTimeout(() => setPurchase(null), 5000);
