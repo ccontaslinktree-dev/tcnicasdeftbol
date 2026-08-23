@@ -931,18 +931,12 @@ function Index() {
           isFooterVisible ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
-        <div className="max-w-[560px] mx-auto flex gap-2">
+        <div className="max-w-[560px] mx-auto">
           <button
             onClick={openPremiumOffer}
-            className="flex-1 bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[13px] py-3.5 px-2 rounded-xl shadow-lg flex items-center justify-center gap-2"
+            className="w-full bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[15px] py-4 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2"
           >
-            <Zap className="w-4 h-4 fill-current" /> Plan Premium
-          </button>
-          <button
-            onClick={openBasicOffer}
-            className="flex-1 bg-slate-900 hover:bg-black active:scale-[0.98] transition-all text-white font-black uppercase text-[13px] py-3.5 px-2 rounded-xl shadow-lg flex items-center justify-center gap-2"
-          >
-            Plan Básico
+            <Zap className="w-5 h-5 fill-current" /> Quiero el Plan Premium - $5.50 USD
           </button>
         </div>
       </div>
