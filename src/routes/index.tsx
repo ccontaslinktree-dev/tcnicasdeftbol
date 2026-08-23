@@ -107,15 +107,15 @@ function PurchaseNotification() {
         </div>
       )}
       <div className="fixed bottom-4 left-4 z-[100] animate-in fade-in slide-in-from-left-10 duration-500">
-        <div className="bg-white rounded-2xl p-4 shadow-2xl border border-slate-200 flex items-center gap-3 max-w-[280px]">
-          <div className="w-10 h-10 bg-[#16a34a] rounded-full flex items-center justify-center shrink-0">
-            <CheckCircle2 className="w-6 h-6 text-white" />
+        <div className="bg-white/95 backdrop-blur-sm rounded-xl p-2.5 shadow-xl border border-slate-200 flex items-center gap-2.5 max-w-[220px]">
+          <div className="w-8 h-8 bg-[#16a34a] rounded-full flex items-center justify-center shrink-0">
+            <CheckCircle2 className="w-5 h-5 text-white" />
           </div>
-          <div>
-            <p className="text-xs font-black text-[#0f172a]">{purchase.name} acaba de inscribirse</p>
-            <p className="text-[11px] text-[#16a34a] font-bold">{purchase.product}</p>
-            <p className="text-[9px] text-slate-400 mt-0.5 flex items-center gap-1">
-              <Clock className="w-2.5 h-2.5" /> hace unos segundos
+          <div className="min-w-0">
+            <p className="text-[11px] font-black text-[#0f172a] truncate leading-tight">{purchase.name}</p>
+            <p className="text-[10px] text-[#16a34a] font-bold leading-tight">Inscrito • Plan Premium</p>
+            <p className="text-[8px] text-slate-400 mt-0.5 flex items-center gap-1">
+              <Clock className="w-2 h-2" /> hace segundos
             </p>
           </div>
         </div>
