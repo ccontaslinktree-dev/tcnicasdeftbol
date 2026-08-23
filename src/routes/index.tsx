@@ -273,15 +273,8 @@ function Index() {
     setShowPremiumPopout(true);
   }, []);
 
-  const openBasicOffer = useCallback(() => {
-    setShowBasicPopout(true);
-  }, []);
-
   const handleClosePremium = useCallback(() => {
     setShowPremiumPopout(false);
-    setTimeout(() => {
-      setShowBasicPopout(true);
-    }, 300);
   }, []);
 
   return (
