@@ -677,7 +677,7 @@ function Index() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-[960px] mx-auto">
+          <div className="max-w-[560px] mx-auto">
             {/* Plan Premium - On page */}
             <div className="relative group bg-white rounded-[32px] p-6 sm:p-8 flex flex-col border-2 border-[#16a34a] shadow-[0_20px_50px_-12px_rgba(22,163,74,0.3)] transform transition-all duration-500 hover:scale-[1.02]">
               <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#16a34a] text-white px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest shadow-lg flex items-center gap-2 whitespace-nowrap">
@@ -728,64 +728,6 @@ function Index() {
                 className="w-full bg-[#16a34a] hover:bg-[#15803d] active:scale-[0.98] text-white font-black uppercase py-5 rounded-2xl shadow-[0_10px_25px_-5px_rgba(22,163,74,0.4)] transition-all flex items-center justify-center gap-3 text-lg"
               >
                 Quiero el Plan Premium
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Plan Fútbol 360 - On page */}
-            <div className="relative group bg-slate-900 rounded-[32px] p-6 sm:p-8 flex flex-col border-2 border-slate-800 shadow-2xl transform transition-all duration-500 hover:scale-[1.02]">
-              <div className="mb-8">
-                <h3 className="text-white font-black uppercase text-2xl sm:text-3xl mb-1">Fútbol 360</h3>
-                <p className="text-slate-400 font-bold italic text-sm">Acceso Esencial al Método</p>
-              </div>
-
-              <div className="bg-blue-500/10 border border-blue-500/20 p-4 rounded-2xl mb-8">
-                <div className="flex items-center gap-2 text-blue-400 mb-2">
-                  <Target className="w-5 h-5" />
-                  <p className="font-black uppercase text-xs tracking-wider">¿Qué incluye?</p>
-                </div>
-                <p className="text-slate-300 text-sm font-bold leading-relaxed">
-                  Entrenamiento completo para niños, mujeres y preparación física; mejora en todas las áreas.
-                </p>
-              </div>
-
-              <div className="space-y-3 mb-10 flex-grow">
-                {[
-                  "Ejercicios Seleccionados",
-                  "Preparación Física Base",
-                  "Ideal para Niños y Mujeres",
-                  "Acceso Inmediato",
-                ].map((item) => (
-                  <div key={item} className="flex items-center gap-3">
-                    <div className="bg-white/10 rounded-full p-1 shrink-0">
-                      <CheckCircle2 className="w-3 h-3 text-white/50" />
-                    </div>
-                    <span className="text-slate-300 font-bold text-sm tracking-tight">{item}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="bg-white/5 rounded-2xl p-6 mb-8 border border-white/10 flex items-center justify-between">
-                <div>
-                  <p className="text-slate-500 font-bold text-lg line-through leading-none">$19.90</p>
-                  <div className="flex items-baseline gap-1.5 mt-1">
-                    <span className="text-4xl font-black text-white">$4.50</span>
-                    <span className="text-xl font-black text-slate-400">USD</span>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="bg-white/10 text-white/80 px-2.5 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider mb-2">
-                    Económico
-                  </div>
-                  <p className="text-slate-400 font-black text-xs uppercase tracking-tight">77% OFF</p>
-                </div>
-              </div>
-
-              <button
-                onClick={openBasicOffer}
-                className="w-full bg-white hover:bg-slate-100 active:scale-[0.98] text-[#0a0a0a] font-black uppercase py-5 rounded-2xl shadow-xl transition-all flex items-center justify-center gap-3 text-lg"
-              >
-                Quiero el Plan Básico
                 <ArrowRight className="w-5 h-5" />
               </button>
             </div>
