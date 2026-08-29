@@ -202,7 +202,11 @@ function goCheckout(url: string) {
       }
     });
 
-    if (hasUtm) {
+    // Hotmart usa "sck" como código de rastreo: usamos el xcod de Meta si existe
+    const xcod = searchParams.get("xcod");
+    if (xcod) {
+      targetUrl.searchParams.set("sck", xcod);
+    } else if (hasUtm) {
       targetUrl.searchParams.set("sck", "meta_ads");
     }
 
