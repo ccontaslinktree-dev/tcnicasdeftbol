@@ -189,7 +189,7 @@ function goCheckout(url: string) {
   
   if (typeof window !== "undefined") {
     const searchParams = new URLSearchParams(window.location.search);
-    const utms = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+    const utms = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "xcod"];
     const targetUrl = new URL(url);
     
     // Add SCK for Hotmart tracking if any UTM exists
