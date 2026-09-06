@@ -65,8 +65,6 @@ import imgStackValor from "@/assets/stack-valor.jpg";
 
 const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=10";
 const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/B107438269A?checkoutMode=10";
-const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/B107438269A?checkoutMode=10";
-const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/B107438269A?checkoutMode=10";
 
 const BUYERS = [
   "Juan Mendoza", "Carlos Rodríguez", "Sofía García", "Mateo López", "Valentina Peña", 
@@ -925,78 +923,14 @@ function Index() {
           </div>
 
 
-      {/* Pop-out Premium */}
-      <Dialog open={showPremiumPopout} onOpenChange={(open) => {
-        if (!open) handleClosePremium();
-        else setShowPremiumPopout(true);
-      }}>
-        <DialogContent className="max-w-[92vw] sm:max-w-[450px] max-h-[90vh] overflow-y-auto p-0 border-none rounded-3xl bg-white shadow-2xl">
-          <div className="bg-[#16a34a] p-4 text-center relative">
-            <button 
-              onClick={handleClosePremium}
-              className="absolute right-4 top-4 text-white/80 hover:text-white transition-colors"
-            >
-              <X className="w-6 h-6" />
-            </button>
-            <div className="bg-white/20 backdrop-blur rounded-full px-4 py-1.5 inline-flex items-center gap-2 mb-2">
-              <Sparkles className="w-4 h-4 text-[#facc15]" />
-              <span className="text-white text-xs font-black uppercase tracking-wider">Oportunidad Única</span>
-            </div>
-            <h2 className="text-white font-black uppercase text-2xl leading-tight">Plan Completo</h2>
-            <p className="text-white/90 text-sm font-medium italic mt-1">+2.000 Ejercicios + Todos los Bonos</p>
-          </div>
-
-          <div className="p-6">
-            <div className="flex items-center gap-2 text-red-600 mb-6 bg-red-50 p-3 rounded-2xl border border-red-100 animate-pulse">
-              <Clock className="w-5 h-5" />
-              <p className="text-sm font-black uppercase tracking-tight">¡Vence en {mm}:{ss}!</p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-3 mb-6">
-              {[
-                "+2.000 entrenamientos organizados",
-                "Rutina alimentaria de alto rendimiento",
-                "Entrenamientos en casa de profesionales",
-                "500 entrenamientos de definición (hoy)",
-                "4 Bonos adicionales incluidos",
-                "Acceso vitalicio + actualizaciones",
-                "Garantía de 7 días",
-              ].map((item) => (
-                <div key={item} className="flex items-center gap-3">
-                  <div className="bg-[#16a34a] rounded-full p-1 shrink-0">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-white" />
-                  </div>
-                  <span className="text-[#0f172a] font-bold text-sm tracking-tight">{item}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="bg-slate-50 rounded-2xl p-5 mb-8 border border-slate-100">
-              <p className="text-slate-400 font-bold text-lg line-through leading-none">$29.90</p>
-              <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-4xl font-black text-[#0f172a]">$39.90</span>
-                <span className="text-xl font-black text-[#16a34a]">USD</span>
-              </div>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="bg-[#facc15] text-[#0a0a0a] px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-wider">
-                  Mejor Oferta
-                </div>
-                <p className="text-[#dc2626] font-black text-xs uppercase tracking-tight">Ahorras 81%</p>
-              </div>
-            </div>
-
-            <button
-              onClick={() => goCheckout(PREMIUM_CHECKOUT_URL, 39.90)}
-              className="w-full bg-[#16a34a] hover:bg-[#15803d] text-white font-black uppercase py-5 rounded-2xl shadow-xl shadow-green-200 transition-all flex items-center justify-center gap-3 group text-lg"
-            >
-              Sí, quiero el Plan Completo ahora
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-            
-            <p className="text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-4 flex items-center justify-center gap-2">
-              <Lock className="w-3.5 h-3.5" /> Pago 100% Seguro · Acceso Instantáneo
-            </p>
-          </div>
+      {/* Package selector */}
+      <Dialog open={showPremiumPopout} onOpenChange={(open) => { if (!open) handleClosePremium(); else setShowPremiumPopout(true); }}>
+        <DialogContent className="max-w-[94vw] sm:max-w-[820px] max-h-[92vh] overflow-y-auto p-0 rounded-3xl bg-white shadow-2xl">
+          <div className="bg-[#0a0a0a] p-6 text-center relative"><button onClick={handleClosePremium} className="absolute right-4 top-4 text-white/80"><X className="w-6 h-6" /></button><p className="text-[#facc15] font-black uppercase text-xs">Elige tu paquete</p><h2 className="text-white font-black uppercase text-2xl sm:text-3xl mt-2">Empieza ahora</h2><p className="text-white/70 text-sm mt-2">El Plan Completo es la opción recomendada.</p></div>
+          <div className="p-5 sm:p-7 grid md:grid-cols-2 gap-5">
+            <div className="relative rounded-3xl border-4 border-[#16a34a] p-5 sm:p-6"><div className="absolute -top-4 left-5 bg-[#16a34a] text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase">⭐ Recomendado · Mejor Valor</div><h3 className="font-black uppercase text-2xl mt-2">Plan Completo</h3><p className="text-slate-500 text-sm mb-4">+2.000 ejercicios + nutrición + casa + definición + 4 bonos.</p><div className="space-y-2 text-sm font-semibold mb-5">{['+2.000 ejercicios por posición y categoría','Nutrición de alto rendimiento','Entrenamientos en casa','500 entrenamientos de definición muscular','4 bonos exclusivos','Acceso vitalicio + actualizaciones','Garantía de 7 días'].map((item)=><div key={item} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-[#16a34a]" />{item}</div>)}</div><div className="text-4xl font-black mb-5">$39.90 <span className="text-base text-[#16a34a]">USD</span></div><button onClick={()=>goCheckout(PREMIUM_CHECKOUT_URL,39.90)} className="w-full bg-[#16a34a] text-white font-black uppercase py-4 rounded-2xl">Comprar Plan Completo <ArrowRight className="inline w-5 h-5" /></button></div>
+            <div className="rounded-3xl border-2 border-slate-300 p-5 sm:p-6"><p className="text-slate-500 font-black uppercase text-[10px] mb-2">Opción económica</p><h3 className="font-black uppercase text-2xl">2.000 Ejercicios</h3><p className="text-slate-500 text-sm mb-4">Solo la biblioteca organizada por posición y categoría.</p><div className="space-y-2 text-sm font-semibold mb-5">{['+2.000 ejercicios de fútbol','Organizados por posición','Organizados por categoría','Acceso inmediato','Acceso vitalicio','Garantía de 7 días'].map((item)=><div key={item} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-slate-700" />{item}</div>)}</div><div className="text-4xl font-black mb-5">$25.90 <span className="text-base text-slate-700">USD</span></div><button onClick={()=>goCheckout(BASIC_CHECKOUT_URL,25.90)} className="w-full bg-slate-900 text-white font-black uppercase py-4 rounded-2xl">Comprar 2.000 Ejercicios <ArrowRight className="inline w-5 h-5" /></button></div>
+          </div><p className="text-center text-[10px] text-slate-400 font-bold uppercase pb-5"><Lock className="inline w-3.5 h-3.5" /> Pago 100% seguro · Hotmart</p>
         </DialogContent>
       </Dialog>
 
