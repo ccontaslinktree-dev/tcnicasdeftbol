@@ -870,6 +870,9 @@ function Index() {
               <div className="mb-8">
                 <h3 className="text-[#0a0a0a] font-black uppercase text-2xl sm:text-3xl mb-1">Plan Premium</h3>
                 <p className="text-slate-500 font-bold italic text-sm">Biblioteca Completa + Todos los Bonos</p>
+                <p className="mt-3 text-[13px] font-bold text-[#0a0a0a] bg-[#facc15]/25 border border-[#facc15] rounded-xl px-3 py-2">
+                  El <b>93% de los compradores</b> eligen el Plan Premium porque lleva el sistema completo.
+                </p>
               </div>
 
               <div className="space-y-4 mb-10 flex-grow">
@@ -912,7 +915,7 @@ function Index() {
                 onClick={openPremiumOffer}
                 className="w-full bg-[#16a34a] hover:bg-[#15803d] active:scale-[0.98] text-white font-black uppercase py-5 rounded-2xl shadow-[0_10px_25px_-5px_rgba(22,163,74,0.4)] transition-all flex items-center justify-center gap-3 text-lg"
               >
-                Quiero el Plan Premium
+                Sí, quiero el Plan Premium ahora
                 <ArrowRight className="w-5 h-5" />
               </button>
             </div>
