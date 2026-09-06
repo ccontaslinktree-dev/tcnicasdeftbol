@@ -1,0 +1,105 @@
+name: Update football offers
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  update:
+    if: ${{ !contains(github.event.head_commit.message, '[offers-final]') }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update offers
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('src/routes/index.tsx')
+          s = p.read_text()
+
+          s = s.replace(
+              'const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=10";',
+              'const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=10";\nconst BASIC_CHECKOUT_URL = "https://pay.hotmart.com/B107438269A?checkoutMode=10";'
+          )
+
+          s = s.replace('setPurchase({ name, product: "Plan Premium" });', 'setPurchase({ name, product: "Plan Completo" });')
+          s = s.replace('Inscrito • Plan Premium', 'Inscrito • Plan Completo')
+          s = s.replace('function goCheckout(url: string) {\n  fireEvent("InitiateCheckout", 5.50);', 'function goCheckout(url: string, value: number) {\n  fireEvent("InitiateCheckout", value);')
+
+          # Replace the pricing cards with two packages, prioritizing the complete plan.
+          start = s.index('          <div className="max-w-[560px] mx-auto">\n            {/* Plan Premium - On page */}')
+          end = s.index('\n\n      {/* Pop-out Premium */}', start)
+          pricing = '''          <div className="grid lg:grid-cols-2 gap-6 max-w-[1050px] mx-auto items-stretch">
+            <div className="relative group bg-white rounded-[32px] p-6 sm:p-8 flex flex-col border-4 border-[#16a34a] shadow-[0_25px_70px_-18px_rgba(22,163,74,0.5)] lg:-translate-y-2 transition-all duration-500 hover:scale-[1.02]">
+              <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#16a34a] text-white px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest shadow-lg flex items-center gap-2 whitespace-nowrap"><Sparkles className="w-4 h-4 text-[#facc15]" /> RECOMENDADO · MEJOR VALOR</div>
+              <div className="mb-7 mt-2">
+                <h3 className="text-[#0a0a0a] font-black uppercase text-2xl sm:text-3xl mb-1">Plan Completo</h3>
+                <p className="text-slate-500 font-bold italic text-sm">El sistema completo para evolucionar dentro y fuera del campo</p>
+                <p className="mt-3 text-[13px] font-bold text-[#0a0a0a] bg-[#facc15]/25 border border-[#facc15] rounded-xl px-3 py-2">⭐ <b>La opción recomendada:</b> +2.000 ejercicios + nutrición + casa + definición + 4 bonos.</p>
+              </div>
+              <div className="space-y-3 mb-8 flex-grow">
+                {[
+                  "+2.000 ejercicios organizados por posición y categoría",
+                  "Rutina alimentaria completa de alto rendimiento",
+                  "Entrenamientos en casa",
+                  "500 entrenamientos para definir músculo",
+                  "4 bonos exclusivos incluidos",
+                  "Acceso vitalicio + actualizaciones",
+                  "Garantía total de 7 días",
+                ].map((item) => <div key={item} className="flex items-center gap-3"><div className="bg-[#16a34a] rounded-full p-1 shrink-0"><CheckCircle2 className="w-3.5 h-3.5 text-white" /></div><span className="text-[#0f172a] font-bold text-sm">{item}</span></div>)}
+              </div>
+              <div className="bg-slate-50 rounded-2xl p-5 mb-6 border border-slate-100"><p className="text-slate-400 font-bold text-lg line-through">$89.90 USD</p><div className="flex items-baseline gap-2"><span className="text-5xl font-black text-[#0f172a]">$39.90</span><span className="text-2xl font-black text-[#16a34a]">USD</span></div><span className="inline-block mt-3 bg-[#facc15] text-[#0a0a0a] px-3 py-1.5 rounded-lg text-xs font-black uppercase">Plan recomendado</span></div>
+              <button onClick={openPremiumOffer} className="w-full bg-[#16a34a] hover:bg-[#15803d] text-white font-black uppercase py-5 rounded-2xl shadow-xl transition-all flex items-center justify-center gap-3 text-lg">Quiero el Plan Completo <ArrowRight className="w-5 h-5" /></button>
+            </div>
+
+            <div className="relative group bg-white rounded-[32px] p-6 sm:p-8 flex flex-col border-2 border-slate-300 shadow-xl transition-all duration-500 hover:scale-[1.01]">
+              <div className="mb-7"><h3 className="text-[#0a0a0a] font-black uppercase text-2xl sm:text-3xl mb-1">2.000 Ejercicios</h3><p className="text-slate-500 font-bold italic text-sm">Biblioteca organizada por posición y categoría</p><p className="mt-3 text-[13px] font-semibold text-slate-700 bg-slate-100 border border-slate-200 rounded-xl px-3 py-2">Ideal si buscas únicamente la biblioteca de ejercicios de fútbol.</p></div>
+              <div className="space-y-3 mb-8 flex-grow">
+                {[
+                  "+2.000 ejercicios de fútbol",
+                  "Organizados por posición",
+                  "Organizados por categoría",
+                  "Acceso digital inmediato",
+                  "Acceso vitalicio",
+                  "Garantía de 7 días",
+                ].map((item) => <div key={item} className="flex items-center gap-3"><div className="bg-slate-800 rounded-full p-1 shrink-0"><CheckCircle2 className="w-3.5 h-3.5 text-white" /></div><span className="text-[#0f172a] font-bold text-sm">{item}</span></div>)}
+              </div>
+              <div className="bg-slate-50 rounded-2xl p-5 mb-6 border border-slate-100"><p className="text-slate-400 font-bold text-lg line-through">$49.90 USD</p><div className="flex items-baseline gap-2"><span className="text-4xl font-black text-[#0f172a]">$25.90</span><span className="text-xl font-black text-slate-700">USD</span></div><span className="inline-block mt-3 bg-slate-200 text-slate-800 px-3 py-1.5 rounded-lg text-xs font-black uppercase">Biblioteca esencial</span></div>
+              <button onClick={openPremiumOffer} className="w-full bg-slate-900 hover:bg-slate-800 text-white font-black uppercase py-5 rounded-2xl shadow-xl transition-all flex items-center justify-center gap-3 text-lg">Quiero los 2.000 Ejercicios <ArrowRight className="w-5 h-5" /></button>
+            </div>
+          </div>'''
+          s = s[:start] + pricing + s[end:]
+
+          # Replace the old single-package dialog with a selector. Only the two package buttons call goCheckout.
+          start = s.index('      {/* Pop-out Premium */}')
+          end = s.index('\n\n      {/* Guarantee */}', start)
+          dialog = '''      {/* Package selector: only these two buttons go directly to Hotmart */}
+      <Dialog open={showPremiumPopout} onOpenChange={(open) => { if (!open) handleClosePremium(); else setShowPremiumPopout(true); }}>
+        <DialogContent className="max-w-[94vw] sm:max-w-[760px] max-h-[92vh] overflow-y-auto p-0 border-none rounded-3xl bg-white shadow-2xl">
+          <div className="bg-[#0a0a0a] p-5 sm:p-6 text-center relative"><button onClick={handleClosePremium} className="absolute right-4 top-4 text-white/70 hover:text-white"><X className="w-6 h-6" /></button><div className="bg-[#16a34a] text-white rounded-full px-4 py-1.5 inline-flex items-center gap-2 mb-2"><Sparkles className="w-4 h-4 text-[#facc15]" /><span className="text-xs font-black uppercase tracking-wider">Elige tu paquete</span></div><h2 className="text-white font-black uppercase text-2xl sm:text-3xl">Dos formas de empezar</h2><p className="text-white/80 text-sm mt-1">El Plan Completo es la opción recomendada.</p></div>
+          <div className="p-5 sm:p-7 grid md:grid-cols-2 gap-4">
+            <div className="relative rounded-3xl border-4 border-[#16a34a] bg-white p-5 shadow-lg"><div className="absolute -top-3 left-5 bg-[#16a34a] text-white px-3 py-1 rounded-full text-[10px] font-black uppercase">Recomendado</div><h3 className="font-black uppercase text-xl mt-2">Plan Completo</h3><p className="text-slate-500 text-sm font-medium mb-4">Todo el método + bonos.</p><ul className="space-y-2 text-sm font-semibold mb-5">{['+2.000 ejercicios por posición y categoría','Nutrición de alto rendimiento','Entrenamientos en casa','500 entrenamientos de definición','4 bonos exclusivos','Acceso vitalicio + actualizaciones','Garantía de 7 días'].map((item) => <li key={item} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-[#16a34a] shrink-0 mt-0.5" />{item}</li>)}</ul><div className="mb-4"><span className="text-slate-400 line-through font-bold">$89.90</span><div className="text-4xl font-black">$39.90 <span className="text-base text-[#16a34a]">USD</span></div></div><button onClick={() => goCheckout(PREMIUM_CHECKOUT_URL, 39.90)} className="w-full bg-[#16a34a] hover:bg-[#15803d] text-white font-black uppercase py-4 rounded-2xl shadow-xl flex items-center justify-center gap-2">Comprar Plan Completo <ArrowRight className="w-5 h-5" /></button></div>
+            <div className="rounded-3xl border-2 border-slate-300 bg-white p-5 shadow-lg"><h3 className="font-black uppercase text-xl mt-2">2.000 Ejercicios</h3><p className="text-slate-500 text-sm font-medium mb-4">Solo la biblioteca de ejercicios.</p><ul className="space-y-2 text-sm font-semibold mb-5">{['+2.000 ejercicios de fútbol','Organizados por posición','Organizados por categoría','Acceso inmediato','Acceso vitalicio','Garantía de 7 días'].map((item) => <li key={item} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-slate-700 shrink-0 mt-0.5" />{item}</li>)}</ul><div className="mb-4"><span className="text-slate-400 line-through font-bold">$49.90</span><div className="text-4xl font-black">$25.90 <span className="text-base text-slate-700">USD</span></div></div><button onClick={() => goCheckout(BASIC_CHECKOUT_URL, 25.90)} className="w-full bg-slate-900 hover:bg-slate-800 text-white font-black uppercase py-4 rounded-2xl shadow-xl flex items-center justify-center gap-2">Comprar 2.000 Ejercicios <ArrowRight className="w-5 h-5" /></button></div>
+          </div><p className="text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest pb-5 flex items-center justify-center gap-2"><Lock className="w-3.5 h-3.5" /> Pago 100% seguro · Acceso instantáneo por Hotmart</p>
+        </DialogContent>
+      </Dialog>'''
+          s = s[:start] + dialog + s[end:]
+
+          # Update visible old prices in all remaining copy and keep every non-package CTA opening the selector.
+          s = s.replace('$5.50', '$39.90').replace('$5,50', '$39,90')
+          s = s.replace('Plan Premium', 'Plan Completo')
+          s = s.replace('Premium', 'Completo')
+          s = s.replace('goCheckout(PREMIUM_CHECKOUT_URL)', 'goCheckout(PREMIUM_CHECKOUT_URL, 39.90)')
+
+          # Ensure there are no direct checkout calls outside the two package buttons.
+          p.write_text(s)
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/routes/index.tsx
+          git commit -m "Implement two package offers [offers-final]"
+          git push
