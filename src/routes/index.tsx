@@ -64,6 +64,7 @@ import imgCasa from "@/assets/entrenamiento-casa.jpg";
 import imgStackValor from "@/assets/stack-valor.jpg";
 
 const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=10";
+const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/B107438269A?checkoutMode=10";
 
 const BUYERS = [
   "Juan Mendoza", "Carlos Rodríguez", "Sofía García", "Mateo López", "Valentina Peña", 
@@ -79,7 +80,7 @@ function PurchaseNotification() {
   useEffect(() => {
     const showNotification = () => {
       const name = BUYERS[Math.floor(Math.random() * BUYERS.length)];
-      setPurchase({ name, product: "Plan Premium" });
+      setPurchase({ name, product: "Plan Completo" });
       setShowConfetti(true);
       
       setTimeout(() => setPurchase(null), 5000);
@@ -118,7 +119,7 @@ function PurchaseNotification() {
           </div>
           <div className="min-w-0">
             <p className="text-[11px] font-black text-[#0f172a] truncate leading-tight">{purchase.name}</p>
-            <p className="text-[10px] text-[#16a34a] font-bold leading-tight">Inscrito • Plan Premium</p>
+            <p className="text-[10px] text-[#16a34a] font-bold leading-tight">Inscrito • Plan Completo</p>
             <p className="text-[8px] text-slate-400 mt-0.5 flex items-center gap-1">
               <Clock className="w-2 h-2" /> hace segundos
             </p>
@@ -189,8 +190,8 @@ function fireEvent(name: string, value?: number) {
   }).catch(() => {});
 }
 
-function goCheckout(url: string) {
-  fireEvent("InitiateCheckout", 5.50);
+function goCheckout(url: string, value: number) {
+  fireEvent("InitiateCheckout", value);
   
   if (typeof window !== "undefined") {
     const searchParams = new URLSearchParams(window.location.search);
@@ -459,7 +460,7 @@ function Index() {
         <div className="max-w-[1100px] mx-auto">
           <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Todo lo que recibes hoy</p>
           <h2 className="text-center font-black uppercase text-[clamp(24px,5vw,40px)] leading-tight mb-3">
-            El arsenal <span className="text-[#16a34a]">completo</span> del Plan Premium
+            El arsenal <span className="text-[#16a34a]">completo</span> del Plan Completo
           </h2>
           <p className="text-center text-slate-600 max-w-xl mx-auto mb-8 sm:mb-10 text-sm sm:text-base">
             Método completo, organizado y profesional. Nada de material suelto.
@@ -630,7 +631,7 @@ function Index() {
             <div className="mt-6 text-center">
               <p className="font-black uppercase text-slate-500 text-sm">Valor real total: <span className="line-through">más de $460</span></p>
               <p className="font-black uppercase text-[clamp(20px,5vw,32px)] leading-tight mt-2">
-                Hoy te llevas TODO por solo <span className="text-[#16a34a]">$5,50</span>
+                Hoy te llevas TODO por solo <span className="text-[#16a34a]">$39,90</span>
               </p>
               <p className="text-slate-600 text-sm mt-3 max-w-md mx-auto">
                 Estás pagando una fracción mínima del valor real. Esta diferencia solo existe mientras la oferta esté activa.
@@ -639,7 +640,7 @@ function Index() {
                 onClick={openPremiumOffer}
                 className="mt-6 w-full max-w-[520px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] active:scale-[0.98] transition-all text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl"
               >
-                Quiero todo por $5,50
+                Quiero todo por $39,90
               </button>
             </div>
           </div>
@@ -860,7 +861,7 @@ function Index() {
           </div>
 
           <div className="max-w-[560px] mx-auto">
-            {/* Plan Premium - On page */}
+            {/* Plan Completo - On page */}
             <div className="relative group bg-white rounded-[32px] p-6 sm:p-8 flex flex-col border-2 border-[#16a34a] shadow-[0_20px_50px_-12px_rgba(22,163,74,0.3)] transform transition-all duration-500 hover:scale-[1.02]">
               <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#16a34a] text-white px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest shadow-lg flex items-center gap-2 whitespace-nowrap">
                 <Sparkles className="w-4 h-4 text-[#facc15]" />
@@ -868,10 +869,10 @@ function Index() {
               </div>
               
               <div className="mb-8">
-                <h3 className="text-[#0a0a0a] font-black uppercase text-2xl sm:text-3xl mb-1">Plan Premium</h3>
+                <h3 className="text-[#0a0a0a] font-black uppercase text-2xl sm:text-3xl mb-1">Plan Completo</h3>
                 <p className="text-slate-500 font-bold italic text-sm">Biblioteca Completa + Todos los Bonos</p>
                 <p className="mt-3 text-[13px] font-bold text-[#0a0a0a] bg-[#facc15]/25 border border-[#facc15] rounded-xl px-3 py-2">
-                  El <b>93% de los compradores</b> eligen el Plan Premium porque lleva el sistema completo.
+                  El <b>93% de los compradores</b> eligen el Plan Completo porque lleva el sistema completo.
                 </p>
               </div>
 
@@ -898,7 +899,7 @@ function Index() {
               <div className="bg-slate-50 rounded-2xl p-6 mb-8 border border-slate-100">
                 <p className="text-slate-400 font-bold text-xl line-through leading-none">$29.90</p>
                 <div className="flex items-baseline gap-2 mt-1">
-                  <span className="text-5xl font-black text-[#0f172a]">$5.50</span>
+                  <span className="text-5xl font-black text-[#0f172a]">$39.90</span>
                   <span className="text-2xl font-black text-[#16a34a]">USD</span>
                 </div>
                 <div className="mt-4 flex items-center gap-3">
@@ -915,7 +916,7 @@ function Index() {
                 onClick={openPremiumOffer}
                 className="w-full bg-[#16a34a] hover:bg-[#15803d] active:scale-[0.98] text-white font-black uppercase py-5 rounded-2xl shadow-[0_10px_25px_-5px_rgba(22,163,74,0.4)] transition-all flex items-center justify-center gap-3 text-lg"
               >
-                Sí, quiero el Plan Premium ahora
+                Sí, quiero el Plan Completo ahora
                 <ArrowRight className="w-5 h-5" />
               </button>
             </div>
@@ -939,7 +940,7 @@ function Index() {
               <Sparkles className="w-4 h-4 text-[#facc15]" />
               <span className="text-white text-xs font-black uppercase tracking-wider">Oportunidad Única</span>
             </div>
-            <h2 className="text-white font-black uppercase text-2xl leading-tight">Plan Premium</h2>
+            <h2 className="text-white font-black uppercase text-2xl leading-tight">Plan Completo</h2>
             <p className="text-white/90 text-sm font-medium italic mt-1">+2.000 Ejercicios + Todos los Bonos</p>
           </div>
 
@@ -971,7 +972,7 @@ function Index() {
             <div className="bg-slate-50 rounded-2xl p-5 mb-8 border border-slate-100">
               <p className="text-slate-400 font-bold text-lg line-through leading-none">$29.90</p>
               <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-4xl font-black text-[#0f172a]">$5.50</span>
+                <span className="text-4xl font-black text-[#0f172a]">$39.90</span>
                 <span className="text-xl font-black text-[#16a34a]">USD</span>
               </div>
               <div className="mt-3 flex items-center gap-2">
@@ -983,10 +984,10 @@ function Index() {
             </div>
 
             <button
-              onClick={() => goCheckout(PREMIUM_CHECKOUT_URL)}
+              onClick={() => goCheckout(PREMIUM_CHECKOUT_URL, 39.90)}
               className="w-full bg-[#16a34a] hover:bg-[#15803d] text-white font-black uppercase py-5 rounded-2xl shadow-xl shadow-green-200 transition-all flex items-center justify-center gap-3 group text-lg"
             >
-              Sí, quiero el Plan Premium ahora
+              Sí, quiero el Plan Completo ahora
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
             
@@ -1127,7 +1128,7 @@ function Index() {
             onClick={openPremiumOffer}
             className="w-full bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[15px] py-4 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2"
           >
-            <Zap className="w-5 h-5 fill-current" /> Quiero el Plan Premium - $5.50 USD
+            <Zap className="w-5 h-5 fill-current" /> Quiero el Plan Completo - $39.90 USD
           </button>
         </div>
       </div>
