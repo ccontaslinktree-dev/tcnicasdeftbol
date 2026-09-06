@@ -57,6 +57,11 @@ import featDribles from "@/assets/feature-dribles.jpg";
 import featAgilidad from "@/assets/feature-agilidad.jpg";
 import featChutes from "@/assets/feature-chutes.jpg";
 import featPasses from "@/assets/feature-passes.jpg";
+import imgArsenal from "@/assets/arsenal-completo.jpg";
+import imgDefinicion from "@/assets/bono-definicion.jpg";
+import imgNutricion from "@/assets/nutricion-atleta.jpg";
+import imgCasa from "@/assets/entrenamiento-casa.jpg";
+import imgStackValor from "@/assets/stack-valor.jpg";
 
 const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=10";
 
@@ -294,11 +299,11 @@ function Index() {
       <section className="px-5 pt-6 pb-8 text-center">
         <div className="max-w-[1100px] mx-auto">
           <h1 className="font-black uppercase leading-[1.12] tracking-tight text-[#0a0a0a] mb-6 text-[clamp(22px,5.2vw,48px)]">
-            Domina el Fútbol con{" "}
+            Domina el Fútbol y Transforma tu Rendimiento con el{" "}
             <span className="bg-[#facc15] text-[#0a0a0a] px-2 py-0.5 rounded-md">
-              +2.000 Entrenamientos Profesionales
+              Método Completo
             </span>{" "}
-            organizados para Jugadores y Entrenadores, listos para aplicar
+            que Usan Jugadores y Entrenadores que Quieren Resultados Reales
           </h1>
           <div className="max-w-[680px] mx-auto mb-6 bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white rounded-2xl px-4 py-3 sm:px-5 sm:py-4 shadow-lg border border-[#facc15]/40 flex items-start gap-3 text-left">
             <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 text-[#facc15] mt-0.5 animate-pulse" />
@@ -306,10 +311,10 @@ function Index() {
               <span className="text-[#facc15] font-black uppercase">Actualizaciones automáticas:</span> añadimos nuevos ejercicios constantemente, además de las estrategias clásicas que grandes clubes usan para lograr resultados de élite. Tu biblioteca crece contigo, siempre.
             </p>
           </div>
-          <p className="text-slate-600 font-medium max-w-[640px] mx-auto mb-7 leading-relaxed text-[clamp(14px,3.6vw,19px)]">
-            Accede a la <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">biblioteca completa</span> organizada por{" "}
-            <b className="text-[#0a0a0a]">posición y categoría</b>, método profesional, acceso inmediato{" "}
-            <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">+ 4 Bonos exclusivos</span>
+          <p className="text-slate-600 font-medium max-w-[680px] mx-auto mb-7 leading-relaxed text-[clamp(14px,3.6vw,19px)]">
+            <b className="text-[#0a0a0a]">+2.000 entrenamientos profesionales</b> organizados por posición y categoría{" "}
+            <b className="text-[#0a0a0a]">+ nutrición de alto rendimiento</b> + entrenamientos en casa de jugadores profesionales{" "}
+            <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">+ 500 entrenamientos específicos para definir músculo</span>. Todo listo para aplicar. Acceso inmediato.
           </p>
 
           <img
@@ -452,22 +457,32 @@ function Index() {
       {/* Includes */}
       <section className="px-5 py-12 sm:py-14">
         <div className="max-w-[1100px] mx-auto">
-          <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Lo que Incluye tu Kit</p>
+          <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Todo lo que recibes hoy</p>
           <h2 className="text-center font-black uppercase text-[clamp(24px,5vw,40px)] leading-tight mb-3">
-            Todo para <span className="text-[#16a34a]">jugar mejor</span>
+            El arsenal <span className="text-[#16a34a]">completo</span> del Plan Premium
           </h2>
           <p className="text-center text-slate-600 max-w-xl mx-auto mb-8 sm:mb-10 text-sm sm:text-base">
-            Método completo, organizado y profesional.
+            Método completo, organizado y profesional. Nada de material suelto.
           </p>
+
+          <img
+            src={imgArsenal}
+            alt="Arsenal completo de entrenamientos y nutrición"
+            className="w-full max-w-[820px] mx-auto rounded-3xl shadow-2xl mb-8 sm:mb-10 transition-transform duration-500 hover:scale-[1.02]"
+            width={1200}
+            height={800}
+            loading="lazy"
+            decoding="async"
+          />
 
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {[
-              { i: Trophy, t: "+2.000 entrenamientos organizados", d: "Biblioteca completa lista para acceder desde cualquier dispositivo." },
-              { i: Target, t: "Organizados por posición y categorías", d: "Portero, defensa, mediocampo y delantero, desde Sub-8 hasta Adulto." },
-              { i: Zap, t: "Técnica individual y colectiva", d: "Control, regate, pase y jugadas de conjunto." },
-              { i: Flame, t: "Preparación física y prevención", d: "Velocidad, fuerza, resistencia y menos lesiones." },
-              { i: Star, t: "4 Bonos exclusivos incluidos", d: "Materiales extra para acelerar tu evolución." },
-              { i: Mail, t: "Acceso instantáneo por e-mail", d: "Al finalizar la compra recibes al instante toda la biblioteca." },
+              { i: Trophy, t: "+2.000 entrenamientos de fútbol", d: "Organizados por posición y categoría, listos para aplicar hoy." },
+              { i: Target, t: "Rutina alimentaria completa", d: "La alimentación real de atletas de alto rendimiento, paso a paso." },
+              { i: Zap, t: "Recetas estratégicas", d: "Para optimizar energía, recuperación y rendimiento en cada sesión." },
+              { i: Flame, t: "Entrenamientos en casa", d: "Sesiones individuales que usan jugadores profesionales, sin gimnasio." },
+              { i: Star, t: "500 entrenamientos de definición", d: "Bono exclusivo de hoy para construir un físico atlético." },
+              { i: Mail, t: "Acceso vitalicio + actualizaciones", d: "4 bonos adicionales y material nuevo añadido automáticamente." },
             ].map(({ i: Icon, t, d }) => (
               <div key={t} className="group bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] hover:border-[#16a34a]/40 transition-all duration-300">
                 <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#16a34a]/10 text-[#16a34a] flex items-center justify-center mb-2 sm:mb-3 group-hover:scale-110 group-hover:bg-[#16a34a] group-hover:text-white transition-all duration-300">
@@ -477,6 +492,156 @@ function Index() {
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{d}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Dolor y deseo */}
+      <section className="px-5 py-14 bg-[#0a0a0a] text-white">
+        <div className="max-w-[900px] mx-auto">
+          <h2 className="font-black uppercase text-[clamp(24px,5vw,38px)] leading-tight mb-5 text-center">
+            ¿Sigues entrenando sin un plan claro mientras{" "}
+            <span className="text-[#facc15]">otros mejoran más rápido</span>?
+          </h2>
+          <p className="text-slate-300 leading-relaxed mb-8 text-center max-w-2xl mx-auto text-[clamp(14px,3.6vw,17px)]">
+            La mayoría de jugadores y entrenadores cometen el mismo error: saltan de video en video, usan ejercicios
+            sueltos y esperan resultados que nunca llegan de forma consistente.
+          </p>
+          <p className="font-black uppercase text-[#facc15] tracking-widest text-xs mb-4">Es hora de cambiar eso:</p>
+          <div className="grid sm:grid-cols-2 gap-3 mb-10">
+            {[
+              "Basta de perder horas buscando material desorganizado",
+              "Basta de entrenar sin progresión clara",
+              "Basta de sentir que te estancas temporada tras temporada",
+              "Basta de copiar ejercicios que no llevan a ningún lado",
+            ].map((t) => (
+              <div key={t} className="flex items-start gap-3 bg-white/5 rounded-2xl p-4 border border-white/10">
+                <XCircle className="w-5 h-5 text-[#dc2626] shrink-0 mt-0.5" />
+                <span className="text-sm font-semibold text-slate-200">{t}</span>
+              </div>
+            ))}
+          </div>
+          <p className="font-black uppercase text-[#16a34a] tracking-widest text-xs mb-4">Con este método vas a poder:</p>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {[
+              "Entrenar con dirección y estructura profesional",
+              "Mejorar técnica, físico y energía al mismo tiempo",
+              "Aplicar sesiones listas en minutos, no en horas",
+              "Tener un sistema completo que acelera tu evolución",
+            ].map((t) => (
+              <div key={t} className="flex items-start gap-3 bg-[#16a34a]/15 rounded-2xl p-4 border border-[#16a34a]/40">
+                <CheckCircle2 className="w-5 h-5 text-[#16a34a] shrink-0 mt-0.5" />
+                <span className="text-sm font-semibold text-white">{t}</span>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={openPremiumOffer}
+            className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl"
+          >
+            Quiero el método completo
+          </button>
+        </div>
+      </section>
+
+      {/* Nutrición + Casa */}
+      <section className="px-5 py-14 bg-white">
+        <div className="max-w-[1100px] mx-auto grid md:grid-cols-2 gap-6">
+          {[
+            {
+              img: imgNutricion,
+              tag: "Nutrición de alto rendimiento",
+              t: "Come como un atleta, rinde como un profesional",
+              d: "Rutina alimentaria completa y recetas estratégicas para optimizar energía, recuperación y rendimiento en cada entrenamiento y partido.",
+            },
+            {
+              img: imgCasa,
+              tag: "Entrenamientos en casa",
+              t: "Evoluciona incluso los días que no vas a la cancha",
+              d: "Sesiones individuales que usan jugadores profesionales para mantener técnica, físico y explosividad sin necesidad de gimnasio.",
+            },
+          ].map((c) => (
+            <div key={c.t} className="rounded-3xl overflow-hidden bg-[#f8fafc] border border-slate-200 shadow-sm transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+              <img src={c.img} alt={c.t} className="w-full aspect-[3/2] object-cover" width={1200} height={800} loading="lazy" decoding="async" />
+              <div className="p-6">
+                <p className="text-[#16a34a] font-black uppercase tracking-widest text-[11px] mb-2">{c.tag}</p>
+                <h3 className="font-black text-xl leading-tight mb-2">{c.t}</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">{c.d}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Bono exclusivo definición */}
+      <section className="px-5 py-14 bg-[#0a0a0a] text-white">
+        <div className="max-w-[900px] mx-auto">
+          <div className="rounded-3xl overflow-hidden border-2 border-[#facc15] shadow-[0_20px_60px_-20px_rgba(250,204,21,0.5)]">
+            <img src={imgDefinicion} alt="500 entrenamientos para definir músculo" className="w-full aspect-[3/2] object-cover" width={1200} height={800} loading="lazy" decoding="async" />
+            <div className="p-6 sm:p-8 bg-[#111]">
+              <h2 className="font-black uppercase text-[clamp(20px,4.6vw,32px)] leading-tight mb-4">
+                ⚠️ Bono Exclusivo de Hoy · <span className="text-[#facc15]">500 Entrenamientos para Definir Músculo</span>
+              </h2>
+              <p className="text-slate-300 leading-relaxed text-[clamp(14px,3.6vw,17px)]">
+                Entrenamientos específicos para mejorar la definición y el físico atlético, complementando tu trabajo en
+                la cancha. Este bono <b className="text-white">solo se incluye si compras HOY</b>. Mañana desaparece.
+              </p>
+              <button
+                onClick={openPremiumOffer}
+                className="mt-7 w-full flex items-center justify-center gap-2 bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl"
+              >
+                Quiero el bono de hoy
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stack de valor */}
+      <section className="px-5 py-14 bg-white">
+        <div className="max-w-[900px] mx-auto">
+          <h2 className="text-center font-black uppercase text-[clamp(24px,5vw,38px)] leading-tight mb-8">
+            ¿Cuánto valdría realmente <span className="text-[#16a34a]">todo esto por separado</span>?
+          </h2>
+          <img
+            src={imgStackValor}
+            alt="Valor real del paquete completo"
+            className="w-full max-w-[620px] mx-auto rounded-3xl shadow-2xl mb-8"
+            width={1200}
+            height={800}
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="rounded-3xl border-2 border-slate-200 bg-[#f8fafc] p-5 sm:p-8">
+            {[
+              ["+2.000 Entrenamientos de Fútbol", 147],
+              ["Rutina Alimentaria de Atletas", 67],
+              ["Recetas de Metabolismo y Rendimiento", 47],
+              ["Entrenamientos en Casa de Profesionales", 57],
+              ["500 Entrenamientos de Definición Muscular", 67],
+              ["Bonos Exclusivos", 75],
+            ].map(([t, v]) => (
+              <div key={t as string} className="flex items-baseline gap-2 py-2.5 border-b border-dashed border-slate-300 last:border-0">
+                <span className="font-semibold text-slate-700 text-[clamp(13px,3.4vw,16px)]">{t as string}</span>
+                <span className="flex-1 border-b border-dotted border-slate-300 translate-y-[-3px]" />
+                <span className="font-black text-slate-500 line-through text-[clamp(13px,3.4vw,16px)]">${v as number}</span>
+              </div>
+            ))}
+            <div className="mt-6 text-center">
+              <p className="font-black uppercase text-slate-500 text-sm">Valor real total: <span className="line-through">más de $460</span></p>
+              <p className="font-black uppercase text-[clamp(20px,5vw,32px)] leading-tight mt-2">
+                Hoy te llevas TODO por solo <span className="text-[#16a34a]">$5,50</span>
+              </p>
+              <p className="text-slate-600 text-sm mt-3 max-w-md mx-auto">
+                Estás pagando una fracción mínima del valor real. Esta diferencia solo existe mientras la oferta esté activa.
+              </p>
+              <button
+                onClick={openPremiumOffer}
+                className="mt-6 w-full max-w-[520px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] active:scale-[0.98] transition-all text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl"
+              >
+                Quiero todo por $5,50
+              </button>
+            </div>
           </div>
         </div>
       </section>
