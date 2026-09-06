@@ -20,20 +20,72 @@ jobs:
           git pull --rebase origin main
           python3 - <<'PY'
           from pathlib import Path
+          import re
           p = Path('src/routes/index.tsx')
           s = p.read_text()
-          s = s.replace('const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=10";', 'const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=10";\nconst BASIC_CHECKOUT_URL = "https://pay.hotmart.com/B107438269A?checkoutMode=10";')
+
+          # Keep exactly one checkout constant for each package.
+          s = re.sub(r'\nconst BASIC_CHECKOUT_URL = "https://pay\.hotmart\.com/B107438269A\?checkoutMode=10";', '', s)
+          s = s.replace('const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=10";', 'const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=10";\nconst BASIC_CHECKOUT_URL = "https://pay.hotmart.com/B107438269A?checkoutMode=10";', 1)
+
           s = s.replace('function goCheckout(url: string) {\n  fireEvent("InitiateCheckout", 5.50);', 'function goCheckout(url: string, value: number) {\n  fireEvent("InitiateCheckout", value);')
-          s = s.replace('goCheckout(PREMIUM_CHECKOUT_URL)', 'goCheckout(PREMIUM_CHECKOUT_URL, 39.90)')
+          s = re.sub(r'goCheckout\(PREMIUM_CHECKOUT_URL\)(?!,)', 'goCheckout(PREMIUM_CHECKOUT_URL, 39.90)', s)
           s = s.replace('Plan Premium', 'Plan Completo')
           s = s.replace('$5.50', '$39.90').replace('$5,50', '$39,90')
-          if 'BASIC_CHECKOUT_URL' not in s:
-              raise SystemExit('Basic checkout constant missing')
+
+          # Replace the existing single-package popout with a two-package selector.
+          start = s.find('      {/* Pop-out Premium */}')
+          end = s.find('\n\n        </div>\n      </section>', start)
+          if start < 0 or end < 0:
+              raise SystemExit(f'Could not locate offer modal: start={start}, end={end}')
+
+          modal = '''      {/* Package selector */}
+      <Dialog open={showPremiumPopout} onOpenChange={(open) => {
+        if (!open) handleClosePremium();
+        else setShowPremiumPopout(true);
+      }}>
+        <DialogContent className="max-w-[94vw] sm:max-w-[820px] max-h-[92vh] overflow-y-auto p-0 border-none rounded-3xl bg-white shadow-2xl">
+          <div className="bg-[#0a0a0a] p-6 text-center relative">
+            <button onClick={handleClosePremium} className="absolute right-4 top-4 text-white/80 hover:text-white"><X className="w-6 h-6" /></button>
+            <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">Elige tu paquete</p>
+            <h2 className="text-white font-black uppercase text-2xl sm:text-3xl">Empieza con la opción que más te conviene</h2>
+            <p className="text-white/70 text-sm mt-2">El Plan Completo es la opción recomendada y con mayor valor.</p>
+          </div>
+          <div className="p-5 sm:p-7 grid md:grid-cols-2 gap-5">
+            <div className="relative rounded-3xl border-4 border-[#16a34a] p-5 sm:p-6 shadow-lg">
+              <div className="absolute -top-4 left-5 bg-[#16a34a] text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider">⭐ Recomendado · Mejor Valor</div>
+              <h3 className="font-black uppercase text-2xl mt-2 text-[#0a0a0a]">Plan Completo</h3>
+              <p className="text-slate-500 font-bold text-sm mt-1 mb-5">Todo el método + todos los bonos</p>
+              <div className="space-y-2.5 text-sm font-semibold mb-6">
+                {['+2.000 ejercicios por posición y categoría','Nutrición de alto rendimiento','Entrenamientos en casa','500 entrenamientos de definición muscular','4 bonos exclusivos','Acceso vitalicio + actualizaciones','Garantía de 7 días'].map((item) => <div key={item} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-[#16a34a] shrink-0" />{item}</div>)}
+              </div>
+              <p className="text-slate-400 font-bold line-through">$89.90 USD</p>
+              <div className="text-4xl font-black text-[#0f172a] mb-5">$39.90 <span className="text-base text-[#16a34a]">USD</span></div>
+              <button onClick={() => goCheckout(PREMIUM_CHECKOUT_URL, 39.90)} className="w-full bg-[#16a34a] hover:bg-[#15803d] text-white font-black uppercase py-4 rounded-2xl shadow-xl flex items-center justify-center gap-2">Comprar Plan Completo <ArrowRight className="w-5 h-5" /></button>
+            </div>
+            <div className="rounded-3xl border-2 border-slate-300 p-5 sm:p-6 shadow-lg">
+              <p className="text-slate-500 font-black uppercase tracking-widest text-[10px] mb-2">Opción económica</p>
+              <h3 className="font-black uppercase text-2xl text-[#0a0a0a]">2.000 Ejercicios</h3>
+              <p className="text-slate-500 font-bold text-sm mt-1 mb-5">Solo la biblioteca organizada</p>
+              <div className="space-y-2.5 text-sm font-semibold mb-6">
+                {['+2.000 ejercicios de fútbol','Organizados por posición','Organizados por categoría','Acceso digital inmediato','Acceso vitalicio','Garantía de 7 días'].map((item) => <div key={item} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-slate-700 shrink-0" />{item}</div>)}
+              </div>
+              <p className="text-slate-400 font-bold line-through">$49.90 USD</p>
+              <div className="text-4xl font-black text-[#0f172a] mb-5">$25.90 <span className="text-base text-slate-700">USD</span></div>
+              <button onClick={() => goCheckout(BASIC_CHECKOUT_URL, 25.90)} className="w-full bg-slate-900 hover:bg-slate-800 text-white font-black uppercase py-4 rounded-2xl shadow-xl flex items-center justify-center gap-2">Comprar 2.000 Ejercicios <ArrowRight className="w-5 h-5" /></button>
+            </div>
+          </div>
+          <p className="text-center text-[10px] text-slate-400 font-bold uppercase pb-5"><Lock className="inline w-3.5 h-3.5" /> Pago 100% seguro · Hotmart</p>
+        </DialogContent>
+      </Dialog>'''
+
+          s = s[:start] + modal + s[end:]
           p.write_text(s)
           PY
+
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add src/routes/index.tsx
           if git diff --cached --quiet; then exit 0; fi
-          git commit -m 'Update football package prices and basic checkout'
+          git commit -m 'Add prioritized complete and basic football packages'
           git push origin HEAD:main
