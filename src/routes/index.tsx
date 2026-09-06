@@ -841,9 +841,22 @@ function Index() {
             <h2 className="font-black uppercase text-[clamp(26px,5vw,44px)] leading-tight mb-4">
               Elige tu paquete y <span className="text-[#facc15]">empieza ahora</span>
             </h2>
-            <p className="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base">
+            <p className="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base mb-6">
               Precio promocional válido <b className="text-white">solo por hoy</b>. Mañana vuelve al valor normal, no dejes escapar esta oportunidad.
             </p>
+            <div className="max-w-[620px] mx-auto grid gap-2 text-left">
+              {[
+                "Esta oferta puede terminar en cualquier momento",
+                "Cuando se acaben las plazas del día, el precio vuelve al valor normal",
+                "El bono de 500 entrenamientos de definición solo está disponible hoy",
+                "No dejes pasar la oportunidad de tener el método completo por menos de lo que cuesta una comida",
+              ].map((t) => (
+                <div key={t} className="flex items-start gap-2.5 bg-white/5 border border-[#facc15]/30 rounded-xl px-4 py-3">
+                  <Flame className="w-4 h-4 text-[#facc15] shrink-0 mt-0.5" />
+                  <span className="text-slate-200 text-[13px] sm:text-sm font-semibold">{t}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="max-w-[560px] mx-auto">
@@ -861,11 +874,14 @@ function Index() {
 
               <div className="space-y-4 mb-10 flex-grow">
                 {[
-                  "+2.000 Ejercicios Profesionales",
-                  "4 Bonos Sorpresa Incluidos",
-                  "Acceso Vitalicio e Inmediato",
-                  "Actualizaciones Automáticas",
-                  "Garantía de 7 Días",
+                  "+2.000 entrenamientos organizados por posición y categoría",
+                  "Rutina alimentaria completa de atletas de alto rendimiento",
+                  "Recetas para energía, recuperación y rendimiento",
+                  "Entrenamientos individuales en casa de profesionales",
+                  "500 entrenamientos de definición muscular (bono de hoy)",
+                  "4 Bonos adicionales para acelerar resultados",
+                  "Acceso vitalicio + actualizaciones automáticas",
+                  "Garantía total de 7 días",
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-3">
                     <div className="bg-[#16a34a] rounded-full p-1 shrink-0">
@@ -932,11 +948,13 @@ function Index() {
 
             <div className="grid grid-cols-1 gap-3 mb-6">
               {[
-                "+2.000 Ejercicios Profesionales",
-                "4 Bonos Sorpresa Incluidos",
-                "Acceso Vitalicio e Inmediato",
-                "Actualizaciones Automáticas",
-                "Garantía de 7 Días",
+                "+2.000 entrenamientos organizados",
+                "Rutina alimentaria de alto rendimiento",
+                "Entrenamientos en casa de profesionales",
+                "500 entrenamientos de definición (hoy)",
+                "4 Bonos adicionales incluidos",
+                "Acceso vitalicio + actualizaciones",
+                "Garantía de 7 días",
               ].map((item) => (
                 <div key={item} className="flex items-center gap-3">
                   <div className="bg-[#16a34a] rounded-full p-1 shrink-0">
@@ -965,7 +983,7 @@ function Index() {
               onClick={() => goCheckout(PREMIUM_CHECKOUT_URL)}
               className="w-full bg-[#16a34a] hover:bg-[#15803d] text-white font-black uppercase py-5 rounded-2xl shadow-xl shadow-green-200 transition-all flex items-center justify-center gap-3 group text-lg"
             >
-              Quiero el Plan Premium
+              Sí, quiero el Plan Premium ahora
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
             
@@ -991,10 +1009,11 @@ function Index() {
           </div>
           <p className="text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Compra protegida</p>
           <h2 className="font-black uppercase text-[clamp(28px,5.5vw,44px)] leading-tight mb-4">
-            Prueba el Kit sin Ningún Riesgo
+            Prueba todo durante 7 días. Riesgo cero.
           </h2>
           <p className="text-slate-600 leading-relaxed max-w-2xl mx-auto mb-6 text-[clamp(15px,3.6vw,18px)]">
-            Tienes <b>7 días completos</b> para explorar los +2.000 ejercicios, los 4 bonos y todo el método. Si sientes que no es para ti, por cualquier motivo, nos escribes un email y te devolvemos <b>hasta el último céntimo</b>.
+            Si en los primeros <b>7 días</b> sientes que este material no es lo que necesitabas, te devolvemos el{" "}
+            <b>100% de tu dinero</b>. Sin preguntas. Sin letra chica.
           </p>
           <button
             onClick={openPremiumOffer}
