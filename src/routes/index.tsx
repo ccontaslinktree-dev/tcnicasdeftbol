@@ -239,7 +239,7 @@ const faqs = [
   },
   {
     q: "¿Cuánto tiempo tengo acceso al contenido?",
-    a: "Acceso vitalicio + actualizaciones automáticas. Pagas una sola vez y usas el material organizado siempre que lo necesites, con actualizaciones incluidas.",
+    a: "Acceso vitalicio + actualizaciones automáticas + actualizaciones automáticas. Pagas una sola vez y usas el material organizado siempre que lo necesites, con actualizaciones incluidas.",
   },
   {
     q: "¿Y si no me gusta o no es para mí?",
@@ -309,7 +309,7 @@ function Index() {
             </p>
           </div>
           <p className="text-slate-600 font-medium max-w-[680px] mx-auto mb-7 leading-relaxed text-[clamp(14px,3.6vw,19px)]">
-            <b className="text-[#0a0a0a]">+2.000 entrenamientos profesionales listos para aplicar</b> + <b className="text-[#0a0a0a]">nutrición de alto rendimiento</b> + <b className="text-[#0a0a0a]">entrenamientos en casa de jugadores profesionales</b> + <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">500 entrenamientos de definición muscular (bono exclusivo de hoy)</span>. Todo organizado. Acceso inmediato.
+            <b className="text-[#0a0a0a]">+2.000 entrenamientos profesionales listos para aplicar</b> + <b className="text-[#0a0a0a]">nutrición de alto rendimiento</b> + <b className="text-[#0a0a0a]">entrenamientos en casa de jugadores profesionales</b> + <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">500 entrenamientos de definición muscular (bono exclusivo de hoy) (bono exclusivo de hoy)</span>. Todo organizado. Acceso inmediato.
           </p>
 
           <img
@@ -473,11 +473,11 @@ function Index() {
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {[
               { i: Trophy, t: "+2.000 entrenamientos de fútbol", d: "Organizados por posición y categoría, listos para aplicar hoy." },
-              { i: Target, t: "Rutina alimentaria completa de atletas de alto rendimiento completa", d: "La alimentación real de atletas de alto rendimiento, paso a paso." },
+              { i: Target, t: "Rutina alimentaria completa de atletas de alto rendimiento completa de atletas de alto rendimiento completa", d: "La alimentación real de atletas de alto rendimiento, paso a paso." },
               { i: Zap, t: "Recetas estratégicas", d: "Para optimizar energía, recuperación y rendimiento en cada sesión." },
               { i: Flame, t: "Entrenamientos individuales en casa que usan jugadores profesionales", d: "Sesiones individuales que usan jugadores profesionales, sin gimnasio." },
               { i: Star, t: "500 entrenamientos de definición", d: "Bono exclusivo de hoy para construir un físico atlético." },
-              { i: Mail, t: "Acceso vitalicio + actualizaciones automáticas + actualizaciones", d: "4 bonos adicionales y material nuevo añadido automáticamente." },
+              { i: Mail, t: "Acceso vitalicio + actualizaciones automáticas + actualizaciones automáticas + actualizaciones", d: "4 bonos adicionales y material nuevo añadido automáticamente." },
             ].map(({ i: Icon, t, d }) => (
               <div key={t} className="group bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] hover:border-[#16a34a]/40 transition-all duration-300">
                 <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#16a34a]/10 text-[#16a34a] flex items-center justify-center mb-2 sm:mb-3 group-hover:scale-110 group-hover:bg-[#16a34a] group-hover:text-white transition-all duration-300">
@@ -547,7 +547,7 @@ function Index() {
               img: imgNutricion,
               tag: "Nutrición de alto rendimiento",
               t: "Come como un atleta, rinde como un profesional",
-              d: "Rutina alimentaria completa de atletas de alto rendimiento completa y recetas estratégicas para optimizar energía, recuperación y rendimiento en cada entrenamiento y partido.",
+              d: "Rutina alimentaria completa de atletas de alto rendimiento completa de atletas de alto rendimiento completa y recetas estratégicas para optimizar energía, recuperación y rendimiento en cada entrenamiento y partido.",
             },
             {
               img: imgCasa,
@@ -873,12 +873,12 @@ function Index() {
               <div className="space-y-4 mb-10 flex-grow">
                 {[
                   "+2.000 entrenamientos organizados por posición y categoría",
-                  "Rutina alimentaria completa de atletas de alto rendimiento completa de atletas de alto rendimiento",
+                  "Rutina alimentaria completa de atletas de alto rendimiento completa de atletas de alto rendimiento completa de atletas de alto rendimiento",
                   "Recetas para energía, recuperación y rendimiento",
                   "Entrenamientos individuales en casa de profesionales",
-                  "500 entrenamientos de definición muscular (bono exclusivo de hoy) (bono de hoy)",
+                  "500 entrenamientos de definición muscular (bono exclusivo de hoy) (bono exclusivo de hoy) (bono de hoy)",
                   "4 Bonos adicionales para acelerar resultados",
-                  "Acceso vitalicio + actualizaciones automáticas + actualizaciones automáticas",
+                  "Acceso vitalicio + actualizaciones automáticas + actualizaciones automáticas + actualizaciones automáticas",
                   "Garantía total de 7 días",
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-3">
@@ -922,8 +922,8 @@ function Index() {
         <DialogContent className="max-w-[94vw] sm:max-w-[820px] max-h-[92vh] overflow-y-auto p-0 rounded-3xl bg-white shadow-2xl">
           <div className="bg-[#0a0a0a] p-6 text-center relative"><button onClick={handleClosePremium} className="absolute right-4 top-4 text-white/80"><X className="w-6 h-6" /></button><p className="text-[#facc15] font-black uppercase text-xs">Elige tu paquete</p><h2 className="text-white font-black uppercase text-2xl sm:text-3xl mt-2">Empieza ahora</h2><p className="text-white/70 text-sm mt-2">El Plan Completo es la opción recomendada.</p></div>
           <div className="p-5 sm:p-7 grid md:grid-cols-2 gap-5">
-            <div className="relative rounded-3xl border-4 border-[#16a34a] p-5 sm:p-6"><div className="absolute -top-4 left-5 bg-[#16a34a] text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase">⭐ Recomendado · Mejor Valor</div><h3 className="font-black uppercase text-2xl mt-2">Plan Completo</h3><p className="text-slate-500 text-sm mb-4">+2.000 ejercicios + nutrición + casa + definición + 4 bonos.</p><div className="space-y-2 text-sm font-semibold mb-5">{['+2.000 ejercicios por posición y categoría','Nutrición de alto rendimiento','Entrenamientos individuales en casa que usan jugadores profesionales','500 entrenamientos de definición muscular (bono exclusivo de hoy)','4 bonos exclusivos','Acceso vitalicio + actualizaciones automáticas + actualizaciones','Garantía de 7 días'].map((item)=><div key={item} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-[#16a34a]" />{item}</div>)}</div><div className="text-4xl font-black mb-5">$39.90 <span className="text-base text-[#16a34a]">USD</span></div><button onClick={()=>goCheckout(PREMIUM_CHECKOUT_URL,39.90)} className="w-full bg-[#16a34a] text-white font-black uppercase py-4 rounded-2xl">Comprar Plan Completo <ArrowRight className="inline w-5 h-5" /></button></div>
-            <div className="rounded-3xl border-2 border-slate-300 p-5 sm:p-6"><p className="text-slate-500 font-black uppercase text-[10px] mb-2">Opción económica</p><h3 className="font-black uppercase text-2xl">2.000 Ejercicios</h3><p className="text-slate-500 text-sm mb-4">Solo la biblioteca organizada por posición y categoría.</p><div className="space-y-2 text-sm font-semibold mb-5">{['+2.000 entrenamientos de fútbol organizados por posición y categoría (listos para aplicar hoy)','Organizados por posición','Organizados por categoría','Acceso inmediato','Acceso vitalicio + actualizaciones automáticas','Garantía de 7 días'].map((item)=><div key={item} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-slate-700" />{item}</div>)}</div><div className="text-4xl font-black mb-5">$25.90 <span className="text-base text-slate-700">USD</span></div><button onClick={()=>goCheckout(BASIC_CHECKOUT_URL,25.90)} className="w-full bg-slate-900 text-white font-black uppercase py-4 rounded-2xl">Comprar 2.000 Ejercicios <ArrowRight className="inline w-5 h-5" /></button></div>
+            <div className="relative rounded-3xl border-4 border-[#16a34a] p-5 sm:p-6"><div className="absolute -top-4 left-5 bg-[#16a34a] text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase">⭐ Recomendado · Mejor Valor</div><h3 className="font-black uppercase text-2xl mt-2">Plan Completo</h3><p className="text-slate-500 text-sm mb-4">+2.000 ejercicios + nutrición + casa + definición + 4 bonos.</p><div className="space-y-2 text-sm font-semibold mb-5">{['+2.000 ejercicios por posición y categoría','Nutrición de alto rendimiento','Entrenamientos individuales en casa que usan jugadores profesionales','500 entrenamientos de definición muscular (bono exclusivo de hoy) (bono exclusivo de hoy)','4 bonos exclusivos','Acceso vitalicio + actualizaciones automáticas + actualizaciones automáticas + actualizaciones','Garantía de 7 días'].map((item)=><div key={item} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-[#16a34a]" />{item}</div>)}</div><div className="text-4xl font-black mb-5">$39.90 <span className="text-base text-[#16a34a]">USD</span></div><button onClick={()=>goCheckout(PREMIUM_CHECKOUT_URL,39.90)} className="w-full bg-[#16a34a] text-white font-black uppercase py-4 rounded-2xl">Comprar Plan Completo <ArrowRight className="inline w-5 h-5" /></button></div>
+            <div className="rounded-3xl border-2 border-slate-300 p-5 sm:p-6"><p className="text-slate-500 font-black uppercase text-[10px] mb-2">Opción económica</p><h3 className="font-black uppercase text-2xl">2.000 Ejercicios</h3><p className="text-slate-500 text-sm mb-4">Solo la biblioteca organizada por posición y categoría.</p><div className="space-y-2 text-sm font-semibold mb-5">{['+2.000 entrenamientos de fútbol organizados por posición y categoría (listos para aplicar hoy)','Organizados por posición','Organizados por categoría','Acceso inmediato','Acceso vitalicio + actualizaciones automáticas + actualizaciones automáticas','Garantía de 7 días'].map((item)=><div key={item} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-slate-700" />{item}</div>)}</div><div className="text-4xl font-black mb-5">$25.90 <span className="text-base text-slate-700">USD</span></div><button onClick={()=>goCheckout(BASIC_CHECKOUT_URL,25.90)} className="w-full bg-slate-900 text-white font-black uppercase py-4 rounded-2xl">Comprar 2.000 Ejercicios <ArrowRight className="inline w-5 h-5" /></button></div>
           </div><p className="text-center text-[10px] text-slate-400 font-bold uppercase pb-5"><Lock className="inline w-3.5 h-3.5" /> Pago 100% seguro · Hotmart</p>
         </DialogContent>
       </Dialog>
