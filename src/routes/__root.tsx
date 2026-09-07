@@ -22,10 +22,7 @@ function NotFoundComponent() {
           The page you're looking for doesn't exist or has been moved.
         </p>
         <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
+          <Link to="/" className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
             Go home
           </Link>
         </div>
@@ -44,26 +41,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
-        </p>
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">This page didn't load</h1>
+        <p className="mt-2 text-sm text-muted-foreground">Something went wrong on our end. You can try refreshing or head back home.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button
-            onClick={() => {
-              router.invalidate();
-              reset();
-            }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
+          <button onClick={() => { router.invalidate(); reset(); }} className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">
             Try again
           </button>
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-          >
+          <a href="/" className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent">
             Go home
           </a>
         </div>
@@ -78,13 +62,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "+2.000 Ejercicios de Fútbol — Método Completo para Jugadores y Entrenadores" },
-      { name: "description", content: "Accede a +2.000 ejercicios profesionales de fútbol por posición y categoría — método completo listo para aplicar en solo 15 minutos." },
+      { name: "description", content: "+2.000 ejercicios profesionales de fútbol por posición y categoría — método completo listo para aplicar." },
       { property: "og:title", content: "+2.000 Ejercicios de Fútbol — Método Completo para Jugadores y Entrenadores" },
-      { property: "og:description", content: "Accede a +2.000 ejercicios profesionales de fútbol por posición y categoría — método completo listo para aplicar en solo 15 minutos." },
+      { property: "og:description", content: "+2.000 ejercicios profesionales de fútbol por posición y categoría — método completo listo para aplicar." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "+2.000 Ejercicios de Fútbol — Método Completo para Jugadores y Entrenadores" },
-      { name: "twitter:description", content: "Accede a +2.000 ejercicios profesionales de fútbol por posición y categoría — método completo listo para aplicar en solo 15 minutos." },
+      { name: "twitter:description", content: "+2.000 ejercicios profesionales de fútbol por posición y categoría — método completo listo para aplicar." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/44038a08-e049-46f1-8273-eed12814fc04/id-preview-996f82b4--9688cdb4-d0ab-4c73-bd12-0c417c465517.lovable.app-1784181108713.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/44038a08-e049-46f1-8273-eed12814fc04/id-preview-996f82b4--9688cdb4-d0ab-4c73-bd12-0c417c465517.lovable.app-1784181108713.png" },
     ],
@@ -107,11 +91,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             fbq('init', '889185807027175');
             fbq('track', 'PageView');
           };
-          if (window.requestIdleCallback) {
-            requestIdleCallback(window.fbq_init);
-          } else {
-            setTimeout(window.fbq_init, 2000);
-          }
+          if (window.requestIdleCallback) requestIdleCallback(window.fbq_init);
+          else setTimeout(window.fbq_init, 2000);
         `,
       },
       {
@@ -119,13 +100,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           (function () {
             function addBasicOfferCard() {
               try {
-                if (document.querySelector('[data-basic-offer-card="true"]')) return;
+                if (document.querySelector('[data-basic-offer-card="true"]')) return true;
                 var section = document.getElementById('oferta');
-                if (!section) return;
+                if (!section) return false;
                 var wrapper = Array.from(section.querySelectorAll('div')).find(function (el) {
                   return Array.from(el.classList).includes('max-w-[560px]') && el.querySelector('button');
                 });
-                if (!wrapper || !wrapper.firstElementChild) return;
+                if (!wrapper || !wrapper.firstElementChild) return false;
 
                 wrapper.className = 'grid md:grid-cols-2 gap-5 max-w-[1100px] mx-auto items-stretch';
                 var premium = wrapper.firstElementChild;
@@ -180,26 +161,40 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
                 if (oldButton) {
                   var link = document.createElement('a');
                   var target = new URL('https://pay.hotmart.com/B107438269A?checkoutMode=10', window.location.href);
+                  var params = new URLSearchParams(window.location.search);
                   ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','xcod'].forEach(function (key) {
-                    var value = new URLSearchParams(window.location.search).get(key);
+                    var value = params.get(key);
                     if (value) target.searchParams.set(key, value);
                   });
-                  var xcod = new URLSearchParams(window.location.search).get('xcod');
+                  var xcod = params.get('xcod');
                   if (xcod) target.searchParams.set('sck', xcod);
                   link.href = target.toString();
                   link.className = 'w-full bg-slate-900 hover:bg-slate-800 active:scale-[0.98] text-white font-black uppercase py-5 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 text-base';
                   link.textContent = 'QUIERO SESIONES LISTAS Y ORGANIZADAS →';
                   oldButton.replaceWith(link);
                 }
-
                 wrapper.appendChild(basic);
+                return true;
               } catch (e) {
                 console.warn('Basic offer card injection skipped', e);
+                return false;
               }
             }
-            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addBasicOfferCard);
-            else addBasicOfferCard();
-            setTimeout(addBasicOfferCard, 1200);
+
+            function start() {
+              if (addBasicOfferCard()) return;
+              var observer = new MutationObserver(function () {
+                if (addBasicOfferCard()) observer.disconnect();
+              });
+              if (document.body) observer.observe(document.body, { childList: true, subtree: true });
+              var tries = 0;
+              var interval = setInterval(function () {
+                tries++;
+                if (addBasicOfferCard() || tries >= 30) clearInterval(interval);
+              }, 500);
+            }
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+            else start();
           })();
         `,
       },
@@ -214,20 +209,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
+      <head><HeadContent /></head>
+      <body>{children}<Scripts /></body>
     </html>
   );
 }
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
