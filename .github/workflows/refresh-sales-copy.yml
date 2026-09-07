@@ -1,0 +1,88 @@
+name: Refresh sales copy
+on:
+  push:
+    paths:
+      - 'offer-copy-refresh.trigger'
+      - '.github/workflows/refresh-sales-copy.yml'
+permissions:
+  contents: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update landing page copy
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p = Path('src/routes/index.tsx')
+          s = p.read_text()
+
+          replacements = {
+            'Domina el Fútbol y Transforma tu Rendimiento con el{" "}\n            <span className="bg-[#facc15] text-[#0a0a0a] px-2 py-0.5 rounded-md">\n              Método Completo\n            </span>{" "}\n            que Usan Jugadores y Entrenadores que Quieren Resultados Reales':
+            'Deja de improvisar. Llega a cada entrenamiento con sesiones listas, organizadas por posición y categoría.',
+            '<span className="text-[#facc15] font-black uppercase">Actualizaciones automáticas:</span> añadimos nuevos ejercicios constantemente, además de las estrategias clásicas que grandes clubes usan para lograr resultados de élite. Tu biblioteca crece contigo, siempre.':
+            '<span className="text-[#facc15] font-black uppercase">Actualizaciones automáticas:</span> añadimos nuevos ejercicios constantemente. Tu biblioteca crece contigo, siempre.',
+            '<b className="text-[#0a0a0a]">+2.000 entrenamientos profesionales</b> organizados por posición y categoría{" "}\n            <b className="text-[#0a0a0a]">+ nutrición de alto rendimiento</b> + entrenamientos en casa de jugadores profesionales{" "}\n            <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">+ 500 entrenamientos específicos para definir músculo</span>. Todo listo para aplicar. Acceso inmediato.':
+            '<b className="text-[#0a0a0a]">+2.000 entrenamientos profesionales listos para aplicar</b> + <b className="text-[#0a0a0a]">nutrición de alto rendimiento</b> + <b className="text-[#0a0a0a]">entrenamientos en casa de jugadores profesionales</b> + <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">500 entrenamientos de definición muscular</span>. Todo organizado. Acceso inmediato.'
+          }
+          for a,b in replacements.items():
+              if a in s: s = s.replace(a,b)
+
+          # Replace common CTA labels globally, preserving structure/design.
+          cta_map = {
+            'QUIERO VER EL MÉTODO COMPLETO': 'SÍ, QUIERO DEJAR DE IMPROVISAR AHORA',
+            'QUIERO EL MÉTODO COMPLETO': 'SÍ, QUIERO DEJAR DE IMPROVISAR AHORA',
+            'QUIERO EMPEZAR AHORA': 'QUIERO SESIONES LISTAS Y ORGANIZADAS',
+            'COMENZAR AHORA': 'EMPEZAR A ENTRENAR CON MÉTODO',
+            'QUIERO MEJORAR MI RENDIMIENTO': 'QUIERO SESIONES LISTAS Y ORGANIZADAS',
+          }
+          for a,b in cta_map.items(): s=s.replace(a,b)
+
+          # Insert the strategic pain section immediately before the first major benefits/content section.
+          pain = '''\n          <section className="px-5 py-12 bg-white">\n            <div className="max-w-[1000px] mx-auto text-center">\n              <h2 className="font-black text-[clamp(24px,4vw,40px)] leading-tight mb-6 text-[#0f172a]">¿Sigues perdiendo horas armando entrenamientos mientras tu equipo no evoluciona como debería?</h2>\n              <div className="max-w-[820px] mx-auto text-left text-slate-600 text-[clamp(15px,2.2vw,18px)] leading-relaxed space-y-4">\n                <p>La mayoría de entrenadores y jugadores cometen el mismo error: improvisan, repiten siempre los mismos ejercicios y pierden tiempo buscando material suelto en YouTube o Instagram.</p>\n                <p className="font-black text-[#0f172a]">El resultado es siempre el mismo:</p>\n                <ul className="space-y-2 list-disc pl-6">\n                  <li>Horas perdidas planificando cada sesión</li>\n                  <li>Entrenamientos sin progresión clara</li>\n                  <li>Jugadores que no mejoran de forma consistente</li>\n                  <li>Sensación de estar estancado temporada tras temporada</li>\n                </ul>\n                <p className="font-bold text-[#0f172a]">Es hora de cambiar eso.</p>\n                <p>Con este método llegas a cada entrenamiento con material profesional, organizado y listo para aplicar en minutos.</p>\n              </div>\n            </div>\n          </section>\n          '''
+          if '¿Sigues perdiendo horas armando entrenamientos mientras tu equipo no evoluciona como debería?' not in s:
+              marker='      {/* HERO */}'
+              # place after hero section closing, before the next section marker
+              hero_end=re.search(r'(</section>\s*\n\s*\{isFooterVisible)', s)
+              if hero_end:
+                  pos=hero_end.start(1)
+                  s=s[:pos] + pain + s[pos:]
+
+          # Add the requested solution block before the offer area, if not already present.
+          solution='''\n          <section className="px-5 py-12">\n            <div className="max-w-[1000px] mx-auto">\n              <div className="text-center mb-8">\n                <h2 className="font-black text-[clamp(24px,4vw,40px)] leading-tight text-[#0f172a]">Entrena con todo organizado y deja de improvisar</h2>\n              </div>\n              <div className="grid sm:grid-cols-2 gap-4 max-w-[850px] mx-auto">\n                {['Filtra por posición y categoría en segundos','Abre el ejercicio y aplícalo directamente','Ahorras horas de planificación cada semana','Tienes progresión real y material profesional','Dejas de improvisar y empiezas a entrenar con método'].map((item) => (\n                  <div key={item} className="bg-white rounded-xl p-4 shadow-sm border border-slate-200 flex items-start gap-3">\n                    <CheckCircle2 className="w-5 h-5 text-[#16a34a] shrink-0 mt-0.5" />\n                    <span className="font-bold text-slate-700">{item}</span>\n                  </div>\n                ))}\n              </div>\n            </div>\n          </section>\n          '''
+          if 'Filtra por posición y categoría en segundos' not in s:
+              # Insert before first occurrence of the offer/stack image.
+              idx=s.find('imgStackValor')
+              if idx!=-1:
+                  sec=s.rfind('<section',0,idx)
+                  s=s[:sec]+solution+s[sec:]
+
+          # Strengthen deliverables wherever the existing bullet labels appear.
+          s=s.replace('+2.000 ejercicios de fútbol', '+2.000 entrenamientos de fútbol organizados por posición y categoría (listos para aplicar hoy)')
+          s=s.replace('Rutina alimentaria', 'Rutina alimentaria completa de atletas de alto rendimiento')
+          s=s.replace('Entrenamientos en casa', 'Entrenamientos individuales en casa que usan jugadores profesionales')
+          s=s.replace('500 entrenamientos de definición muscular', '500 entrenamientos de definición muscular (bono exclusivo de hoy)')
+          s=s.replace('Acceso vitalicio', 'Acceso vitalicio + actualizaciones automáticas')
+
+          # Add objection handling + guarantee near FAQ if absent.
+          objections='''\n          <section className="px-5 py-12 bg-white">\n            <div className="max-w-[900px] mx-auto">\n              <h2 className="text-center font-black text-[clamp(24px,4vw,38px)] mb-8">¿Todavía tienes dudas?</h2>\n              <div className="space-y-4">\n                {[["Ya tengo material","Este está filtrado por posición y categoría, listo para aplicar sin perder tiempo."],["¿Sirve para mi categoría?","Sí. Está organizado desde Sub-8 hasta Adulto y por posición."],["¿Y si no lo uso?","Tienes acceso vitalicio + actualizaciones. El material crece contigo."],["¿Es solo para jugadores?","No. Está pensado tanto para entrenadores como para jugadores."]].map(([q,a]) => (\n                  <div key={q} className="rounded-xl border border-slate-200 bg-slate-50 p-5">\n                    <p className="font-black text-[#0f172a]">{q}</p>\n                    <p className="mt-1 text-slate-600">{a}</p>\n                  </div>\n                ))}\n              </div>\n              <div className="mt-8 rounded-2xl border-2 border-[#16a34a] bg-[#f0fdf4] p-6 text-center">\n                <h3 className="font-black text-2xl">Prueba todo durante 7 días. Riesgo cero.</h3>\n                <p className="mt-2 text-slate-600">Si sientes que este material no te ahorra tiempo ni mejora la calidad de tus entrenamientos, te devolvemos el 100% de tu dinero. Sin preguntas.</p>\n              </div>\n            </div>\n          </section>\n          '''
+          if 'Prueba todo durante 7 días. Riesgo cero.' not in s:
+              # Put before FAQ heading, preserving existing FAQ.
+              m=re.search(r'(<section[^>]*>\s*<div[^>]*>\s*<h2[^>]*>[^<]*¿.*dudas|<section[^>]*>\s*<div[^>]*>\s*<h2[^>]*>[^<]*Preguntas)',s,re.I)
+              if m: s=s[:m.start()]+objections+s[m.start():]
+              else:
+                  # fallback: insert before closing app div
+                  s=s.replace('\n    </div>\n  );\n}', objections+'\n    </div>\n  );\n}',1)
+
+          p.write_text(s)
+          print('Updated copy. size=', len(s))
+          PY
+      - name: Commit changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/routes/index.tsx
+          git diff --cached --quiet || git commit -m 'feat: strengthen sales copy and offer messaging'
+          git push
