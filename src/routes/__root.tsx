@@ -150,7 +150,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
                   var oldPrice = priceBox.querySelector('p');
                   if (oldPrice) { oldPrice.textContent = '$49.90'; oldPrice.className = 'text-slate-400 font-bold text-xl line-through leading-none'; }
                   var price = priceBox.querySelector('.text-5xl');
-                  if (price) price.textContent = '$25.90';
+                  if (price) price.textContent = '$6.99';
                   var usd = priceBox.querySelector('.text-2xl');
                   if (usd) { usd.textContent = 'USD'; usd.className = 'text-2xl font-black text-slate-700'; }
                   var labels = priceBox.querySelectorAll('div.mt-4');
