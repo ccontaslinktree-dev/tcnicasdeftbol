@@ -89,21 +89,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/44038a08-e049-46f1-8273-eed12814fc04/id-preview-996f82b4--9688cdb4-d0ab-4c73-bd12-0c417c465517.lovable.app-1784181108713.png" },
     ],
     links: [
-      {
-        rel: "preload",
-        as: "image",
-        href: "/src/assets/hero-product.png",
-      },
-      {
-        rel: "preload",
-        as: "video",
-        href: "/__l5e/assets-v1/ee1c657d-f341-4b18-b91c-798075c31211/preview.mov",
-        type: "video/quicktime",
-      },
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
+      { rel: "preload", as: "image", href: "/src/assets/hero-product.png" },
+      { rel: "preload", as: "video", href: "/__l5e/assets-v1/ee1c657d-f341-4b18-b91c-798075c31211/preview.mov", type: "video/quicktime" },
+      { rel: "stylesheet", href: appCss },
     ],
     scripts: [
       {
@@ -124,6 +112,95 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           } else {
             setTimeout(window.fbq_init, 2000);
           }
+        `,
+      },
+      {
+        children: `
+          (function () {
+            function addBasicOfferCard() {
+              try {
+                if (document.querySelector('[data-basic-offer-card="true"]')) return;
+                var section = document.getElementById('oferta');
+                if (!section) return;
+                var wrapper = Array.from(section.querySelectorAll('div')).find(function (el) {
+                  return Array.from(el.classList).includes('max-w-[560px]') && el.querySelector('button');
+                });
+                if (!wrapper || !wrapper.firstElementChild) return;
+
+                wrapper.className = 'grid md:grid-cols-2 gap-5 max-w-[1100px] mx-auto items-stretch';
+                var premium = wrapper.firstElementChild;
+                var basic = premium.cloneNode(true);
+                basic.setAttribute('data-basic-offer-card', 'true');
+                basic.className = 'relative group bg-white rounded-[32px] p-6 sm:p-8 flex flex-col border-2 border-slate-300 shadow-xl transition-all duration-500 hover:scale-[1.01]';
+
+                var badge = basic.querySelector('.absolute');
+                if (badge) badge.remove();
+                var title = basic.querySelector('h3');
+                if (title) title.textContent = '2.000 Ejercicios';
+                var subtitle = basic.querySelector('h3 + p');
+                if (subtitle) subtitle.textContent = 'La biblioteca esencial para dejar de buscar material suelto';
+
+                var yellow = basic.querySelector('p.bg-\\[\\#facc15\\]');
+                if (yellow) {
+                  yellow.textContent = 'Ideal si quieres acceder a los ejercicios organizados sin llevarte los extras del Plan Completo.';
+                  yellow.className = 'mt-3 text-[13px] font-bold text-slate-700 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2';
+                }
+
+                var rows = basic.querySelectorAll('.space-y-4 > div');
+                var items = [
+                  '+2.000 entrenamientos de fútbol',
+                  'Organizados por posición',
+                  'Organizados por categoría',
+                  'Listos para aplicar hoy',
+                  'Acceso inmediato',
+                  'Acceso vitalicio + actualizaciones automáticas',
+                  'Garantía total de 7 días'
+                ];
+                items.forEach(function (text, i) {
+                  if (rows[i]) {
+                    var span = rows[i].querySelector('span');
+                    if (span) span.textContent = text;
+                  }
+                });
+                for (var i = items.length; i < rows.length; i++) rows[i].remove();
+
+                var priceBox = basic.querySelector('.bg-slate-50');
+                if (priceBox) {
+                  var oldPrice = priceBox.querySelector('p');
+                  if (oldPrice) { oldPrice.textContent = '$49.90'; oldPrice.className = 'text-slate-400 font-bold text-xl line-through leading-none'; }
+                  var price = priceBox.querySelector('.text-5xl');
+                  if (price) price.textContent = '$25.90';
+                  var usd = priceBox.querySelector('.text-2xl');
+                  if (usd) { usd.textContent = 'USD'; usd.className = 'text-2xl font-black text-slate-700'; }
+                  var labels = priceBox.querySelectorAll('div.mt-4');
+                  if (labels[0]) labels[0].remove();
+                }
+
+                var oldButton = basic.querySelector('button');
+                if (oldButton) {
+                  var link = document.createElement('a');
+                  var target = new URL('https://pay.hotmart.com/B107438269A?checkoutMode=10', window.location.href);
+                  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','xcod'].forEach(function (key) {
+                    var value = new URLSearchParams(window.location.search).get(key);
+                    if (value) target.searchParams.set(key, value);
+                  });
+                  var xcod = new URLSearchParams(window.location.search).get('xcod');
+                  if (xcod) target.searchParams.set('sck', xcod);
+                  link.href = target.toString();
+                  link.className = 'w-full bg-slate-900 hover:bg-slate-800 active:scale-[0.98] text-white font-black uppercase py-5 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 text-base';
+                  link.textContent = 'QUIERO SESIONES LISTAS Y ORGANIZADAS →';
+                  oldButton.replaceWith(link);
+                }
+
+                wrapper.appendChild(basic);
+              } catch (e) {
+                console.warn('Basic offer card injection skipped', e);
+              }
+            }
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', addBasicOfferCard);
+            else addBasicOfferCard();
+            setTimeout(addBasicOfferCard, 1200);
+          })();
         `,
       },
     ],
@@ -153,7 +230,6 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
     </QueryClientProvider>
   );
