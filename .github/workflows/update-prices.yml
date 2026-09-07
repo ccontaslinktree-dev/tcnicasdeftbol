@@ -1,0 +1,36 @@
+name: Update Offer Prices
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  update-prices:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update prices
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          files = [Path('src/routes/index.tsx'), Path('src/routes/__root.tsx')]
+          for path in files:
+              text = path.read_text()
+              text = text.replace('$39.90', '$14.99')
+              text = text.replace('$25.90', '$6.99')
+              text = text.replace('goCheckout(PREMIUM_CHECKOUT_URL,39.90)', 'goCheckout(PREMIUM_CHECKOUT_URL,14.99)')
+              text = text.replace('goCheckout(BASIC_CHECKOUT_URL,25.90)', 'goCheckout(BASIC_CHECKOUT_URL,6.99)')
+              text = text.replace('value: 39.90', 'value: 14.99')
+              text = text.replace('value: 25.90', 'value: 6.99')
+              path.write_text(text)
+          PY
+      - name: Commit price changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/routes/index.tsx src/routes/__root.tsx
+          git diff --cached --quiet || git commit -m "Update offer prices to increase conversion"
+          git push
