@@ -854,7 +854,7 @@ function Index() {
             </div>
           </div>
 
-          <div className="max-w-[560px] mx-auto">
+          <div className="max-w-[980px] mx-auto grid md:grid-cols-2 gap-10 md:gap-8 items-stretch">
             {/* Plan Completo - On page */}
             <div className="relative group bg-white rounded-[32px] p-6 sm:p-8 flex flex-col border-2 border-[#16a34a] shadow-[0_20px_50px_-12px_rgba(22,163,74,0.3)] transform transition-all duration-500 hover:scale-[1.02]">
               <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#16a34a] text-white px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest shadow-lg flex items-center gap-2 whitespace-nowrap">
@@ -873,12 +873,12 @@ function Index() {
               <div className="space-y-4 mb-10 flex-grow">
                 {[
                   "+2.000 entrenamientos organizados por posición y categoría",
-                  "Rutina alimentaria completa de atletas de alto rendimiento completa de atletas de alto rendimiento completa de atletas de alto rendimiento",
+                  "Rutina alimentaria completa de atletas de alto rendimiento",
                   "Recetas para energía, recuperación y rendimiento",
                   "Entrenamientos individuales en casa de profesionales",
-                  "500 entrenamientos de definición muscular (bono exclusivo de hoy) (bono exclusivo de hoy) (bono de hoy)",
+                  "500 entrenamientos de definición muscular (bono exclusivo de hoy)",
                   "4 Bonos adicionales para acelerar resultados",
-                  "Acceso vitalicio + actualizaciones automáticas + actualizaciones automáticas + actualizaciones automáticas",
+                  "Acceso vitalicio + actualizaciones automáticas",
                   "Garantía total de 7 días",
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-3">
