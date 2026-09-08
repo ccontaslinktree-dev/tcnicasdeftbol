@@ -914,6 +914,57 @@ function Index() {
                 <ArrowRight className="w-5 h-5" />
               </button>
             </div>
+
+            {/* Plan Básico - On page */}
+            <div className="relative bg-white rounded-[32px] p-6 sm:p-8 flex flex-col border-2 border-slate-200 shadow-xl transform transition-all duration-500 hover:scale-[1.02]">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-slate-700 text-white px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg whitespace-nowrap">
+                Opción económica
+              </div>
+
+              <div className="mb-8">
+                <h3 className="text-[#0a0a0a] font-black uppercase text-2xl sm:text-3xl mb-1">Plan Básico</h3>
+                <p className="text-slate-500 font-bold italic text-sm">Biblioteca de +2.000 ejercicios organizada</p>
+              </div>
+
+              <div className="space-y-4 mb-10 flex-grow">
+                {[
+                  "+2.000 entrenamientos de fútbol organizados",
+                  "Organizados por posición",
+                  "Organizados por categoría",
+                  "Acceso inmediato",
+                  "Acceso vitalicio + actualizaciones automáticas",
+                  "Garantía de 7 días",
+                ].map((item) => (
+                  <div key={item} className="flex items-center gap-3">
+                    <div className="bg-slate-700 rounded-full p-1 shrink-0">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-white" />
+                    </div>
+                    <span className="text-[#0f172a] font-bold text-sm tracking-tight">{item}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bg-slate-50 rounded-2xl p-6 mb-8 border border-slate-100">
+                <p className="text-slate-400 font-bold text-xl line-through leading-none">$19.90</p>
+                <div className="flex items-baseline gap-2 mt-1">
+                  <span className="text-5xl font-black text-[#0f172a]">$5</span>
+                  <span className="text-2xl font-black text-slate-700">USD</span>
+                </div>
+                <div className="mt-4 flex items-center gap-3">
+                  <div className="bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider shadow-sm">
+                    Ahorras 75%
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => goCheckout(BASIC_CHECKOUT_URL, 5)}
+                className="w-full bg-slate-900 hover:bg-slate-800 active:scale-[0.98] text-white font-black uppercase py-5 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-3 text-lg"
+              >
+                Quiero el Plan Básico
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
           </div>
 
 
@@ -923,7 +974,7 @@ function Index() {
           <div className="bg-[#0a0a0a] p-6 text-center relative"><button onClick={handleClosePremium} className="absolute right-4 top-4 text-white/80"><X className="w-6 h-6" /></button><p className="text-[#facc15] font-black uppercase text-xs">Elige tu paquete</p><h2 className="text-white font-black uppercase text-2xl sm:text-3xl mt-2">Empieza ahora</h2><p className="text-white/70 text-sm mt-2">El Plan Completo es la opción recomendada.</p></div>
           <div className="p-5 sm:p-7 grid md:grid-cols-2 gap-5">
             <div className="relative rounded-3xl border-4 border-[#16a34a] p-5 sm:p-6"><div className="absolute -top-4 left-5 bg-[#16a34a] text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase">⭐ Recomendado · Mejor Valor</div><h3 className="font-black uppercase text-2xl mt-2">Plan Completo</h3><p className="text-slate-500 text-sm mb-4">+2.000 ejercicios + nutrición + casa + definición + 4 bonos.</p><div className="space-y-2 text-sm font-semibold mb-5">{['+2.000 ejercicios por posición y categoría','Nutrición de alto rendimiento','Entrenamientos individuales en casa que usan jugadores profesionales','500 entrenamientos de definición muscular (bono exclusivo de hoy) (bono exclusivo de hoy)','4 bonos exclusivos','Acceso vitalicio + actualizaciones automáticas + actualizaciones automáticas + actualizaciones','Garantía de 7 días'].map((item)=><div key={item} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-[#16a34a]" />{item}</div>)}</div><div className="text-4xl font-black mb-5">$6.50 <span className="text-base text-[#16a34a]">USD</span></div><button onClick={()=>goCheckout(PREMIUM_CHECKOUT_URL,6.50)} className="w-full bg-[#16a34a] text-white font-black uppercase py-4 rounded-2xl">Comprar Plan Completo <ArrowRight className="inline w-5 h-5" /></button></div>
-            <div className="rounded-3xl border-2 border-slate-300 p-5 sm:p-6"><p className="text-slate-500 font-black uppercase text-[10px] mb-2">Opción económica</p><h3 className="font-black uppercase text-2xl">2.000 Ejercicios</h3><p className="text-slate-500 text-sm mb-4">Solo la biblioteca organizada por posición y categoría.</p><div className="space-y-2 text-sm font-semibold mb-5">{['+2.000 entrenamientos de fútbol organizados por posición y categoría (listos para aplicar hoy)','Organizados por posición','Organizados por categoría','Acceso inmediato','Acceso vitalicio + actualizaciones automáticas + actualizaciones automáticas','Garantía de 7 días'].map((item)=><div key={item} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-slate-700" />{item}</div>)}</div><div className="text-4xl font-black mb-5">$4.50 <span className="text-base text-slate-700">USD</span></div><button onClick={()=>goCheckout(BASIC_CHECKOUT_URL,4.50)} className="w-full bg-slate-900 text-white font-black uppercase py-4 rounded-2xl">Comprar 2.000 Ejercicios <ArrowRight className="inline w-5 h-5" /></button></div>
+            <div className="rounded-3xl border-2 border-slate-300 p-5 sm:p-6"><p className="text-slate-500 font-black uppercase text-[10px] mb-2">Opción económica</p><h3 className="font-black uppercase text-2xl">2.000 Ejercicios</h3><p className="text-slate-500 text-sm mb-4">Solo la biblioteca organizada por posición y categoría.</p><div className="space-y-2 text-sm font-semibold mb-5">{['+2.000 entrenamientos de fútbol organizados por posición y categoría (listos para aplicar hoy)','Organizados por posición','Organizados por categoría','Acceso inmediato','Acceso vitalicio + actualizaciones automáticas + actualizaciones automáticas','Garantía de 7 días'].map((item)=><div key={item} className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-slate-700" />{item}</div>)}</div><div className="text-4xl font-black mb-5">$5 <span className="text-base text-slate-700">USD</span></div><button onClick={()=>goCheckout(BASIC_CHECKOUT_URL,5)} className="w-full bg-slate-900 text-white font-black uppercase py-4 rounded-2xl">Comprar Plan Básico <ArrowRight className="inline w-5 h-5" /></button></div>
           </div><p className="text-center text-[10px] text-slate-400 font-bold uppercase pb-5"><Lock className="inline w-3.5 h-3.5" /> Pago 100% seguro · Hotmart</p>
         </DialogContent>
       </Dialog>
