@@ -625,7 +625,7 @@ function Index() {
             <div className="mt-6 text-center">
               <p className="font-black uppercase text-slate-500 text-sm">Valor real total: <span className="line-through">más de $460</span></p>
               <p className="font-black uppercase text-[clamp(20px,5vw,32px)] leading-tight mt-2">
-                Hoy te llevas TODO por solo <span className="text-[#16a34a]">$39,90</span>
+                Hoy te llevas TODO por solo <span className="text-[#16a34a]">$6,50</span>
               </p>
               <p className="text-slate-600 text-sm mt-3 max-w-md mx-auto">
                 Estás pagando una fracción mínima del valor real. Esta diferencia solo existe mientras la oferta esté activa.
@@ -634,7 +634,7 @@ function Index() {
                 onClick={openPremiumOffer}
                 className="mt-6 w-full max-w-[520px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] active:scale-[0.98] transition-all text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl"
               >
-                Quiero todo por $39,90
+                Quiero todo por $6,50
               </button>
             </div>
           </div>
