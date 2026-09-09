@@ -62,6 +62,8 @@ import imgDefinicion from "@/assets/bono-definicion.jpg";
 import imgNutricion from "@/assets/nutricion-atleta.jpg";
 import imgCasa from "@/assets/entrenamiento-casa.jpg";
 import imgStackValor from "@/assets/stack-valor.jpg";
+import feedbackJugador from "@/assets/feedback-jugador.mp4.asset.json";
+import feedbackEntrenador from "@/assets/feedback-entrenador.mp4.asset.json";
 
 const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=10";
 const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/B107438269A?checkoutMode=10";
@@ -689,6 +691,77 @@ function Index() {
             className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             Quiero acceder ahora
+          </button>
+        </div>
+      </section>
+
+      {/* Video feedback - jugador y entrenador */}
+      <section className="px-5 py-14 bg-gradient-to-b from-[#0a0a0a] to-[#0f172a] text-white">
+        <div className="max-w-[1100px] mx-auto">
+          <p className="text-center text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">
+            Feedback en vídeo
+          </p>
+          <h2 className="text-center font-black uppercase text-[clamp(24px,5vw,40px)] leading-tight mb-3">
+            Lo que dicen <span className="text-[#16a34a]">jugadores y entrenadores</span> reales
+          </h2>
+          <p className="text-center text-slate-300 max-w-xl mx-auto mb-8 sm:mb-10 text-sm sm:text-base">
+            No son actores. Son personas que ya aplican el método dentro y fuera de la cancha.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-5 sm:gap-6 max-w-[760px] mx-auto">
+            {[
+              {
+                src: feedbackJugador.url,
+                role: "Jugador",
+                name: "Mateo · Delantero",
+                quote: "Los ejercicios están listos para aplicar. Mejoré mi definición y mi ritmo en pocas semanas.",
+                tag: "Plan Completo",
+              },
+              {
+                src: feedbackEntrenador.url,
+                role: "Entrenador",
+                name: "Prof. Herrera · DT",
+                quote: "Dejé de improvisar. Ahora llevo una estructura profesional a cada sesión con mi equipo.",
+                tag: "Plan Completo",
+              },
+            ].map((v, i) => (
+              <div key={i} className="group rounded-3xl overflow-hidden border border-white/10 bg-white/5 hover:border-[#16a34a]/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+                <div className="relative">
+                  <video
+                    src={v.src}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    controls
+                    className="w-full aspect-[9/16] max-h-[440px] object-cover bg-black"
+                  />
+                  <div className="absolute top-3 left-3 bg-[#16a34a] text-white text-[11px] font-black uppercase tracking-wide px-2.5 py-1 rounded-full shadow-lg">
+                    {v.role}
+                  </div>
+                </div>
+                <div className="p-4 sm:p-5">
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <p className="font-black text-sm sm:text-base text-white">{v.name}</p>
+                    <span className="text-[10px] font-bold uppercase tracking-wide text-[#facc15] bg-[#facc15]/10 px-2 py-1 rounded-md">
+                      {v.tag}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 mb-2">
+                    {[0,1,2,3,4].map((s) => (
+                      <Star key={s} className="w-3.5 h-3.5 text-[#facc15] fill-[#facc15]" />
+                    ))}
+                  </div>
+                  <p className="text-slate-300 text-xs sm:text-sm leading-relaxed italic">"{v.quote}"</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={openPremiumOffer}
+            className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(250,204,21,0.55)]"
+          >
+            Quiero resultados como los suyos
           </button>
         </div>
       </section>
