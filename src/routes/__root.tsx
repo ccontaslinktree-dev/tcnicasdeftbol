@@ -41,6 +41,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
             try{
               var hero=document.querySelector('section');
               if(hero){
+                var h1=hero.querySelector('h1');
+                if(h1) h1.textContent='JUGADOR O ENTRENADOR, DEJA DE IMPROVISAR. ESTA PLATAFORMA TIENE MÁS DE 2.000 EJERCICIOS ORGANIZADOS POR CATEGORÍA, DIVERSOS BONOS, MATERIALES Y VIDEOS. ¡ES EL MOMENTO IDEAL PARA EMPEZAR A ENTRENAR DE LA MANERA CORRECTA!';
                 var paragraphs=hero.querySelectorAll('p');
                 if(paragraphs.length>1) paragraphs[1].textContent='LO SÉ: LO DIFÍCIL QUE ES TENER QUE IMPROVISAR, REPETIR ENTRENAMIENTOS O ENTRENAR COMO UN AMATEUR. AHORA TIENES TODO EN UNA SOLA PLATAFORMA, AL ALCANCE DE TU MANO, DESDE TU CELULAR, COMPUTADORA O TABLETA, Y ESTÁ DISPONIBLE A UN PRECIO PROMOCIONAL INCREÍBLE QUE SOLO DURARÁ HASTA HOY.';
               }
