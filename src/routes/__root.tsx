@@ -73,8 +73,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/44038a08-e049-46f1-8273-eed12814fc04/id-preview-996f82b4--9688cdb4-d0ab-4c73-bd12-0c417c465517.lovable.app-1784181108713.png" },
     ],
     links: [
-      { rel: "preload", as: "image", href: "/src/assets/hero-product.png" },
-      { rel: "preload", as: "video", href: "/__l5e/assets-v1/ee1c657d-f341-4b18-b91c-798075c31211/preview.mov", type: "video/quicktime" },
       { rel: "stylesheet", href: appCss },
     ],
     scripts: [
@@ -227,8 +225,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
                 if ((offer && copy) || tries >= 30) clearInterval(interval);
               }, 500);
             }
-            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
-            else start();
+            function scheduleStart() {
+              if (window.requestIdleCallback) requestIdleCallback(start, { timeout: 1500 });
+              else setTimeout(start, 700);
+            }
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scheduleStart, { once: true });
+            else scheduleStart();
           })();
         `,
       },
