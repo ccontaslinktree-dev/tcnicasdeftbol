@@ -42,7 +42,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               var hero=document.querySelector('section');
               if(hero){
                 var paragraphs=hero.querySelectorAll('p');
-                if(paragraphs.length>1) paragraphs[1].textContent='EU SEI O QUANTO É DIFICIL VOCE TER QUE IMPROVISAR, REPETIR TREINOS OU TREINAR IGUAL UM AMADOR, VOCE TEM TUDO AGORA EM UMA SO PLATAFORMA NA PALMA DA SUA MAO NA TELA DO SEU CELULAR, COMPUTADOR OU TABLET, E ESTA COM UM PRECO PROMOCIONAL MARAVILHOSO E QUE SO IRA DURAR ATE HOJE.';
+                if(paragraphs.length>1) paragraphs[1].textContent='LO SÉ: LO DIFÍCIL QUE ES TENER QUE IMPROVISAR, REPETIR ENTRENAMIENTOS O ENTRENAR COMO UN AMATEUR. AHORA TIENES TODO EN UNA SOLA PLATAFORMA, AL ALCANCE DE TU MANO, DESDE TU CELULAR, COMPUTADORA O TABLETA, Y ESTÁ DISPONIBLE A UN PRECIO PROMOCIONAL INCREÍBLE QUE SOLO DURARÁ HASTA HOY.';
               }
               document.querySelectorAll('video[src],iframe[src*="youtube.com/embed"]').forEach(function(el){
                 var src=el.getAttribute('src'); if(!src)return;
