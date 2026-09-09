@@ -62,6 +62,8 @@ import imgDefinicion from "@/assets/bono-definicion.jpg";
 import imgNutricion from "@/assets/nutricion-atleta.jpg";
 import imgCasa from "@/assets/entrenamiento-casa.jpg";
 import imgStackValor from "@/assets/stack-valor.jpg";
+import feedbackJugador from "@/assets/feedback-jugador.mp4.asset.json";
+import feedbackEntrenador from "@/assets/feedback-entrenador.mp4.asset.json";
 
 const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=10";
 const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/B107438269A?checkoutMode=10";
