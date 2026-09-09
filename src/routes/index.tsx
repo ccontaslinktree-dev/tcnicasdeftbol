@@ -299,17 +299,17 @@ function Index() {
       {/* HERO */}
       <section className="px-5 pt-6 pb-8 text-center">
         <div className="max-w-[1100px] mx-auto">
-          <h1 className="font-black uppercase leading-[1.12] tracking-tight text-[#0a0a0a] mb-6 text-[clamp(22px,5.2vw,48px)]">
-            Deja de improvisar. Llega a cada entrenamiento con sesiones listas, organizadas por posición y categoría.
+          <h1 className="font-black uppercase leading-[1.1] tracking-tight text-[#0a0a0a] mb-5 text-[clamp(22px,5.4vw,46px)]">
+            Si eres entrenador o jugador de fútbol, <span className="text-[#16a34a]">esta plataforma fue hecha para ti</span>
           </h1>
           <div className="max-w-[680px] mx-auto mb-6 bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white rounded-2xl px-4 py-3 sm:px-5 sm:py-4 shadow-lg border border-[#facc15]/40 flex items-start gap-3 text-left">
             <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 text-[#facc15] mt-0.5 animate-pulse" />
             <p className="font-bold leading-snug text-[clamp(12px,3.4vw,15px)]">
-              <span className="text-[#facc15] font-black uppercase">Actualizaciones automáticas:</span> añadimos nuevos ejercicios constantemente. Tu biblioteca crece contigo, siempre.
+              <span className="text-[#facc15] font-black uppercase">Actualizaciones semanales:</span> cada semana añadimos nuevos ejercicios. Tu biblioteca crece contigo, siempre.
             </p>
           </div>
           <p className="text-slate-600 font-medium max-w-[680px] mx-auto mb-7 leading-relaxed text-[clamp(14px,3.6vw,19px)]">
-            <b className="text-[#0a0a0a]">+2.000 entrenamientos profesionales listos para aplicar</b> + <b className="text-[#0a0a0a]">nutrición de alto rendimiento</b> + <b className="text-[#0a0a0a]">entrenamientos en casa de jugadores profesionales</b> + <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">500 entrenamientos de definición muscular (bono exclusivo de hoy) (bono exclusivo de hoy)</span>. Todo organizado. Acceso inmediato.
+            <b className="text-[#0a0a0a]">+2.000 entrenamientos profesionales listos para aplicar</b> + <b className="text-[#0a0a0a]">nutrición de alto rendimiento</b> + <b className="text-[#0a0a0a]">entrenamientos en casa de jugadores profesionales</b> + <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">500 entrenamientos de definición muscular (bono exclusivo de hoy)</span>. En materiales y vídeos listos, organizados por categorías. Acceso inmediato.
           </p>
 
           <img
@@ -324,6 +324,18 @@ function Index() {
           />
           <p className="mt-6 text-sm text-slate-500 flex items-center justify-center gap-1.5">
             <Lock className="w-4 h-4" /> Pago 100% seguro · Acceso inmediato por e-mail
+          </p>
+        </div>
+      </section>
+
+      {/* Strategic bridge */}
+      <section className="px-5 py-8 sm:py-10 bg-gradient-to-r from-[#0a0a0a] to-[#0f172a] text-white">
+        <div className="max-w-[820px] mx-auto text-center">
+          <p className="font-black uppercase text-[clamp(18px,4.4vw,30px)] leading-tight mb-3">
+            Deja de improvisar y empieza a <span className="text-[#facc15]">entrenar como un verdadero profesional</span>
+          </p>
+          <p className="text-slate-300 text-[clamp(14px,3.4vw,17px)] leading-relaxed max-w-[640px] mx-auto">
+            Todo en la palma de tu mano, todo en un solo lugar, organizado y listo para hacerte evolucionar. También cuenta con <b className="text-white">actualizaciones semanales</b> para que nunca te quedes atrás.
           </p>
         </div>
       </section>
