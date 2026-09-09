@@ -22,6 +22,12 @@ div[style*="Edit with Lovable"],
   z-index: -9999 !important;
 }
 
+/* Keep below-the-fold sections from consuming layout/paint work during first render. */
+main > section:nth-of-type(n + 3) {
+  content-visibility: auto;
+  contain-intrinsic-size: 900px;
+}
+
 /*
  * Design system definition.
  *
@@ -107,7 +113,7 @@ div[style*="Edit with Lovable"],
   --chart-5: oklch(0.769 0.188 70.08);
   --sidebar: oklch(0.984 0.003 247.858);
   --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
   --sidebar-accent: oklch(0.968 0.007 247.896);
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
