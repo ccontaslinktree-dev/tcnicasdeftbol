@@ -181,16 +181,50 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
               }
             }
 
+            function updateSalesCopy() {
+              try {
+                var sections = document.querySelectorAll('section');
+                if (sections.length < 3) return false;
+
+                var heroTitle = sections[0].querySelector('h1');
+                if (heroTitle) {
+                  heroTitle.textContent = 'JUGADOR O ENTRENADOR, DEJA DE IMPROVISAR. ESTA PLATAFORMA TIENE MÁS DE 2.000 EJERCICIOS ORGANIZADOS POR CATEGORÍA, DIVERSOS BONOS, MATERIALES Y VIDEOS. ¡ESTE ES EL MOMENTO DE EMPEZAR A ENTRENAR DE LA MANERA CORRECTA!';
+                }
+
+                var third = sections[2];
+                if (third.getAttribute('data-sales-copy-updated') === 'true') return true;
+                var heading = third.querySelector('h2');
+                if (!heading) return false;
+                heading.innerHTML = 'TODO LO QUE NECESITAS PARA <span class="text-[#facc15]">DEJAR DE IMPROVISAR</span> Y ENTRENAR COMO UN PROFESIONAL';
+
+                var paragraph = document.createElement('p');
+                paragraph.className = 'text-slate-300 max-w-[800px] mx-auto mt-5 mb-2 text-[clamp(14px,3.6vw,18px)] leading-relaxed font-medium';
+                paragraph.textContent = 'Sé lo difícil que es tener que improvisar, repetir entrenamientos o entrenar como un amateur. Ahora tienes todo en una sola plataforma, al alcance de tu mano, desde tu celular, computadora o tablet. Y lo mejor: está disponible con un precio promocional increíble que solo durará hasta hoy.';
+                heading.insertAdjacentElement('afterend', paragraph);
+                third.setAttribute('data-sales-copy-updated', 'true');
+                return true;
+              } catch (e) {
+                console.warn('Sales copy update skipped', e);
+                return false;
+              }
+            }
+
             function start() {
-              if (addBasicOfferCard()) return;
+              var doneOffer = addBasicOfferCard();
+              var doneCopy = updateSalesCopy();
+              if (doneOffer && doneCopy) return;
               var observer = new MutationObserver(function () {
-                if (addBasicOfferCard()) observer.disconnect();
+                var offer = addBasicOfferCard();
+                var copy = updateSalesCopy();
+                if (offer && copy) observer.disconnect();
               });
               if (document.body) observer.observe(document.body, { childList: true, subtree: true });
               var tries = 0;
               var interval = setInterval(function () {
                 tries++;
-                if (addBasicOfferCard() || tries >= 30) clearInterval(interval);
+                var offer = addBasicOfferCard();
+                var copy = updateSalesCopy();
+                if ((offer && copy) || tries >= 30) clearInterval(interval);
               }, 500);
             }
             if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
