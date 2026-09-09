@@ -85,153 +85,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         children: `
           window.fbq_init = function() {
-            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '889185807027175');
             fbq('track', 'PageView');
           };
           if (window.requestIdleCallback) requestIdleCallback(window.fbq_init);
           else setTimeout(window.fbq_init, 2000);
-        `,
-      },
-      {
-        children: `
-          (function () {
-            function addBasicOfferCard() {
-              try {
-                if (document.querySelector('[data-basic-offer-card="true"]')) return true;
-                var section = document.getElementById('oferta');
-                if (!section) return false;
-                var wrapper = Array.from(section.querySelectorAll('div')).find(function (el) {
-                  return Array.from(el.classList).includes('max-w-[560px]') && el.querySelector('button');
-                });
-                if (!wrapper || !wrapper.firstElementChild) return false;
-
-                wrapper.className = 'grid md:grid-cols-2 gap-5 max-w-[1100px] mx-auto items-stretch';
-                var premium = wrapper.firstElementChild;
-                var basic = premium.cloneNode(true);
-                basic.setAttribute('data-basic-offer-card', 'true');
-                basic.className = 'relative group bg-white rounded-[32px] p-6 sm:p-8 flex flex-col border-2 border-slate-300 shadow-xl transition-all duration-500 hover:scale-[1.01]';
-
-                var badge = basic.querySelector('.absolute');
-                if (badge) badge.remove();
-                var title = basic.querySelector('h3');
-                if (title) title.textContent = '2.000 Ejercicios';
-                var subtitle = basic.querySelector('h3 + p');
-                if (subtitle) subtitle.textContent = 'La biblioteca esencial para dejar de buscar material suelto';
-
-                var yellow = basic.querySelector('p.bg-\\[\\#facc15\\]');
-                if (yellow) {
-                  yellow.textContent = 'Ideal si quieres acceder a los ejercicios organizados sin llevarte los extras del Plan Completo.';
-                  yellow.className = 'mt-3 text-[13px] font-bold text-slate-700 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2';
-                }
-
-                var rows = basic.querySelectorAll('.space-y-4 > div');
-                var items = [
-                  '+2.000 entrenamientos de fútbol',
-                  'Organizados por posición',
-                  'Organizados por categoría',
-                  'Listos para aplicar hoy',
-                  'Acceso inmediato',
-                  'Acceso vitalicio + actualizaciones automáticas',
-                  'Garantía total de 7 días'
-                ];
-                items.forEach(function (text, i) {
-                  if (rows[i]) {
-                    var span = rows[i].querySelector('span');
-                    if (span) span.textContent = text;
-                  }
-                });
-                for (var i = items.length; i < rows.length; i++) rows[i].remove();
-
-                var priceBox = basic.querySelector('.bg-slate-50');
-                if (priceBox) {
-                  var oldPrice = priceBox.querySelector('p');
-                  if (oldPrice) { oldPrice.textContent = '$49.90'; oldPrice.className = 'text-slate-400 font-bold text-xl line-through leading-none'; }
-                  var price = priceBox.querySelector('.text-5xl');
-                  if (price) price.textContent = '$4.50';
-                  var usd = priceBox.querySelector('.text-2xl');
-                  if (usd) { usd.textContent = 'USD'; usd.className = 'text-2xl font-black text-slate-700'; }
-                  var labels = priceBox.querySelectorAll('div.mt-4');
-                  if (labels[0]) labels[0].remove();
-                }
-
-                var oldButton = basic.querySelector('button');
-                if (oldButton) {
-                  var link = document.createElement('a');
-                  var target = new URL('https://pay.hotmart.com/B107438269A?checkoutMode=10', window.location.href);
-                  var params = new URLSearchParams(window.location.search);
-                  ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','xcod'].forEach(function (key) {
-                    var value = params.get(key);
-                    if (value) target.searchParams.set(key, value);
-                  });
-                  var xcod = params.get('xcod');
-                  if (xcod) target.searchParams.set('sck', xcod);
-                  link.href = target.toString();
-                  link.className = 'w-full bg-slate-900 hover:bg-slate-800 active:scale-[0.98] text-white font-black uppercase py-5 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 text-base';
-                  link.textContent = 'QUIERO SESIONES LISTAS Y ORGANIZADAS →';
-                  oldButton.replaceWith(link);
-                }
-                wrapper.appendChild(basic);
-                return true;
-              } catch (e) {
-                console.warn('Basic offer card injection skipped', e);
-                return false;
-              }
-            }
-
-            function updateSalesCopy() {
-              try {
-                var sections = document.querySelectorAll('section');
-                if (sections.length < 3) return false;
-
-                var heroTitle = sections[0].querySelector('h1');
-                if (heroTitle) {
-                  heroTitle.textContent = 'JUGADOR O ENTRENADOR, DEJA DE IMPROVISAR. ESTA PLATAFORMA TIENE MÁS DE 2.000 EJERCICIOS ORGANIZADOS POR CATEGORÍA, DIVERSOS BONOS, MATERIALES Y VIDEOS. ¡ESTE ES EL MOMENTO DE EMPEZAR A ENTRENAR DE LA MANERA CORRECTA!';
-                }
-
-                var third = sections[2];
-                if (third.getAttribute('data-sales-copy-updated') === 'true') return true;
-                var heading = third.querySelector('h2');
-                if (!heading) return false;
-                heading.innerHTML = 'TODO LO QUE NECESITAS PARA <span class="text-[#facc15]">DEJAR DE IMPROVISAR</span> Y ENTRENAR COMO UN PROFESIONAL';
-
-                var paragraph = document.createElement('p');
-                paragraph.className = 'text-slate-300 max-w-[800px] mx-auto mt-5 mb-2 text-[clamp(14px,3.6vw,18px)] leading-relaxed font-medium';
-                paragraph.textContent = 'Sé lo difícil que es tener que improvisar, repetir entrenamientos o entrenar como un amateur. Ahora tienes todo en una sola plataforma, al alcance de tu mano, desde tu celular, computadora o tablet. Y lo mejor: está disponible con un precio promocional increíble que solo durará hasta hoy.';
-                heading.insertAdjacentElement('afterend', paragraph);
-                third.setAttribute('data-sales-copy-updated', 'true');
-                return true;
-              } catch (e) {
-                console.warn('Sales copy update skipped', e);
-                return false;
-              }
-            }
-
-            function start() {
-              var doneOffer = addBasicOfferCard();
-              var doneCopy = updateSalesCopy();
-              if (doneOffer && doneCopy) return;
-              var observer = new MutationObserver(function () {
-                var offer = addBasicOfferCard();
-                var copy = updateSalesCopy();
-                if (offer && copy) observer.disconnect();
-              });
-              if (document.body) observer.observe(document.body, { childList: true, subtree: true });
-              var tries = 0;
-              var interval = setInterval(function () {
-                tries++;
-                var offer = addBasicOfferCard();
-                var copy = updateSalesCopy();
-                if ((offer && copy) || tries >= 30) clearInterval(interval);
-              }, 500);
-            }
-            function scheduleStart() {
-              if (window.requestIdleCallback) requestIdleCallback(start, { timeout: 1500 });
-              else setTimeout(start, 700);
-            }
-            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scheduleStart, { once: true });
-            else scheduleStart();
-          })();
         `,
       },
     ],
@@ -244,7 +103,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <head><HeadContent /></head>
       <body>{children}<Scripts /></body>
     </html>
