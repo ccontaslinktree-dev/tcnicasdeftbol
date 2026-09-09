@@ -34,44 +34,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [{ rel: "stylesheet", href: appCss }],
     scripts: [
       { src: "https://cdn.utmify.com.br/scripts/utms/latest.js", async: true, defer: true, "data-utmify-prevent-subids": "" },
+      { children: `window.fbq_init=function(){!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','889185807027175');fbq('track','PageView');};if(window.requestIdleCallback)requestIdleCallback(window.fbq_init);else setTimeout(window.fbq_init,2000);` },
       { children: `
-        window.fbq_init = function() {
-          !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init', '889185807027175'); fbq('track', 'PageView');
-        };
-        if (window.requestIdleCallback) requestIdleCallback(window.fbq_init); else setTimeout(window.fbq_init, 2000);
-      ` },
-      { children: `
-        (function () {
-          function optimizeAfterPaint() {
-            try {
-              var sections = document.querySelectorAll('section');
-              var hero = sections[0];
-              if (hero) {
-                var paragraphs = hero.querySelectorAll('p');
-                if (paragraphs.length) paragraphs[paragraphs.length - 1].textContent = 'EU SEI O QUANTO É DIFICIL VOCE TER QUE IMPROVISAR, REPETIR TREINOS OU TREINAR IGUAL UM AMADOR, VOCE TEM TUDO AGORA EM UMA SO PLATAFORMA NA PALMA DA SUA MAO NA TELA DO SEU CELULAR, COMPUTADOR OU TABLET, E ESTA COM UM PRECO PROMOCIONAL MARAVILHOSO E QUE SO IRA DURAR ATE HOJE.';
+        (function(){
+          function optimizeAfterPaint(){
+            try{
+              var hero=document.querySelector('section');
+              if(hero){
+                var paragraphs=hero.querySelectorAll('p');
+                if(paragraphs.length>1) paragraphs[1].textContent='EU SEI O QUANTO É DIFICIL VOCE TER QUE IMPROVISAR, REPETIR TREINOS OU TREINAR IGUAL UM AMADOR, VOCE TEM TUDO AGORA EM UMA SO PLATAFORMA NA PALMA DA SUA MAO NA TELA DO SEU CELULAR, COMPUTADOR OU TABLET, E ESTA COM UM PRECO PROMOCIONAL MARAVILHOSO E QUE SO IRA DURAR ATE HOJE.';
               }
-              document.querySelectorAll('video[src], iframe[src*="youtube.com/embed"]').forEach(function (el) {
-                var src = el.getAttribute('src');
-                if (!src) return;
-                el.setAttribute('data-media-src', src);
-                el.removeAttribute('src');
-                if (el instanceof HTMLVideoElement) el.preload = 'none';
-                if (el instanceof HTMLIFrameElement) el.loading = 'lazy';
-                var load = function () {
-                  var mediaSrc = el.getAttribute('data-media-src');
-                  if (mediaSrc && !el.getAttribute('src')) el.setAttribute('src', mediaSrc);
-                  if (el instanceof HTMLVideoElement) { el.preload = 'metadata'; try { el.load(); } catch (_) {} }
-                };
-                if ('IntersectionObserver' in window) {
-                  var io = new IntersectionObserver(function (entries) { if (entries.some(function (entry) { return entry.isIntersecting; })) { load(); io.disconnect(); } }, { rootMargin: '400px 0px' });
-                  io.observe(el);
-                } else load();
+              document.querySelectorAll('video[src],iframe[src*="youtube.com/embed"]').forEach(function(el){
+                var src=el.getAttribute('src'); if(!src)return;
+                el.setAttribute('data-media-src',src); el.removeAttribute('src');
+                if(el instanceof HTMLVideoElement)el.preload='none';
+                if(el instanceof HTMLIFrameElement)el.loading='lazy';
+                var load=function(){var mediaSrc=el.getAttribute('data-media-src');if(mediaSrc&&!el.getAttribute('src'))el.setAttribute('src',mediaSrc);if(el instanceof HTMLVideoElement){el.preload='metadata';try{el.load()}catch(_){}}};
+                if('IntersectionObserver' in window){var io=new IntersectionObserver(function(entries){if(entries.some(function(entry){return entry.isIntersecting})){load();io.disconnect()}},{rootMargin:'400px 0px'});io.observe(el)}else load();
               });
-            } catch (_) {}
+            }catch(_){ }
           }
-          if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { setTimeout(optimizeAfterPaint, 50); }, { once: true });
-          else setTimeout(optimizeAfterPaint, 50);
+          if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(optimizeAfterPaint,50)},{once:true});else setTimeout(optimizeAfterPaint,50);
         })();
       ` },
     ],
