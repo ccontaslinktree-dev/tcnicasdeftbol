@@ -184,7 +184,25 @@ function Index() {
       <section className="bg-white px-4 py-9 sm:py-12"><div className="w-full max-w-[700px] mx-auto"><p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-[10px] mb-2">Preguntas frecuentes</p><h2 className="text-center font-black uppercase text-[27px] sm:text-[38px] leading-tight mb-6">Antes de <span className="text-[#16a34a]">entrar</span></h2><div className="divide-y divide-slate-200 border-y border-slate-200">{faqs.map(([q, a]) => <details key={q} className="group py-4"><summary className="cursor-pointer list-none font-black text-[14px] pr-7 relative">{q}<span className="absolute right-0 top-0 text-[#16a34a] text-xl group-open:rotate-45 transition-transform">+</span></summary><p className="text-slate-600 text-[13px] leading-relaxed mt-2 pr-5">{a}</p></details>)}</div><div className="mt-6"><CTA>Quiero elegir mi plan</CTA></div></div></section>
       <section className="bg-[#090909] text-white px-4 py-10 sm:py-14 text-center"><div className="w-full max-w-[620px] mx-auto"><Zap className="w-9 h-9 text-[#facc15] mx-auto mb-3 fill-current" /><h2 className="font-black uppercase text-[28px] sm:text-[44px] leading-[1.04] mb-3">Tu próximo entrenamiento puede empezar <span className="text-[#facc15]">hoy.</span></h2><p className="text-slate-300 text-[13px] leading-relaxed mb-5">Deja de perder tiempo buscando material. Elige tu plan y empieza.</p><CTA>Elegir mi plan ahora</CTA><p className="mt-3 text-[10px] text-slate-500">Acceso digital · Pago seguro · 7 días de garantía</p></div></section>
       <footer className="bg-[#050505] text-slate-500 text-[9px] leading-relaxed text-center px-4 py-6"><p className="font-black text-white uppercase tracking-widest mb-2">2000 Ejercicios de Fútbol</p><p>Este sitio no forma parte de Facebook, Meta o Instagram, ni está patrocinado o avalado por dichas plataformas.</p><p className="mt-1">Los resultados individuales pueden variar según dedicación, contexto y aplicación del material.</p><p className="mt-1">© {new Date().getFullYear()} 2000 Ejercicios de Fútbol · Todos los derechos reservados.</p></footer>
-      <div className="fixed bottom-0 inset-x-0 z-[80] bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 safe-area-bottom"><div className="w-full max-w-[620px] mx-auto"><button className="w-full min-h-[52px] bg-[#facc15] active:scale-[0.98] text-[#090909] font-black uppercase text-[13px] px-4 py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 touch-manipulation"><PlayCircle className="w-5 h-5" /> Ver planes · $6.50 USD</button></div></div>
+      <div className="fixed bottom-0 inset-x-0 z-[80] bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 safe-area-bottom"><div className="w-full max-w-[620px] mx-auto"><button type="button" onClick={scrollToOffer} className="w-full min-h-[52px] bg-[#facc15] active:scale-[0.98] text-[#090909] font-black uppercase text-[13px] px-4 py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 touch-manipulation"><PlayCircle className="w-5 h-5" /> Ver planes · $6.50 USD</button></div></div>
+
+      {checkout && (
+        <div className="fixed inset-0 z-[120] bg-black/80 flex items-end sm:items-center justify-center" role="dialog" aria-modal="true" aria-label="Finalizar compra">
+          <div className="absolute inset-0" onClick={() => setCheckout(null)} aria-hidden="true" />
+          <div className="relative w-full sm:max-w-[520px] h-[92dvh] sm:h-[88vh] bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col">
+            <div className="flex items-center justify-between gap-3 px-4 py-3 bg-[#090909] text-white shrink-0">
+              <div className="min-w-0">
+                <p className="font-black uppercase text-[11px] tracking-widest text-[#facc15]">Compra segura</p>
+                <p className="truncate font-bold text-[13px]">{checkout.plan === "premium" ? "Plan Completo · $6.50 USD" : "Plan Básico · $5 USD"}</p>
+              </div>
+              <button type="button" onClick={() => setCheckout(null)} aria-label="Cerrar" className="shrink-0 rounded-full bg-white/10 p-2 active:scale-95 touch-manipulation">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <iframe src={checkout.url} title="Checkout Hotmart" className="w-full flex-1 border-0 bg-white" allow="payment *; clipboard-write" />
+          </div>
+        </div>
+      )}
     </main>
   );
 }
