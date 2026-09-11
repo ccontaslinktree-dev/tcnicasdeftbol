@@ -4,6 +4,128 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
+const HOTMART_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=2";
+
+function loadHotmartWidget() {
+  if (typeof document === "undefined") return Promise.resolve();
+
+  const existing = document.querySelector<HTMLScriptElement>('script[data-hotmart-widget="true"]');
+  if (existing) {
+    return existing.dataset.loaded === "true"
+      ? Promise.resolve()
+      : new Promise<void>((resolve) => {
+          existing.addEventListener("load", () => resolve(), { once: true });
+          existing.addEventListener("error", () => resolve(), { once: true });
+        });
+  }
+
+  const imported = document.createElement("script");
+  imported.src = "https://static.hotmart.com/checkout/widget.min.js";
+  imported.async = true;
+  imported.dataset.hotmartWidget = "true";
+
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.type = "text/css";
+  link.href = "https://static.hotmart.com/css/hotmart-fb.min.css";
+  if (!document.head.querySelector('link[data-hotmart-widget-style="true"]')) {
+    link.dataset.hotmartWidgetStyle = "true";
+    document.head.appendChild(link);
+  }
+
+  return new Promise<void>((resolve) => {
+    imported.addEventListener("load", () => {
+      imported.dataset.loaded = "true";
+      resolve();
+    }, { once: true });
+    imported.addEventListener("error", () => resolve(), { once: true });
+    document.head.appendChild(imported);
+  });
+}
+
+function buildHotmartCheckoutUrl() {
+  if (typeof window === "undefined") return HOTMART_CHECKOUT_URL;
+
+  const targetUrl = new URL(HOTMART_CHECKOUT_URL);
+  const searchParams = new URLSearchParams(window.location.search);
+  const trackingParams = [
+    "utm_source",
+    "utm_medium",
+    "utm_campaign",
+    "utm_content",
+    "utm_term",
+    "xcod",
+  ];
+
+  trackingParams.forEach((param) => {
+    const value = searchParams.get(param);
+    if (value) targetUrl.searchParams.set(param, value);
+  });
+
+  const xcod = searchParams.get("xcod");
+  if (xcod) targetUrl.searchParams.set("sck", xcod);
+
+  return targetUrl.toString();
+}
+
+function fireHotmartInitiateCheckout() {
+  if (typeof window === "undefined") return;
+
+  const eventId = `evt_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+  // @ts-expect-error fbq global
+  window.fbq?.(
+    "track",
+    "InitiateCheckout",
+    { value: 6.5, currency: "USD" },
+    { eventID: eventId },
+  );
+
+  const supaUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supaKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  if (!supaUrl || !supaKey) return;
+
+  const getCookie = (key: string) => {
+    const match = document.cookie.match(new RegExp("(^| )" + key + "=([^;]+)"));
+    return match ? decodeURIComponent(match[2]) : undefined;
+  };
+
+  fetch(`${supaUrl}/functions/v1/meta-capi`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      apikey: supaKey,
+      Authorization: `Bearer ${supaKey}`,
+    },
+    body: JSON.stringify({
+      event_name: "InitiateCheckout",
+      event_id: eventId,
+      event_source_url: window.location.href,
+      user_agent: navigator.userAgent,
+      fbp: getCookie("_fbp"),
+      fbc: getCookie("_fbc"),
+      value: 6.5,
+      currency: "USD",
+    }),
+    keepalive: true,
+  }).catch(() => {});
+}
+
+function isSalesCta(button: HTMLButtonElement) {
+  const text = button.textContent?.replace(/\s+/g, " ").trim().toLowerCase() ?? "";
+  return [
+    "quiero el plan completo ahora",
+    "quiero acceder a la biblioteca",
+    "quiero entrenar con el método completo",
+    "quiero formar parte",
+    "quiero los 4 bonos incluidos",
+    "sí, quiero el plan completo",
+    "quiero acceder sin complicarme",
+    "quiero mi plan completo",
+    "desbloquear el plan completo",
+    "plan completo · $6.50 usd",
+  ].some((label) => text.includes(label));
+}
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -58,7 +180,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "+2.000 Ejercicios de Fútbol — Método Completo para Jugadores y Entrenadores" },
-      { name: "twitter:description", content: "+2.000 ejercicios profesionales de fútbol por posición y categoría — método completo listo para aplicar." },
+      { name: "twitter:description", content: "+2.000 ejercicios profissionais de fútbol por posición y categoría — método completo listo para aplicar." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/44038a08-e049-46f1-8273-eed12814fc04/id-preview-996f82b4--9688cdb4-d0ab-4c73-bd12-0c417c465517.lovable.app-1784181108713.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/44038a08-e049-46f1-8273-eed12814fc04/id-preview-996f82b4--9688cdb4-d0ab-4c73-bd12-0c417c465517.lovable.app-1784181108713.png" },
     ],
@@ -95,6 +217,64 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    let disposed = false;
+    let anchor: HTMLAnchorElement | null = null;
+
+    const setup = async () => {
+      await loadHotmartWidget();
+      if (disposed) return;
+
+      anchor = document.createElement("a");
+      anchor.id = "hotmart-widget-trigger";
+      anchor.href = HOTMART_CHECKOUT_URL;
+      anchor.className = "hotmart-fb hotmart__button-checkout";
+      anchor.style.display = "none";
+      anchor.setAttribute("aria-hidden", "true");
+      anchor.setAttribute("onclick", "return false;");
+      document.body.appendChild(anchor);
+    };
+
+    const handleClick = (event: MouseEvent) => {
+      const target = event.target as Element | null;
+      const button = target?.closest("button");
+      if (!(button instanceof HTMLButtonElement) || !isSalesCta(button)) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+
+      fireHotmartInitiateCheckout();
+      const checkoutUrl = buildHotmartCheckoutUrl();
+
+      const openWidget = () => {
+        if (!anchor) {
+          anchor = document.createElement("a");
+          anchor.id = "hotmart-widget-trigger";
+          anchor.className = "hotmart-fb hotmart__button-checkout";
+          anchor.style.display = "none";
+          anchor.setAttribute("aria-hidden", "true");
+          anchor.setAttribute("onclick", "return false;");
+          document.body.appendChild(anchor);
+        }
+        anchor.href = checkoutUrl;
+        anchor.click();
+      };
+
+      void loadHotmartWidget().then(openWidget);
+    };
+
+    document.addEventListener("click", handleClick, true);
+    void setup();
+
+    return () => {
+      disposed = true;
+      document.removeEventListener("click", handleClick, true);
+      anchor?.remove();
+    };
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
