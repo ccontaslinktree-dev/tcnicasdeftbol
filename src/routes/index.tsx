@@ -16,8 +16,8 @@ import testimonial4 from "@/assets/testimonial-4.jpg";
 import feedbackJugador from "@/assets/feedback-jugador.mp4.asset.json";
 import feedbackEntrenador from "@/assets/feedback-entrenador.mp4.asset.json";
 
-const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=6";
-const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/B107438269A?checkoutMode=6";
+const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=2";
+const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/B107438269A?checkoutMode=2";
 
 function buildCheckoutUrl(baseUrl: string) {
   if (typeof window === "undefined") return baseUrl;
@@ -98,7 +98,7 @@ function CTA({ children }: { children: React.ReactNode }) {
   );
 }
 
-function PlanCard({ basic = false, onCheckout }: { basic?: boolean; onCheckout: (plan: "premium" | "basic") => void }) {
+function PlanCard({ basic = false, onSelect }: { basic?: boolean; onSelect: (plan: "premium" | "basic") => void }) {
   return (
     <div className={`w-full rounded-[24px] p-5 sm:p-7 text-left text-[#0f172a] ${basic ? "bg-white border-2 border-slate-300 shadow-xl" : "bg-white border-4 border-[#16a34a] shadow-[0_20px_60px_-20px_rgba(22,163,74,.45)]"}`}>
       <div className="text-center mb-5">
@@ -133,30 +133,36 @@ function PlanCard({ basic = false, onCheckout }: { basic?: boolean; onCheckout: 
       <button
         type="button"
         className={`w-full min-h-[58px] rounded-2xl font-black uppercase text-[16px] leading-tight px-4 py-4 flex items-center justify-center gap-2 active:scale-[0.98] touch-manipulation ${basic ? "bg-[#0f172a] text-white" : "bg-[#16a34a] text-white shadow-[0_10px_25px_-8px_rgba(22,163,74,.6)]"}`}
-        onClick={() => onCheckout(basic ? "basic" : "premium")}
+        onClick={() => onSelect(basic ? "basic" : "premium")}
       >
         {basic ? "Sí, quiero el Plan Básico" : "Sí, quiero el Plan Completo"}
         <ArrowRight className="w-5 h-5 shrink-0" />
       </button>
-      <p className="mt-3 text-center text-[10px] text-slate-500 flex items-center justify-center gap-1"><Lock className="w-3 h-3" /> Pago seguro sin salir de esta página · Hotmart</p>
+      <p className="mt-3 text-center text-[10px] text-slate-500 flex items-center justify-center gap-1"><Lock className="w-3 h-3" /> Primero conoce todos los detalles · luego compras en Hotmart</p>
     </div>
   );
 }
 
 function Index() {
-  const [checkout, setCheckout] = useState<{ plan: "premium" | "basic"; url: string } | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<"premium" | "basic" | null>(null);
 
   useEffect(() => { fireEvent("ViewContent"); }, []);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
-    document.body.style.overflow = checkout ? "hidden" : "";
+    document.body.style.overflow = selectedPlan ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [checkout]);
+  }, [selectedPlan]);
 
-  const openCheckout = (plan: "premium" | "basic") => {
+  const openPreview = (plan: "premium" | "basic") => {
     fireEvent("InitiateCheckout", plan === "premium" ? 6.5 : 5);
-    setCheckout({ plan, url: buildCheckoutUrl(plan === "premium" ? PREMIUM_CHECKOUT_URL : BASIC_CHECKOUT_URL) });
+    setSelectedPlan(plan);
+  };
+
+  const goToCheckout = () => {
+    if (!selectedPlan) return;
+    const url = buildCheckoutUrl(selectedPlan === "premium" ? PREMIUM_CHECKOUT_URL : BASIC_CHECKOUT_URL);
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -178,7 +184,7 @@ function Index() {
       <section className="bg-[#090909] text-white px-4 py-9 sm:py-12"><div className="w-full max-w-[760px] mx-auto"><p className="text-center text-[#facc15] font-black uppercase tracking-widest text-[10px] mb-2">Prueba social</p><h2 className="text-center font-black uppercase text-[25px] sm:text-[38px] leading-tight mb-3">Mira lo que <span className="text-[#16a34a]">comparten</span></h2><p className="text-center text-slate-300 text-[13px] mb-6">Feedback de jugadores y entrenadores.</p><div className="grid grid-cols-2 gap-3 max-w-[620px] mx-auto mb-5">{[{ src: feedbackJugador.url, label: "Jugador" }, { src: feedbackEntrenador.url, label: "Entrenador" }].map((item) => <div key={item.label} className="rounded-2xl overflow-hidden border border-white/10 bg-white/5"><div className="relative"><video src={item.src} controls playsInline preload="metadata" className="w-full aspect-[9/16] object-cover bg-black" /><span className="absolute top-2 left-2 bg-[#16a34a] text-white text-[9px] font-black uppercase px-2 py-1 rounded-full">{item.label}</span></div></div>)}</div><div className="grid grid-cols-2 sm:grid-cols-4 gap-2">{[testimonial1, testimonial2, testimonial3, testimonial4].map((src, i) => <img key={i} src={src} alt={`Testimonio ${i + 1}`} className="w-full aspect-[3/4] object-cover rounded-xl border border-white/10" loading="lazy" decoding="async" />)}</div><div className="mt-6"><CTA>Quiero ver los planes</CTA></div></div></section>
       <section className="bg-white px-4 py-9 sm:py-12"><div className="w-full max-w-[760px] mx-auto"><p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-[10px] mb-2">Incluidos en el Plan Completo</p><h2 className="text-center font-black uppercase text-[25px] sm:text-[38px] leading-tight mb-6">4 <span className="text-[#16a34a]">bonos</span> incluidos</h2><div className="grid grid-cols-1 sm:grid-cols-2 gap-3">{[{ n: "01", t: "Guía de Entrenamiento", img: bonus1 }, { n: "02", t: "50 Ejercicios de Técnica Individual", img: bonus2 }, { n: "03", t: "Circuitos de Preparación Física", img: bonus3 }, { n: "04", t: "Bono Sorpresa Exclusivo", img: bonusSurprise }].map((bonus) => <div key={bonus.n} className="flex items-center gap-3 rounded-2xl bg-[#090909] text-white p-3 border border-[#facc15]/30"><img src={bonus.img} alt={bonus.t} className="w-20 h-16 object-cover rounded-xl shrink-0" loading="lazy" /><div><p className="text-[#facc15] font-black text-[9px] uppercase tracking-widest">BONO {bonus.n}</p><h3 className="font-black text-[13px] leading-tight mt-1">{bonus.t}</h3></div></div>)}</div><div className="mt-6"><CTA>Quiero ver los planes</CTA></div></div></section>
 
-      <section id="oferta" className="scroll-mt-10 bg-gradient-to-b from-[#090909] to-[#111827] text-white px-4 py-10 sm:py-14"><div className="w-full max-w-[620px] mx-auto text-center"><p className="text-[#facc15] font-black uppercase tracking-widest text-[10px] mb-2">Elige tu acceso</p><h2 className="font-black uppercase text-[28px] sm:text-[42px] leading-tight mb-3">Dos opciones. <span className="text-[#facc15]">Tú eliges.</span></h2><p className="text-slate-300 text-[13px] leading-relaxed mb-7">Compara los planes y elige el que mejor encaja con tu objetivo.</p><div className="space-y-5 text-left"><PlanCard onCheckout={openCheckout} /><PlanCard basic onCheckout={openCheckout} /></div></div></section>
+      <section id="oferta" className="scroll-mt-10 bg-gradient-to-b from-[#090909] to-[#111827] text-white px-4 py-10 sm:py-14"><div className="w-full max-w-[620px] mx-auto text-center"><p className="text-[#facc15] font-black uppercase tracking-widest text-[10px] mb-2">Elige tu acceso</p><h2 className="font-black uppercase text-[28px] sm:text-[42px] leading-tight mb-3">Dos opciones. <span className="text-[#facc15]">Tú eliges.</span></h2><p className="text-slate-300 text-[13px] leading-relaxed mb-7">Compara los planes y elige el que mejor encaja con tu objetivo.</p><div className="space-y-5 text-left"><PlanCard onSelect={openPreview} /><PlanCard basic onSelect={openPreview} /></div></div></section>
       <section className="bg-white px-4 py-9 sm:py-12"><div className="w-full max-w-[700px] mx-auto"><h2 className="text-center font-black uppercase text-[25px] sm:text-[36px] leading-tight mb-5">Un sistema completo por una fracción de su <span className="text-[#16a34a]">valor</span></h2><img src={imgStackValor} alt="Valor del paquete completo" className="w-full max-w-[560px] mx-auto rounded-2xl shadow-lg mb-5" loading="lazy" /><div className="grid grid-cols-1 sm:grid-cols-2 gap-3"><div className="rounded-2xl bg-[#f8fafc] border border-slate-200 p-4"><p className="font-black uppercase text-[#16a34a] text-[10px] mb-2">Lo que evitas</p><p className="text-[13px] font-semibold">Horas buscando ejercicios, material desorganizado y compras por separado.</p></div><div className="rounded-2xl bg-[#090909] text-white p-4 border border-[#16a34a]"><p className="font-black uppercase text-[#facc15] text-[10px] mb-2">Lo que obtienes</p><p className="text-[13px] font-semibold">Biblioteca centralizada, bonos, acceso inmediato y organización.</p></div></div></div></section>
       <section className="bg-[#f1f5f9] px-4 py-9 sm:py-12 text-center"><ShieldCheck className="w-12 h-12 mx-auto text-[#16a34a] mb-3" /><p className="text-[#16a34a] font-black uppercase tracking-widest text-[10px] mb-2">Compra protegida</p><h2 className="font-black uppercase text-[27px] sm:text-[38px] leading-tight mb-3">7 días de garantía</h2><p className="text-slate-600 text-[13px] leading-relaxed max-w-[520px] mx-auto mb-5">Tienes 7 días para conocer el material conforme a las condiciones de garantía de la compra.</p><div className="max-w-[620px] mx-auto"><CTA>Quiero ver los planes</CTA></div></section>
       <section className="bg-white px-4 py-9 sm:py-12"><div className="w-full max-w-[700px] mx-auto"><p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-[10px] mb-2">Preguntas frecuentes</p><h2 className="text-center font-black uppercase text-[27px] sm:text-[38px] leading-tight mb-6">Antes de <span className="text-[#16a34a]">entrar</span></h2><div className="divide-y divide-slate-200 border-y border-slate-200">{faqs.map(([q, a]) => <details key={q} className="group py-4"><summary className="cursor-pointer list-none font-black text-[14px] pr-7 relative">{q}<span className="absolute right-0 top-0 text-[#16a34a] text-xl group-open:rotate-45 transition-transform">+</span></summary><p className="text-slate-600 text-[13px] leading-relaxed mt-2 pr-5">{a}</p></details>)}</div><div className="mt-6"><CTA>Quiero elegir mi plan</CTA></div></div></section>
@@ -186,20 +192,42 @@ function Index() {
       <footer className="bg-[#050505] text-slate-500 text-[9px] leading-relaxed text-center px-4 py-6"><p className="font-black text-white uppercase tracking-widest mb-2">2000 Ejercicios de Fútbol</p><p>Este sitio no forma parte de Facebook, Meta o Instagram, ni está patrocinado o avalado por dichas plataformas.</p><p className="mt-1">Los resultados individuales pueden variar según dedicación, contexto y aplicación del material.</p><p className="mt-1">© {new Date().getFullYear()} 2000 Ejercicios de Fútbol · Todos los derechos reservados.</p></footer>
       <div className="fixed bottom-0 inset-x-0 z-[80] bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 safe-area-bottom"><div className="w-full max-w-[620px] mx-auto"><button type="button" onClick={scrollToOffer} className="w-full min-h-[52px] bg-[#facc15] active:scale-[0.98] text-[#090909] font-black uppercase text-[13px] px-4 py-3 rounded-xl shadow-lg flex items-center justify-center gap-2 touch-manipulation"><PlayCircle className="w-5 h-5" /> Ver planes · $6.50 USD</button></div></div>
 
-      {checkout && (
-        <div className="fixed inset-0 z-[120] bg-black/80 flex items-end sm:items-center justify-center" role="dialog" aria-modal="true" aria-label="Finalizar compra">
-          <div className="absolute inset-0" onClick={() => setCheckout(null)} aria-hidden="true" />
-          <div className="relative w-full sm:max-w-[520px] h-[92dvh] sm:h-[88vh] bg-white rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col">
-            <div className="flex items-center justify-between gap-3 px-4 py-3 bg-[#090909] text-white shrink-0">
+      {selectedPlan && (
+        <div className="fixed inset-0 z-[120] bg-black/85 flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true" aria-label="Conoce tu plan antes de comprar">
+          <button type="button" className="absolute inset-0 cursor-default" onClick={() => setSelectedPlan(null)} aria-label="Cerrar ventana" />
+          <div className="relative w-full sm:max-w-[520px] max-h-[94dvh] overflow-y-auto bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl text-[#0f172a]">
+            <div className="sticky top-0 z-10 flex items-center justify-between gap-3 px-4 py-3 bg-[#090909] text-white">
               <div className="min-w-0">
-                <p className="font-black uppercase text-[11px] tracking-widest text-[#facc15]">Compra segura</p>
-                <p className="truncate font-bold text-[13px]">{checkout.plan === "premium" ? "Plan Completo · $6.50 USD" : "Plan Básico · $5 USD"}</p>
+                <p className="font-black uppercase text-[10px] tracking-widest text-[#facc15]">Antes de comprar</p>
+                <p className="truncate font-black text-[14px]">{selectedPlan === "premium" ? "Plan Completo" : "Plan Básico"}</p>
               </div>
-              <button type="button" onClick={() => setCheckout(null)} aria-label="Cerrar" className="shrink-0 rounded-full bg-white/10 p-2 active:scale-95 touch-manipulation">
-                <X className="w-5 h-5" />
-              </button>
+              <button type="button" onClick={() => setSelectedPlan(null)} aria-label="Cerrar" className="shrink-0 rounded-full bg-white/10 p-2 active:scale-95 touch-manipulation"><X className="w-5 h-5" /></button>
             </div>
-            <iframe src={checkout.url} title="Checkout Hotmart" className="w-full flex-1 border-0 bg-white" allow="payment *; clipboard-write" />
+
+            <div className="p-5 sm:p-7 text-center">
+              <div className="inline-flex items-center gap-2 bg-[#16a34a] text-white rounded-full px-3 py-2 text-[10px] font-black uppercase tracking-widest">
+                <Star className="w-3 h-3 fill-current text-[#facc15]" /> {selectedPlan === "premium" ? "Mejor valor" : "Acceso esencial"}
+              </div>
+              <h2 className="font-black uppercase text-[25px] sm:text-[32px] leading-tight mt-4">{selectedPlan === "premium" ? "Todo lo que necesitas para entrenar mejor" : "Empieza con lo esencial"}</h2>
+              <p className="text-slate-600 text-[13px] leading-relaxed mt-3">{selectedPlan === "premium" ? "Imagina dejar de buscar ejercicios sueltos y tener una biblioteca completa, organizada y lista para usar cuando quieras." : "Una forma sencilla de comenzar con el contenido principal y entrenar con material organizado."}</p>
+
+              {selectedPlan === "premium" && <img src={heroProduct} alt="Plan Completo de fútbol" className="w-full max-w-[240px] mx-auto rounded-2xl shadow-lg mt-5" />}
+
+              <div className="text-left bg-[#f8fafc] border border-slate-200 rounded-2xl p-4 mt-5 space-y-2.5">
+                {(selectedPlan === "premium"
+                  ? ["+2.000 entrenamientos organizados", "Nutrición de alto rendimiento", "Entrenamientos para hacer en casa", "500 entrenamientos de definición muscular", "4 bonos adicionales", "Acceso vitalicio + actualizaciones", "7 días de garantía"]
+                  : ["Contenido principal del Plan Básico", "Material digital para entrenar", "Acceso desde móvil, tablet u ordenador", "Compra segura por Hotmart"]
+                ).map((item) => <div key={item} className="flex items-start gap-2"><CheckCircle2 className="w-5 h-5 text-[#16a34a] shrink-0" /><span className="font-bold text-[13px] leading-snug">{item}</span></div>)}
+              </div>
+
+              {selectedPlan === "premium" && <div className="mt-5 rounded-2xl bg-[#090909] text-white p-4"><p className="text-slate-400 line-through text-sm font-black">$29.90</p><div className="flex items-baseline justify-center gap-2"><span className="text-5xl font-black text-white">$6.50</span><span className="text-lg font-black text-[#facc15]">USD</span></div><p className="text-[#facc15] text-[10px] font-black uppercase mt-1">Oferta especial · Ahorras 81%</p></div>}
+
+              <button type="button" onClick={goToCheckout} className="w-full min-h-[60px] mt-5 rounded-2xl bg-[#16a34a] text-white font-black uppercase text-[16px] px-5 py-4 flex items-center justify-center gap-2 shadow-[0_12px_30px_-8px_rgba(22,163,74,.65)] active:scale-[0.98] touch-manipulation">
+                {selectedPlan === "premium" ? "Sí, quiero el Plan Completo" : "Sí, quiero el Plan Básico"}<ArrowRight className="w-5 h-5" />
+              </button>
+              <p className="mt-3 text-[10px] text-slate-500 flex items-center justify-center gap-1"><Lock className="w-3 h-3" /> Serás enviado al checkout seguro de Hotmart</p>
+              <p className="mt-2 text-[10px] text-slate-400">Puedes cerrar esta ventana si todavía quieres revisar la página.</p>
+            </div>
           </div>
         </div>
       )}
