@@ -4,7 +4,8 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
-const HOTMART_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=2";
+const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=2";
+const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/B107438269A?checkoutMode=2";
 
 function loadHotmartWidget() {
   if (typeof document === "undefined") return Promise.resolve();
@@ -43,10 +44,10 @@ function loadHotmartWidget() {
   });
 }
 
-function buildHotmartCheckoutUrl() {
-  if (typeof window === "undefined") return HOTMART_CHECKOUT_URL;
+function buildHotmartCheckoutUrl(baseUrl: string) {
+  if (typeof window === "undefined") return baseUrl;
 
-  const targetUrl = new URL(HOTMART_CHECKOUT_URL);
+  const targetUrl = new URL(baseUrl);
   const searchParams = new URLSearchParams(window.location.search);
   const trackingParams = [
     "utm_source",
@@ -68,7 +69,7 @@ function buildHotmartCheckoutUrl() {
   return targetUrl.toString();
 }
 
-function fireHotmartInitiateCheckout() {
+function fireHotmartInitiateCheckout(value?: number) {
   if (typeof window === "undefined") return;
 
   const eventId = `evt_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
@@ -76,7 +77,7 @@ function fireHotmartInitiateCheckout() {
   window.fbq?.(
     "track",
     "InitiateCheckout",
-    { value: 6.5, currency: "USD" },
+    value ? { value, currency: "USD" } : undefined,
     { eventID: eventId },
   );
 
@@ -103,27 +104,56 @@ function fireHotmartInitiateCheckout() {
       user_agent: navigator.userAgent,
       fbp: getCookie("_fbp"),
       fbc: getCookie("_fbc"),
-      value: 6.5,
+      value,
       currency: "USD",
     }),
     keepalive: true,
   }).catch(() => {});
 }
 
-function isSalesCta(button: HTMLButtonElement) {
-  const text = button.textContent?.replace(/\s+/g, " ").trim().toLowerCase() ?? "";
-  return [
-    "quiero el plan completo ahora",
-    "quiero acceder a la biblioteca",
-    "quiero entrenar con el método completo",
-    "quiero formar parte",
-    "quiero los 4 bonos incluidos",
-    "sí, quiero el plan completo",
-    "quiero acceder sin complicarme",
-    "quiero mi plan completo",
-    "desbloquear el plan completo",
-    "plan completo · $6.50 usd",
-  ].some((label) => text.includes(label));
+function getButtonText(button: HTMLButtonElement) {
+  return button.textContent?.replace(/\s+/g, " ").trim().toLowerCase() ?? "";
+}
+
+function isPremiumPlanButton(button: HTMLButtonElement) {
+  return getButtonText(button).includes("sí, quiero el plan completo");
+}
+
+function isBasicPlanButton(button: HTMLButtonElement) {
+  return getButtonText(button).includes("sí, quiero el plan básico");
+}
+
+function injectBasicPlanCard() {
+  const offer = document.getElementById("oferta");
+  if (!offer || document.getElementById("plano-basico-card")) return;
+
+  const premiumCard = offer.querySelector("div.max-w-\\[560px\\]");
+  if (!premiumCard) return;
+
+  const wrapper = document.createElement("div");
+  wrapper.id = "plano-basico-card";
+  wrapper.className = "max-w-[560px] mx-auto mt-6 bg-white text-[#0f172a] rounded-[30px] p-6 sm:p-8 border-2 border-slate-300 shadow-xl text-left";
+  wrapper.innerHTML = `
+    <div class="text-center mb-6">
+      <span class="inline-flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest">
+        Plan Básico · Acceso esencial
+      </span>
+      <h3 class="font-black uppercase text-2xl sm:text-3xl mt-4">Biblioteca Básica</h3>
+      <p class="text-slate-500 text-sm font-bold mt-1">Una opción más simple para empezar a entrenar.</p>
+    </div>
+    <div class="space-y-3 mb-7">
+      <div class="flex items-start gap-2.5"><span class="text-[#16a34a] font-black">✓</span><span class="font-bold text-sm">Acceso al contenido principal del plan básico</span></div>
+      <div class="flex items-start gap-2.5"><span class="text-[#16a34a] font-black">✓</span><span class="font-bold text-sm">Material digital para entrenar desde móvil, tablet u ordenador</span></div>
+      <div class="flex items-start gap-2.5"><span class="text-[#16a34a] font-black">✓</span><span class="font-bold text-sm">Compra segura procesada por Hotmart</span></div>
+    </div>
+    <button type="button" data-hotmart-basic="true" class="w-full bg-[#0f172a] hover:bg-[#020617] active:scale-[0.98] text-white font-black uppercase py-5 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2 text-lg">
+      Sí, quiero el Plan Básico
+      <span aria-hidden="true">→</span>
+    </button>
+    <p class="mt-3 text-center text-[11px] text-slate-500">Compra procesada por Hotmart</p>
+  `;
+
+  premiumCard.insertAdjacentElement("afterend", wrapper);
 }
 
 function NotFoundComponent() {
@@ -220,45 +250,80 @@ function RootComponent() {
 
   useEffect(() => {
     let disposed = false;
-    let anchor: HTMLAnchorElement | null = null;
+    const anchors = new Map<string, HTMLAnchorElement>();
 
-    const createAnchor = () => {
-      if (anchor) return anchor;
-      anchor = document.createElement("a");
-      anchor.id = "hotmart-widget-trigger";
-      anchor.href = HOTMART_CHECKOUT_URL;
+    const createAnchor = (id: string, href: string) => {
+      const existing = document.getElementById(id);
+      if (existing instanceof HTMLAnchorElement) return existing;
+
+      const anchor = document.createElement("a");
+      anchor.id = id;
+      anchor.href = href;
       anchor.className = "hotmart-fb hotmart__button-checkout";
       anchor.style.display = "none";
       anchor.setAttribute("aria-hidden", "true");
       anchor.setAttribute("onclick", "return false;");
       document.body.appendChild(anchor);
+      anchors.set(id, anchor);
       return anchor;
     };
 
     const setup = async () => {
       if (disposed) return;
-      createAnchor();
+      createAnchor("hotmart-widget-premium-trigger", PREMIUM_CHECKOUT_URL);
+      createAnchor("hotmart-widget-basic-trigger", BASIC_CHECKOUT_URL);
       await loadHotmartWidget();
+      injectBasicPlanCard();
+    };
+
+    const scrollToOffer = () => {
+      const offer = document.getElementById("oferta");
+      if (!offer) return;
+      offer.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    const openWidget = (plan: "premium" | "basic") => {
+      const baseUrl = plan === "premium" ? PREMIUM_CHECKOUT_URL : BASIC_CHECKOUT_URL;
+      const value = plan === "premium" ? 6.5 : undefined;
+      fireHotmartInitiateCheckout(value);
+      const checkoutUrl = buildHotmartCheckoutUrl(baseUrl);
+
+      void loadHotmartWidget().then(() => {
+        if (disposed) return;
+        const id = plan === "premium" ? "hotmart-widget-premium-trigger" : "hotmart-widget-basic-trigger";
+        const trigger = createAnchor(id, checkoutUrl);
+        trigger.href = checkoutUrl;
+        trigger.click();
+      });
     };
 
     const handleClick = (event: MouseEvent) => {
       const target = event.target as Element | null;
       const button = target?.closest("button");
-      if (!(button instanceof HTMLButtonElement) || !isSalesCta(button)) return;
+      if (!(button instanceof HTMLButtonElement)) return;
+
+      if (isPremiumPlanButton(button)) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        openWidget("premium");
+        return;
+      }
+
+      if (isBasicPlanButton(button)) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        openWidget("basic");
+        return;
+      }
+
+      if (button.closest("#plano-basico-card")) return;
 
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
-
-      fireHotmartInitiateCheckout();
-      const checkoutUrl = buildHotmartCheckoutUrl();
-
-      void loadHotmartWidget().then(() => {
-        if (disposed) return;
-        const trigger = createAnchor();
-        trigger.href = checkoutUrl;
-        trigger.click();
-      });
+      scrollToOffer();
     };
 
     document.addEventListener("click", handleClick, true);
@@ -267,7 +332,8 @@ function RootComponent() {
     return () => {
       disposed = true;
       document.removeEventListener("click", handleClick, true);
-      anchor?.remove();
+      anchors.forEach((anchor) => anchor.remove());
+      document.getElementById("plano-basico-card")?.remove();
     };
   }, []);
 
