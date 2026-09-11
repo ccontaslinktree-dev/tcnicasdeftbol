@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { ArrowRight, CheckCircle2, Lock, PlayCircle, ShieldCheck, Star, Zap } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight, CheckCircle2, Lock, PlayCircle, ShieldCheck, Star, X, Zap } from "lucide-react";
 import heroProduct from "@/assets/hero-product.png";
 import previewAsset from "@/assets/preview.mov.asset.json";
 import imgArsenal from "@/assets/arsenal-completo.jpg";
