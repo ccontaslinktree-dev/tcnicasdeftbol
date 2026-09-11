@@ -222,10 +222,8 @@ function RootComponent() {
     let disposed = false;
     let anchor: HTMLAnchorElement | null = null;
 
-    const setup = async () => {
-      await loadHotmartWidget();
-      if (disposed) return;
-
+    const createAnchor = () => {
+      if (anchor) return anchor;
       anchor = document.createElement("a");
       anchor.id = "hotmart-widget-trigger";
       anchor.href = HOTMART_CHECKOUT_URL;
@@ -234,6 +232,13 @@ function RootComponent() {
       anchor.setAttribute("aria-hidden", "true");
       anchor.setAttribute("onclick", "return false;");
       document.body.appendChild(anchor);
+      return anchor;
+    };
+
+    const setup = async () => {
+      if (disposed) return;
+      createAnchor();
+      await loadHotmartWidget();
     };
 
     const handleClick = (event: MouseEvent) => {
@@ -248,21 +253,12 @@ function RootComponent() {
       fireHotmartInitiateCheckout();
       const checkoutUrl = buildHotmartCheckoutUrl();
 
-      const openWidget = () => {
-        if (!anchor) {
-          anchor = document.createElement("a");
-          anchor.id = "hotmart-widget-trigger";
-          anchor.className = "hotmart-fb hotmart__button-checkout";
-          anchor.style.display = "none";
-          anchor.setAttribute("aria-hidden", "true");
-          anchor.setAttribute("onclick", "return false;");
-          document.body.appendChild(anchor);
-        }
-        anchor.href = checkoutUrl;
-        anchor.click();
-      };
-
-      void loadHotmartWidget().then(openWidget);
+      void loadHotmartWidget().then(() => {
+        if (disposed) return;
+        const trigger = createAnchor();
+        trigger.href = checkoutUrl;
+        trigger.click();
+      });
     };
 
     document.addEventListener("click", handleClick, true);
