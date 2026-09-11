@@ -144,7 +144,21 @@ function PlanCard({ basic = false, onCheckout }: { basic?: boolean; onCheckout: 
 }
 
 function Index() {
+  const [checkout, setCheckout] = useState<{ plan: "premium" | "basic"; url: string } | null>(null);
+
   useEffect(() => { fireEvent("ViewContent"); }, []);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.body.style.overflow = checkout ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [checkout]);
+
+  const openCheckout = (plan: "premium" | "basic") => {
+    fireEvent("InitiateCheckout", plan === "premium" ? 6.5 : 5);
+    setCheckout({ plan, url: buildCheckoutUrl(plan === "premium" ? PREMIUM_CHECKOUT_URL : BASIC_CHECKOUT_URL) });
+  };
+
   return (
     <main className="min-h-screen w-full bg-[#f8fafc] text-[#0f172a] antialiased overflow-x-hidden pb-24">
       <div className="fixed top-0 inset-x-0 z-[90] bg-[#16a34a] text-white text-center font-black uppercase tracking-wide border-b-2 border-[#15803d] py-2 px-3 text-[10px] sm:text-xs leading-tight">Condición especial de acceso · Plan Completo</div>
