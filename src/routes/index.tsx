@@ -130,15 +130,15 @@ function PlanCard({ basic = false, onCheckout }: { basic?: boolean; onCheckout: 
         </div>
       )}
 
-      <a
-        href={checkoutUrl}
-        className={`hotmart-fb hotmart__button-checkout w-full min-h-[58px] rounded-2xl font-black uppercase text-[16px] leading-tight px-4 py-4 flex items-center justify-center gap-2 active:scale-[0.98] touch-manipulation no-underline ${basic ? "bg-[#0f172a] text-white" : "bg-[#16a34a] text-white shadow-[0_10px_25px_-8px_rgba(22,163,74,.6)]"}`}
-        onClick={() => fireEvent("InitiateCheckout", basic ? undefined : 6.5)}
+      <button
+        type="button"
+        className={`w-full min-h-[58px] rounded-2xl font-black uppercase text-[16px] leading-tight px-4 py-4 flex items-center justify-center gap-2 active:scale-[0.98] touch-manipulation ${basic ? "bg-[#0f172a] text-white" : "bg-[#16a34a] text-white shadow-[0_10px_25px_-8px_rgba(22,163,74,.6)]"}`}
+        onClick={() => onCheckout(basic ? "basic" : "premium")}
       >
         {basic ? "Sí, quiero el Plan Básico" : "Sí, quiero el Plan Completo"}
         <ArrowRight className="w-5 h-5 shrink-0" />
-      </a>
-      <p className="mt-3 text-center text-[10px] text-slate-500 flex items-center justify-center gap-1"><Lock className="w-3 h-3" /> Compra procesada por Hotmart</p>
+      </button>
+      <p className="mt-3 text-center text-[10px] text-slate-500 flex items-center justify-center gap-1"><Lock className="w-3 h-3" /> Pago seguro sin salir de esta página · Hotmart</p>
     </div>
   );
 }
