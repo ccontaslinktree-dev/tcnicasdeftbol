@@ -16,8 +16,26 @@ import testimonial4 from "@/assets/testimonial-4.jpg";
 import feedbackJugador from "@/assets/feedback-jugador.mp4.asset.json";
 import feedbackEntrenador from "@/assets/feedback-entrenador.mp4.asset.json";
 
-const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=2";
-const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/B107438269A?checkoutMode=2";
+const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=6";
+const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/B107438269A?checkoutMode=6";
+
+function buildCheckoutUrl(baseUrl: string) {
+  if (typeof window === "undefined") return baseUrl;
+  const target = new URL(baseUrl);
+  const params = new URLSearchParams(window.location.search);
+  ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "xcod"].forEach((key) => {
+    const value = params.get(key);
+    if (value) target.searchParams.set(key, value);
+  });
+  const xcod = params.get("xcod");
+  if (xcod) target.searchParams.set("sck", xcod);
+  else if (params.get("utm_source")) target.searchParams.set("sck", "meta_ads");
+  return target.toString();
+}
+
+function scrollToOffer() {
+  document.getElementById("oferta")?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
 function fireEvent(name: string, value?: number) {
   if (typeof window === "undefined") return;
