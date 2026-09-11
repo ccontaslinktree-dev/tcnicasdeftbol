@@ -76,18 +76,29 @@ const faqs = [
   ["¿Tengo garantía?", "Sí. El Plan Completo cuenta con 7 días de garantía conforme a las condiciones de la compra."],
 ];
 
-export const Route = createFileRoute("/")({ component: Index });
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "+2.000 Ejercicios de Fútbol · Plataforma Completa para Jugadores y Entrenadores" },
+      { name: "description", content: "Más de 2.000 ejercicios de fútbol organizados por categoría, bonos, materiales y vídeos. Acceso inmediato desde el móvil, con precio promocional solo hoy." },
+      { property: "og:title", content: "+2.000 Ejercicios de Fútbol · Plataforma Completa" },
+      { property: "og:description", content: "Deja de improvisar: más de 2.000 ejercicios organizados por categoría, bonos, materiales y vídeos listos para aplicar." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: Index,
+});
 
 function CTA({ children }: { children: React.ReactNode }) {
   return (
-    <button className="w-full min-h-[56px] flex items-center justify-center gap-2 bg-[#facc15] active:scale-[0.98] text-[#090909] font-black uppercase text-[15px] leading-tight px-5 py-4 rounded-2xl shadow-[0_10px_28px_-8px_rgba(250,204,21,.6)] touch-manipulation">
+    <button type="button" onClick={scrollToOffer} className="w-full min-h-[56px] flex items-center justify-center gap-2 bg-[#facc15] active:scale-[0.98] text-[#090909] font-black uppercase text-[15px] leading-tight px-5 py-4 rounded-2xl shadow-[0_10px_28px_-8px_rgba(250,204,21,.6)] touch-manipulation">
       <span>{children}</span><ArrowRight className="w-5 h-5 shrink-0" />
     </button>
   );
 }
 
-function PlanCard({ basic = false }: { basic?: boolean }) {
-  const checkoutUrl = basic ? BASIC_CHECKOUT_URL : PREMIUM_CHECKOUT_URL;
+function PlanCard({ basic = false, onCheckout }: { basic?: boolean; onCheckout: (plan: "premium" | "basic") => void }) {
   return (
     <div className={`w-full rounded-[24px] p-5 sm:p-7 text-left text-[#0f172a] ${basic ? "bg-white border-2 border-slate-300 shadow-xl" : "bg-white border-4 border-[#16a34a] shadow-[0_20px_60px_-20px_rgba(22,163,74,.45)]"}`}>
       <div className="text-center mb-5">
