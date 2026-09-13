@@ -242,9 +242,10 @@ function Index() {
               <button type="button" onClick={goToCheckout} className="w-full min-h-[60px] mt-5 rounded-2xl bg-[#16a34a] text-white font-black uppercase text-[16px] px-5 py-4 flex items-center justify-center gap-2 shadow-[0_12px_30px_-8px_rgba(22,163,74,.65)] active:scale-[0.98] touch-manipulation">
                 {selectedPlan === "premium" ? "Sí, quiero el Plan Completo" : "Sí, quiero el Plan Básico"}<ArrowRight className="w-5 h-5" />
               </button>
-              <p className="mt-3 text-[10px] text-slate-500 flex items-center justify-center gap-1"><Lock className="w-3 h-3" /> Serás enviado al checkout seguro de Hotmart</p>
+              <p className="mt-3 text-[10px] text-slate-500 flex items-center justify-center gap-1"><Lock className="w-3 h-3" /> El pago se abre aquí mismo, sin salir de esta página</p>
               <p className="mt-2 text-[10px] text-slate-400">Puedes cerrar esta ventana si todavía quieres revisar la página.</p>
             </div>
+            )}
           </div>
         </div>
       )}
