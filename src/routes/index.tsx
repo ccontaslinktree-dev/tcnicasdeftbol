@@ -145,7 +145,6 @@ function PlanCard({ basic = false, onSelect }: { basic?: boolean; onSelect: (pla
 
 function Index() {
   const [selectedPlan, setSelectedPlan] = useState<"premium" | "basic" | null>(null);
-  const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
 
   useEffect(() => { fireEvent("ViewContent"); }, []);
 
@@ -157,16 +156,15 @@ function Index() {
 
   const openPreview = (plan: "premium" | "basic") => {
     fireEvent("InitiateCheckout", plan === "premium" ? 6.5 : 5);
-    setCheckoutUrl(null);
     setSelectedPlan(plan);
   };
 
-  const closeModal = () => { setSelectedPlan(null); setCheckoutUrl(null); };
+  const closeModal = () => { setSelectedPlan(null); };
 
   const goToCheckout = () => {
     if (!selectedPlan) return;
     const url = buildCheckoutUrl(selectedPlan === "premium" ? PREMIUM_CHECKOUT_URL : BASIC_CHECKOUT_URL);
-    setCheckoutUrl(url);
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -202,24 +200,11 @@ function Index() {
           <div className="relative w-full sm:max-w-[520px] max-h-[94dvh] overflow-y-auto bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl text-[#0f172a]">
             <div className="sticky top-0 z-10 flex items-center justify-between gap-3 px-4 py-3 bg-[#090909] text-white">
               <div className="min-w-0">
-                <p className="font-black uppercase text-[10px] tracking-widest text-[#facc15]">{checkoutUrl ? "Pago seguro" : "Antes de comprar"}</p>
+                <p className="font-black uppercase text-[10px] tracking-widest text-[#facc15]">Antes de comprar</p>
                 <p className="truncate font-black text-[14px]">{selectedPlan === "premium" ? "Plan Completo" : "Plan Básico"}</p>
               </div>
               <button type="button" onClick={closeModal} aria-label="Cerrar" className="shrink-0 rounded-full bg-white/10 p-2 active:scale-95 touch-manipulation"><X className="w-5 h-5" /></button>
             </div>
-
-            {checkoutUrl ? (
-              <div className="bg-white">
-                <iframe
-                  src={checkoutUrl}
-                  title="Checkout seguro Hotmart"
-                  className="w-full h-[78dvh] sm:h-[72vh] border-0"
-                  allow="payment *; clipboard-write"
-                />
-                <p className="text-center text-[10px] text-slate-500 flex items-center justify-center gap-1 py-3"><Lock className="w-3 h-3" /> Pago procesado por Hotmart sin salir de esta página</p>
-              </div>
-            ) : (
-
 
             <div className="p-5 sm:p-7 text-center">
               <div className="inline-flex items-center gap-2 bg-[#16a34a] text-white rounded-full px-3 py-2 text-[10px] font-black uppercase tracking-widest">
@@ -242,10 +227,9 @@ function Index() {
               <button type="button" onClick={goToCheckout} className="w-full min-h-[60px] mt-5 rounded-2xl bg-[#16a34a] text-white font-black uppercase text-[16px] px-5 py-4 flex items-center justify-center gap-2 shadow-[0_12px_30px_-8px_rgba(22,163,74,.65)] active:scale-[0.98] touch-manipulation">
                 {selectedPlan === "premium" ? "Sí, quiero el Plan Completo" : "Sí, quiero el Plan Básico"}<ArrowRight className="w-5 h-5" />
               </button>
-              <p className="mt-3 text-[10px] text-slate-500 flex items-center justify-center gap-1"><Lock className="w-3 h-3" /> El pago se abre aquí mismo, sin salir de esta página</p>
+              <p className="mt-3 text-[10px] text-slate-500 flex items-center justify-center gap-1"><Lock className="w-3 h-3" /> El pago se abre en la página segura de Hotmart</p>
               <p className="mt-2 text-[10px] text-slate-400">Puedes cerrar esta ventana si todavía quieres revisar la página.</p>
             </div>
-            )}
           </div>
         </div>
       )}
