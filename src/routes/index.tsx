@@ -224,7 +224,9 @@ function PlanCard({ plan, choose }: { plan: Plan; choose: (p: Plan) => void }) {
       <div
         className={`mb-5 rounded-2xl p-4 text-center ${full ? "bg-[#07130b] text-white" : "bg-slate-100"}`}
       >
-        {full && <p className="text-xs text-slate-400 line-through">Valor separado: US$ 29,90</p>}
+        {full && (
+          <p className="text-xs text-slate-400 line-through">Valor de referencia: US$ 29,90</p>
+        )}
         <div className="flex items-end justify-center gap-1">
           <span className="text-xs font-bold">US$</span>
           <span className="text-5xl font-black leading-none">{full ? "6,50" : "5,00"}</span>
@@ -339,6 +341,68 @@ function Index() {
                 <p className="mt-1 text-xs text-slate-600">{b}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+      <section
+        aria-label="De la frustración a un plan de entrenamiento"
+        className="border-y border-slate-200 bg-white px-4 py-10 sm:py-14"
+      >
+        <div className="mx-auto max-w-5xl">
+          <Heading tag="¿Te suena familiar?">
+            Quieres mejorar.{" "}
+            <span className="text-green-600">Pero cada sesión empieza con la misma duda.</span>
+          </Heading>
+          <p className="mx-auto mb-6 max-w-2xl text-center text-sm leading-relaxed text-slate-600 sm:text-base">
+            Abres vídeos, guardas ejercicios y, cuando llega la hora de entrenar, no sabes por dónde
+            empezar. Como jugador quieres aprovechar tu esfuerzo. Como entrenador necesitas sesiones
+            que tengan sentido.
+          </p>
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              [
+                "Repites siempre lo mismo",
+                "Te faltan ideas para trabajar técnica, físico y táctica sin caer en la rutina.",
+                "Más de 2.000 opciones organizadas",
+                "Encuentra ejercicios por posición y categoría para dar variedad y dirección a tus sesiones.",
+              ],
+              [
+                "Buscas más de lo que entrenas",
+                "Saltas de un vídeo a otro y terminas con material disperso, difícil de volver a encontrar.",
+                "Tu biblioteca en un solo lugar",
+                "Abre el contenido desde el móvil, elige tu objetivo y dedica ese tiempo a practicar o preparar tu sesión.",
+              ],
+              [
+                "Fuera del campo, pierdes el ritmo",
+                "Quieres seguir trabajando, pero te faltan ideas para entrenar por tu cuenta y cuidar tu preparación.",
+                "Un plan que también te acompaña en casa",
+                "Complementa el fútbol con rutinas individuales, nutrición y 500 entrenamientos de definición muscular.",
+              ],
+            ].map(([pain, detail, solution, benefit]) => (
+              <article key={pain} className="overflow-hidden rounded-2xl border border-slate-200">
+                <div className="bg-slate-50 p-5">
+                  <p className="mb-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                    La dificultad
+                  </p>
+                  <h3 className="font-black leading-snug">{pain}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{detail}</p>
+                </div>
+                <div className="border-t border-green-100 bg-green-50 p-5">
+                  <p className="mb-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-green-700">
+                    <CheckCircle2 className="h-4 w-4 shrink-0" /> Con el Plan Completo
+                  </p>
+                  <h4 className="font-black leading-snug text-green-900">{solution}</h4>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-700">{benefit}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+          <p className="mx-auto mt-6 max-w-2xl text-center text-base font-bold leading-relaxed">
+            Imagina llegar a tu próxima sesión sabiendo qué trabajar. Tú pones la constancia; aquí
+            tienes el material para empezar.
+          </p>
+          <div className="mx-auto mt-5 max-w-xl">
+            <CTA>Quiero entrenar con más claridad</CTA>
           </div>
         </div>
       </section>
@@ -481,6 +545,77 @@ function Index() {
         </div>
       </section>
       <section
+        aria-label="Valor y precio del Plan Completo"
+        className="bg-slate-50 px-4 py-10 sm:py-14"
+      >
+        <div className="mx-auto max-w-5xl">
+          <Heading tag="Pon todo lo que recibes en la balanza">
+            Mucho contenido. <span className="text-green-600">Un solo pago pequeño.</span>
+          </Heading>
+          <p className="mx-auto mb-6 max-w-2xl text-center text-sm leading-relaxed text-slate-600">
+            No tienes que elegir entre técnica, preparación física o material para entrenar en casa.
+            El Plan Completo reúne toda esta entrega en un único acceso.
+          </p>
+          <div className="grid items-center gap-6 md:grid-cols-2">
+            <div>
+              <img
+                src={stack}
+                alt="Material del paquete completo de fútbol"
+                className="mb-4 aspect-[3/2] w-full rounded-2xl object-cover"
+                loading="lazy"
+              />
+              <ul className="space-y-3">
+                {[
+                  "+2.000 entrenamientos por posición y categoría",
+                  "Nutrición de alto rendimiento",
+                  "Entrenamientos individuales en casa",
+                  "500 entrenamientos de definición muscular",
+                  "4 bonos adicionales",
+                  "Acceso vitalicio y actualizaciones",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-sm font-semibold">
+                    <CheckCircle2 className="h-5 w-5 shrink-0 text-green-600" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-3xl border-2 border-green-500 bg-[#07130b] p-6 text-center text-white sm:p-8">
+              <p className="text-xs font-bold uppercase tracking-widest text-slate-300">
+                Valor de referencia del paquete
+              </p>
+              <p className="mt-2 text-3xl text-slate-400">
+                <s>US$ 29,90</s>
+              </p>
+              <p className="mt-5 text-sm font-bold text-green-300">Hoy, el Plan Completo cuesta</p>
+              <p className="mt-2 text-6xl font-black tracking-tight">US$ 6,50</p>
+              <p className="mt-3 inline-block rounded-full bg-yellow-400 px-4 py-2 text-sm font-black text-black">
+                US$ 23,40 menos · 78% de diferencia
+              </p>
+              <p className="mt-4 text-sm leading-relaxed text-slate-300">
+                Comparado con el valor de referencia de US$ 29,90.
+              </p>
+              <div className="mt-5 rounded-2xl border border-white/15 bg-white/5 p-4">
+                <p className="text-lg font-black text-yellow-400">
+                  Menos de US$ 0,01 por ejercicio
+                </p>
+                <p className="mt-1 text-xs leading-relaxed text-slate-300">
+                  Dividiendo US$ 6,50 entre solo los 2.000 ejercicios principales. Los complementos
+                  y los 4 bonos también van incluidos.
+                </p>
+              </div>
+              <p className="mt-5 text-sm font-bold">
+                Un solo pago. Sin mensualidades. Acceso vitalicio.
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-slate-300">
+                Y frente al Básico de US$ 5,00, la diferencia es de apenas{" "}
+                <strong className="text-white">US$ 1,50 para llevar el Completo.</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section
         id="oferta"
         className="scroll-mt-10 bg-gradient-to-b from-[#07130b] to-slate-900 px-4 py-12 text-white sm:py-16"
       >
@@ -496,19 +631,6 @@ function Index() {
             <PlanCard plan="premium" choose={choose} />
             <PlanCard plan="basic" choose={choose} />
           </div>
-        </div>
-      </section>
-      <section className="px-4 py-10">
-        <div className="mx-auto max-w-3xl">
-          <Heading tag="Valor total">
-            Una entrega enorme por <span className="text-green-600">menos de US$ 7</span>
-          </Heading>
-          <img
-            src={stack}
-            alt="Valor del paquete"
-            className="w-full rounded-3xl shadow-xl"
-            loading="lazy"
-          />
         </div>
       </section>
       <section className="bg-green-50 px-4 py-10 text-center">
