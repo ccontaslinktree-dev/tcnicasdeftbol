@@ -16,7 +16,7 @@ import testimonial4 from "@/assets/testimonial-4.jpg";
 import feedbackJugador from "@/assets/feedback-jugador.mp4.asset.json";
 import feedbackEntrenador from "@/assets/feedback-entrenador.mp4.asset.json";
 
-const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=2";
+const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=10";
 const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/B107438269A?checkoutMode=2";
 
 function buildCheckoutUrl(baseUrl: string) {
