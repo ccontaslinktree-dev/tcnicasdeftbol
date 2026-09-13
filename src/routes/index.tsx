@@ -198,15 +198,28 @@ function Index() {
 
       {selectedPlan && (
         <div className="fixed inset-0 z-[120] bg-black/85 flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true" aria-label="Conoce tu plan antes de comprar">
-          <button type="button" className="absolute inset-0 cursor-default" onClick={() => setSelectedPlan(null)} aria-label="Cerrar ventana" />
+          <button type="button" className="absolute inset-0 cursor-default" onClick={closeModal} aria-label="Cerrar ventana" />
           <div className="relative w-full sm:max-w-[520px] max-h-[94dvh] overflow-y-auto bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl text-[#0f172a]">
             <div className="sticky top-0 z-10 flex items-center justify-between gap-3 px-4 py-3 bg-[#090909] text-white">
               <div className="min-w-0">
-                <p className="font-black uppercase text-[10px] tracking-widest text-[#facc15]">Antes de comprar</p>
+                <p className="font-black uppercase text-[10px] tracking-widest text-[#facc15]">{checkoutUrl ? "Pago seguro" : "Antes de comprar"}</p>
                 <p className="truncate font-black text-[14px]">{selectedPlan === "premium" ? "Plan Completo" : "Plan Básico"}</p>
               </div>
-              <button type="button" onClick={() => setSelectedPlan(null)} aria-label="Cerrar" className="shrink-0 rounded-full bg-white/10 p-2 active:scale-95 touch-manipulation"><X className="w-5 h-5" /></button>
+              <button type="button" onClick={closeModal} aria-label="Cerrar" className="shrink-0 rounded-full bg-white/10 p-2 active:scale-95 touch-manipulation"><X className="w-5 h-5" /></button>
             </div>
+
+            {checkoutUrl ? (
+              <div className="bg-white">
+                <iframe
+                  src={checkoutUrl}
+                  title="Checkout seguro Hotmart"
+                  className="w-full h-[78dvh] sm:h-[72vh] border-0"
+                  allow="payment *; clipboard-write"
+                />
+                <p className="text-center text-[10px] text-slate-500 flex items-center justify-center gap-1 py-3"><Lock className="w-3 h-3" /> Pago procesado por Hotmart sin salir de esta página</p>
+              </div>
+            ) : (
+
 
             <div className="p-5 sm:p-7 text-center">
               <div className="inline-flex items-center gap-2 bg-[#16a34a] text-white rounded-full px-3 py-2 text-[10px] font-black uppercase tracking-widest">
