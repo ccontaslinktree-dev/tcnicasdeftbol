@@ -145,7 +145,6 @@ function PlanCard({ basic = false, onSelect }: { basic?: boolean; onSelect: (pla
 
 function Index() {
   const [selectedPlan, setSelectedPlan] = useState<"premium" | "basic" | null>(null);
-  const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
 
   useEffect(() => { fireEvent("ViewContent"); }, []);
 
@@ -157,16 +156,15 @@ function Index() {
 
   const openPreview = (plan: "premium" | "basic") => {
     fireEvent("InitiateCheckout", plan === "premium" ? 6.5 : 5);
-    setCheckoutUrl(null);
     setSelectedPlan(plan);
   };
 
-  const closeModal = () => { setSelectedPlan(null); setCheckoutUrl(null); };
+  const closeModal = () => { setSelectedPlan(null); };
 
   const goToCheckout = () => {
     if (!selectedPlan) return;
     const url = buildCheckoutUrl(selectedPlan === "premium" ? PREMIUM_CHECKOUT_URL : BASIC_CHECKOUT_URL);
-    setCheckoutUrl(url);
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   return (
