@@ -480,6 +480,84 @@ function Index() {
         </div>
       </section>
 
+      <section
+        aria-labelledby="entrena-con-intencion"
+        className="border-y border-green-100 bg-green-50 px-5 py-11 sm:py-16"
+      >
+        <div className="mx-auto max-w-[720px]">
+          <p className="mb-3 text-center text-xs font-black uppercase tracking-widest text-green-700">
+            Lo que este acceso puede cambiar en tu rutina
+          </p>
+          <h2
+            id="entrena-con-intencion"
+            className="text-center text-[28px] font-black uppercase leading-[1.12] text-zinc-950 sm:text-[40px]"
+          >
+            Que tus ganas de mejorar{" "}
+            <span className="text-green-700">se conviertan en un entrenamiento con intención.</span>
+          </h2>
+          <div className="mt-7 space-y-5 text-base leading-relaxed text-slate-700 sm:text-lg">
+            <p>
+              Hay algo frustrante en terminar una sesión y sentir que podrías haberla aprovechado
+              mejor. Como jugador, quieres trabajar ese control, ese pase o ese remate que todavía
+              te cuesta. Como entrenador, quieres llegar al campo con una sesión preparada, sin
+              resolverlo todo a última hora.
+              <strong className="text-zinc-950">
+                {" "}
+                Tener ganas ayuda. Tener a mano qué trabajar te permite dar el siguiente paso.
+              </strong>
+            </p>
+            <p>
+              Por eso, el valor de los{" "}
+              <strong className="text-zinc-950">más de 2.000 entrenamientos</strong> está también en
+              poder elegir: buscar por posición y categoría, encontrar un ejercicio para tu objetivo
+              y variar el trabajo cuando la rutina se queda corta. Menos tiempo recorriendo vídeos
+              sueltos; más tiempo para practicar, observar y ajustar tu sesión.
+            </p>
+            <h3 className="pt-2 text-xl font-black leading-snug text-green-900 sm:text-2xl">
+              Tu preparación continúa cuando sales del campo.
+            </h3>
+            <p>
+              Si entrenas por tu cuenta, las{" "}
+              <strong className="text-zinc-950">rutinas individuales en casa</strong> te dan ideas
+              para mantener la práctica entre sesiones. Si quieres ampliar tu trabajo físico, los{" "}
+              <strong className="text-zinc-950">500 entrenamientos de definición muscular</strong>{" "}
+              suman opciones de fuerza y acondicionamiento. Y el material de{" "}
+              <strong className="text-zinc-950">nutrición de alto rendimiento</strong> te ayuda a
+              comprender cómo la alimentación participa en tu energía y recuperación.
+            </p>
+            <p>
+              Los <strong className="text-zinc-950">4 bonos adicionales</strong> amplían tus
+              recursos con más material de entrenamiento, técnica individual y preparación física,
+              además del bono sorpresa. Puedes consultar lo que necesitas ahora y volver al resto
+              cuando cambie tu objetivo.
+            </p>
+            <h3 className="pt-2 text-xl font-black leading-snug text-green-900 sm:text-2xl">
+              Una compra que puedes seguir aprovechando.
+            </h3>
+            <p>
+              Con <strong className="text-zinc-950">acceso vitalicio y actualizaciones</strong>, la
+              biblioteca sigue disponible para futuras sesiones. Ábrela desde el móvil antes de
+              practicar, revísala en la tablet o prepara el entrenamiento desde el ordenador. No
+              necesitas consumir todo de una vez: empieza por lo que más te sirva y avanza a tu
+              ritmo.
+            </p>
+            <p>
+              El Plan Completo reúne todo por{" "}
+              <strong className="text-zinc-950">US$ 5,00 en un solo pago, sin mensualidades</strong>
+              . Por apenas <strong className="text-zinc-950">US$ 0,50 más que el Básico</strong>,
+              tienes los complementos, los bonos y los beneficios del Completo. Además, cuentas con{" "}
+              <strong className="text-zinc-950">7 días de garantía</strong> para conocer el material
+              conforme a las condiciones de Hotmart.
+            </p>
+            <p className="border-t border-green-200 pt-5 text-lg font-bold leading-relaxed text-green-950 sm:text-xl">
+              Imagina tu próxima sesión: abres la biblioteca, eliges qué quieres trabajar y llegas
+              con una idea clara. El progreso lo construyes tú. Aquí tienes recursos para acompañar
+              ese esfuerzo, entrenamiento tras entrenamiento.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-zinc-950 px-4 py-10 text-white sm:py-14">
         <div className="mx-auto max-w-4xl">
           <Heading tag="Experiencias compartidas" dark>
