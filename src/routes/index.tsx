@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   ArrowRight,
   Check,
@@ -12,7 +12,6 @@ import {
   Target,
   Trophy,
   X,
-  Zap,
 } from "lucide-react";
 import hero from "@/assets/hero-product.png";
 import arsenal from "@/assets/arsenal-completo.jpg";
@@ -20,7 +19,6 @@ import stack from "@/assets/stack-valor.jpg";
 import preview from "@/assets/preview.mov.asset.json";
 import tecnica from "@/assets/feature-dribles.jpg";
 import fisico from "@/assets/feature-fisico.jpg";
-import nutricion from "@/assets/nutricion-atleta.jpg";
 import casa from "@/assets/entrenamiento-casa.jpg";
 import definicion from "@/assets/bono-definicion.jpg";
 import bonus1 from "@/assets/bonus-1.jpg";
@@ -40,13 +38,55 @@ const CHECKOUT = {
 };
 type Plan = keyof typeof CHECKOUT;
 
+const inventory = [
+  ["Biblioteca principal", "+2.000 entrenamientos organizados y listos para aplicar", arsenal],
+  ["Técnica completa", "Dribles, pases, control de balón, dominio y remates", tecnica],
+  ["Preparación física", "Agilidad, velocidad, coordinación, resistencia y potencia", fisico],
+  ["Trabajo táctico", "Ejercicios, estrategias y organización para distintas situaciones", stack],
+  ["Entrenamiento individual", "Rutinas para seguir evolucionando en casa y sin equipo", casa],
+  ["Definición muscular", "500 rutinas adicionales para fuerza y acondicionamiento", definicion],
+] as const;
+
+const included = [
+  "+2.000 entrenamientos de fútbol",
+  "Ejercicios físicos y de preparación",
+  "Entrenamientos tácticos y estrategias",
+  "Dribles y dominio del balón",
+  "Agilidad, velocidad y coordinación",
+  "Pases, recepción y control",
+  "Remates y finalización",
+  "Contenido por posición y categoría",
+  "Entrenamientos individuales en casa",
+  "Nutrición para rendimiento y recuperación",
+  "500 rutinas de definición muscular",
+  "4 bonos adicionales",
+  "Acceso vitalicio desde cualquier dispositivo",
+  "Nuevos ejercicios y estrategias en las actualizaciones",
+];
+
+const bonuses = [
+  ["01", "Guía de Entrenamiento", bonus1],
+  ["02", "50 Ejercicios de Técnica Individual", bonus2],
+  ["03", "Circuitos de Preparación Física", bonus3],
+  ["04", "Bono Sorpresa Exclusivo", bonus4],
+] as const;
+
+const faqs = [
+  ["¿Cómo recibo el material?", "Después de la compra, Hotmart envía por e-mail las instrucciones de acceso al contenido de tu plan."],
+  ["¿Puedo acceder desde el móvil?", "Sí. La biblioteca puede consultarse desde móvil, tablet u ordenador."],
+  ["¿Es para jugadores o entrenadores?", "Para ambos: sirve para entrenamiento individual y para planificar sesiones completas."],
+  ["¿El acceso caduca?", "El Plan Completo incluye acceso vitalicio y actualizaciones, sin mensualidad."],
+  ["¿La compra es segura?", "Sí. El pago se realiza en el entorno seguro de Hotmart."],
+  ["¿Y si no es para mí?", "El Plan Completo tiene 7 días de garantía conforme a las condiciones de Hotmart."],
+];
+
 function checkoutUrl(base: string) {
   if (typeof window === "undefined") return base;
-  const url = new URL(base),
-    incoming = new URLSearchParams(window.location.search);
-  ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "xcod"].forEach((k) => {
-    const v = incoming.get(k);
-    if (v) url.searchParams.set(k, v);
+  const url = new URL(base);
+  const incoming = new URLSearchParams(window.location.search);
+  ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "xcod"].forEach((key) => {
+    const value = incoming.get(key);
+    if (value) url.searchParams.set(key, value);
   });
   const xcod = incoming.get("xcod");
   if (xcod) url.searchParams.set("sck", xcod);
@@ -58,13 +98,11 @@ function track(name: string, value?: number) {
   if (typeof window === "undefined") return;
   const event_id = `evt_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
   // @ts-expect-error Meta Pixel global
-  window.fbq?.("track", name, value ? { value, currency: "USD" } : undefined, {
-    eventID: event_id,
-  });
-  const url = import.meta.env.VITE_SUPABASE_URL,
-    key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  window.fbq?.("track", name, value ? { value, currency: "USD" } : undefined, { eventID: event_id });
+  const url = import.meta.env.VITE_SUPABASE_URL;
+  const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return;
-  const cookie = (k: string) => document.cookie.match(new RegExp(`(^| )${k}=([^;]+)`))?.[2];
+  const cookie = (cookieName: string) => document.cookie.match(new RegExp(`(^| )${cookieName}=([^;]+)`))?.[2];
   fetch(`${url}/functions/v1/meta-capi`, {
     method: "POST",
     headers: { "Content-Type": "application/json", apikey: key, Authorization: `Bearer ${key}` },
@@ -82,53 +120,13 @@ function track(name: string, value?: number) {
   }).catch(() => {});
 }
 
-const deliveries = [
-  ["+2.000 entrenamientos", "Ejercicios listos para variar cada sesión sin improvisar.", arsenal],
-  ["Técnica organizada", "Dribles, pases, remates, agilidad, físico y trabajo táctico.", tecnica],
-  ["Nutrición deportiva", "Orientación práctica para rendimiento y recuperación.", nutricion],
-  ["Entrena en casa", "Rutinas individuales para evolucionar incluso sin equipo.", casa],
-  [
-    "500 rutinas de definición",
-    "Un bloque completo para fuerza y definición muscular.",
-    definicion,
-  ],
-  ["Acceso vitalicio", "Consulta desde cualquier dispositivo e incluye actualizaciones.", fisico],
-] as const;
-const faqs = [
-  [
-    "¿Cómo recibo el material?",
-    "Después de la compra, Hotmart envía por e-mail las instrucciones de acceso al contenido de tu plan.",
-  ],
-  ["¿Puedo verlo desde el móvil?", "Sí. Puedes acceder desde móvil, tablet u ordenador."],
-  [
-    "¿Es para jugadores o entrenadores?",
-    "Para ambos: entrenamiento individual y planificación de sesiones.",
-  ],
-  [
-    "¿El acceso caduca?",
-    "El Plan Completo incluye acceso vitalicio y actualizaciones, sin mensualidad.",
-  ],
-  ["¿La compra es segura?", "Sí. El pago se realiza en el entorno seguro de Hotmart."],
-  [
-    "¿Y si no es para mí?",
-    "El Plan Completo tiene 7 días de garantía conforme a las condiciones de Hotmart.",
-  ],
-];
-
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "+2.000 Entrenamientos de Fútbol · Método Completo" },
-      {
-        name: "description",
-        content:
-          "+2.000 ejercicios, nutrición, entrenamientos en casa, definición muscular y 4 bonos para jugadores y entrenadores.",
-      },
-      { property: "og:title", content: "+2.000 Entrenamientos de Fútbol · Método Completo" },
-      {
-        property: "og:description",
-        content: "Todo lo que necesitas para entrenar mejor, organizado y listo para aplicar.",
-      },
+      { title: "+2.000 Entrenamientos de Fútbol por US$ 6,50" },
+      { name: "description", content: "Plan Completo con más de 2.000 entrenamientos, 500 rutinas, 4 bonos, acceso vitalicio y actualizaciones por US$ 6,50." },
+      { property: "og:title", content: "+2.000 Entrenamientos de Fútbol por US$ 6,50" },
+      { property: "og:description", content: "Toda la biblioteca de entrenamiento organizada y lista para aplicar por solo US$ 6,50." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -136,642 +134,194 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-function Heading({
-  tag,
-  children,
-  dark = false,
-}: {
-  tag: string;
-  children: React.ReactNode;
-  dark?: boolean;
-}) {
+function Heading({ tag, children, dark = false }: { tag: string; children: ReactNode; dark?: boolean }) {
   return (
-    <div className="mx-auto mb-6 max-w-2xl text-center">
-      <p
-        className={`mb-2 text-[10px] font-black uppercase tracking-[.2em] ${dark ? "text-yellow-400" : "text-green-600"}`}
-      >
-        {tag}
-      </p>
-      <h2
-        className={`text-[27px] font-black uppercase leading-[1.08] sm:text-[40px] ${dark ? "text-white" : "text-zinc-950"}`}
-      >
-        {children}
-      </h2>
+    <div className="mx-auto mb-5 max-w-2xl text-center">
+      <p className={`mb-2 text-[10px] font-black uppercase tracking-[.2em] ${dark ? "text-yellow-400" : "text-green-600"}`}>{tag}</p>
+      <h2 className={`text-[27px] font-black uppercase leading-[1.08] sm:text-[40px] ${dark ? "text-white" : "text-zinc-950"}`}>{children}</h2>
     </div>
   );
 }
-function CTA({ children }: { children: React.ReactNode }) {
+
+function CTA({ children = "Quiero el Plan Completo por US$ 6,50" }: { children?: ReactNode }) {
   return (
     <button
       type="button"
       onClick={() => document.getElementById("oferta")?.scrollIntoView({ behavior: "smooth" })}
-      className="flex min-h-[58px] w-full items-center justify-center gap-2 rounded-2xl bg-yellow-400 px-5 py-4 text-[15px] font-black uppercase text-zinc-950 shadow-[0_12px_30px_-10px_rgba(250,204,21,.7)] active:scale-[.98]"
+      className="flex min-h-[58px] w-full items-center justify-center gap-2 rounded-2xl bg-yellow-400 px-4 py-4 text-[14px] font-black uppercase text-zinc-950 shadow-[0_12px_30px_-10px_rgba(250,204,21,.7)] active:scale-[.98]"
     >
-      {children}
-      <ArrowRight className="h-5 w-5" />
+      {children}<ArrowRight className="h-5 w-5 shrink-0" />
     </button>
   );
 }
 
-function PlanCard({ plan, choose }: { plan: Plan; choose: (p: Plan) => void }) {
+function PlanCard({ plan, choose }: { plan: Plan; choose: (plan: Plan) => void }) {
   const full = plan === "premium";
   const items = full
-    ? [
-        "+2.000 entrenamientos organizados",
-        "Contenido por posición y categoría",
-        "Nutrición de alto rendimiento",
-        "Entrenamientos individuales en casa",
-        "500 rutinas de definición muscular",
-        "4 bonos adicionales",
-        "Acceso vitalicio + actualizaciones",
-        "Garantía de 7 días",
-      ]
-    : [
-        "Biblioteca básica de fútbol",
-        "Material digital para entrenar",
-        "Acceso desde cualquier dispositivo",
-      ];
+    ? ["+2.000 entrenamientos organizados", "500 rutinas de definición", "Nutrición y entrenamiento en casa", "4 bonos adicionales", "Acceso vitalicio y actualizaciones", "Garantía de 7 días"]
+    : ["Biblioteca básica de fútbol", "Material digital para entrenar", "Acceso desde cualquier dispositivo"];
+
   return (
-    <article
-      className={`relative rounded-[28px] bg-white text-slate-900 ${full ? "border-4 border-green-500 p-5 shadow-[0_26px_70px_-22px_rgba(34,197,94,.7)] sm:p-8" : "border border-slate-300 p-5 opacity-90 sm:p-7"}`}
-    >
-      {full && (
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-yellow-400 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-black">
-          La elección inteligente
-        </div>
-      )}
+    <article className={`relative bg-white text-slate-900 ${full ? "order-first border-4 border-green-500 p-5 shadow-[0_26px_70px_-22px_rgba(34,197,94,.7)] sm:p-8" : "border border-slate-300 p-5 md:order-last"}`}>
+      {full && <div className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-yellow-400 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-black">Más de 2.500 materiales + 4 bonos</div>}
       <div className="text-center">
-        <div
-          className={`mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full ${full ? "bg-green-600 text-white" : "bg-slate-200"}`}
-        >
-          {full ? <Crown /> : <Target />}
-        </div>
-        <p className="text-[11px] font-black uppercase tracking-widest text-green-600">
-          Plan {full ? "Completo" : "Básico"}
-        </p>
-        <h3 className="mt-1 text-[26px] font-black uppercase">
-          {full ? "Todo incluido" : "Solo lo esencial"}
-        </h3>
+        <div className={`mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full ${full ? "bg-green-600 text-white" : "bg-slate-200"}`}>{full ? <Crown /> : <Target />}</div>
+        <p className="text-[11px] font-black uppercase tracking-widest text-green-600">Plan {full ? "Completo" : "Básico"}</p>
+        <h3 className="mt-1 text-[25px] font-black uppercase">{full ? "La biblioteca completa" : "Solo lo esencial"}</h3>
       </div>
-      <div className="my-5 space-y-3">
-        {items.map((i) => (
-          <div key={i} className="flex gap-2.5">
-            <CheckCircle2 className="h-5 w-5 shrink-0 text-green-600" />
-            <span className="text-[14px] font-bold">{i}</span>
-          </div>
-        ))}
+      <div className="my-5 space-y-2.5">
+        {items.map((item) => <div key={item} className="flex gap-2.5"><CheckCircle2 className="h-5 w-5 shrink-0 text-green-600" /><span className="text-[13px] font-bold">{item}</span></div>)}
       </div>
-      <div
-        className={`mb-5 rounded-2xl p-4 text-center ${full ? "bg-[#07130b] text-white" : "bg-slate-100"}`}
-      >
-        {full && (
-          <p className="text-xs text-slate-400 line-through">Valor de referencia: US$ 29,90</p>
-        )}
-        <div className="flex items-end justify-center gap-1">
-          <span className="text-xs font-bold">US$</span>
-          <span className="text-5xl font-black leading-none">{full ? "6,50" : "5,00"}</span>
-        </div>
-        <p
-          className={`mt-2 text-[10px] font-black uppercase ${full ? "text-yellow-400" : "text-slate-500"}`}
-        >
-          {full ? "Por solo US$ 1,50 más, llevas todo" : "Ahorra US$ 1,50 y renuncia a los extras"}
-        </p>
+      <div className={`mb-5 p-4 text-center ${full ? "bg-[#07130b] text-white" : "bg-slate-100"}`}>
+        {full && <p className="text-xs text-slate-400 line-through">Valor de referencia: US$ 29,90</p>}
+        <p className="mt-1 text-[11px] font-black uppercase">Hoy por solo</p>
+        <div className="flex items-end justify-center gap-1"><span className="text-xs font-bold">US$</span><span className="text-5xl font-black leading-none">{full ? "6,50" : "5,00"}</span></div>
+        {full && <p className="mt-2 text-[10px] font-black uppercase text-yellow-400">Pago único · Sin mensualidades</p>}
       </div>
-      <button
-        type="button"
-        onClick={() => choose(plan)}
-        className={`min-h-[60px] w-full rounded-2xl px-4 py-4 text-[15px] font-black uppercase text-white active:scale-[.98] ${full ? "bg-green-600 shadow-lg" : "bg-slate-800"}`}
-      >
-        {full ? "Quiero todo por US$ 6,50" : "Elegir Básico por US$ 5,00"}
+      <button type="button" onClick={() => choose(plan)} className={`min-h-[60px] w-full rounded-2xl px-4 py-4 text-[14px] font-black uppercase text-white active:scale-[.98] ${full ? "bg-green-600 shadow-lg" : "bg-slate-800"}`}>
+        {full ? "Llevar todo por US$ 6,50" : "Elegir Básico por US$ 5,00"}
       </button>
-      <p className="mt-3 flex items-center justify-center gap-1 text-[10px] text-slate-500">
-        <Lock className="h-3 w-3" /> Primero verás todos los detalles
-      </p>
     </article>
   );
 }
 
 function Index() {
   const [plan, setPlan] = useState<Plan | null>(null);
-  useEffect(() => {
-    track("ViewContent");
-  }, []);
+
+  useEffect(() => { track("ViewContent"); }, []);
   useEffect(() => {
     document.body.style.overflow = plan ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => { document.body.style.overflow = ""; };
   }, [plan]);
-  const choose = (p: Plan) => {
-    track("InitiateCheckout", p === "premium" ? 6.5 : 5);
-    setPlan(p);
+
+  const choose = (selected: Plan) => {
+    track("InitiateCheckout", selected === "premium" ? 6.5 : 5);
+    setPlan(selected);
   };
+
   return (
     <main className="min-h-screen overflow-x-hidden bg-white pb-24 text-slate-900 antialiased">
-      <div className="fixed inset-x-0 top-0 z-[90] border-b border-yellow-400/40 bg-[#07130b] px-3 py-2 text-center text-[10px] font-black uppercase text-white sm:text-xs">
-        Acceso inmediato · Sin mensualidad · 7 días de garantía
-      </div>
+      <div className="fixed inset-x-0 top-0 z-[90] border-b border-yellow-400/40 bg-[#07130b] px-3 py-2 text-center text-[10px] font-black uppercase text-white sm:text-xs">Plan Completo · Solo US$ 6,50 · Acceso vitalicio</div>
       <div className="h-9" />
-      <section className="relative overflow-hidden bg-[#07130b] px-4 py-9 text-white sm:py-14">
+
+      <section className="relative overflow-hidden bg-[#07130b] px-4 py-8 text-white sm:py-12">
         <div className="absolute inset-0 opacity-25 [background:radial-gradient(circle_at_80%_25%,#22c55e_0,transparent_38%)]" />
-        <div className="relative mx-auto grid max-w-6xl items-center gap-9 lg:grid-cols-2">
+        <div className="relative mx-auto grid max-w-6xl items-center gap-7 lg:grid-cols-2">
           <div className="text-center lg:text-left">
-            <span className="inline-flex items-center gap-2 rounded-full border border-green-500/50 bg-green-600/15 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-green-300">
-              <Trophy className="h-4 w-4" /> Para jugadores y entrenadores
-            </span>
-            <h1 className="mt-4 text-[35px] font-black uppercase leading-[.98] sm:text-[54px]">
-              Deja de buscar ejercicios.{" "}
-              <span className="text-yellow-400">Entrena con método.</span>
-            </h1>
-            <p className="mx-auto mt-4 max-w-xl text-base font-semibold leading-relaxed text-slate-200 sm:text-xl lg:mx-0">
-              Ten en tu móvil <strong className="text-white">más de 2.000 entrenamientos</strong>,
-              nutrición, rutinas en casa, definición muscular y bonos listos para aplicar.
-            </p>
+            <span className="inline-flex items-center gap-2 rounded-full border border-green-500/50 bg-green-600/15 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-green-300"><Trophy className="h-4 w-4" /> Para jugadores y entrenadores</span>
+            <h1 className="mt-4 text-[34px] font-black uppercase leading-[.98] sm:text-[54px]">Todo el fútbol que necesitas. <span className="text-yellow-400">Organizado en un solo lugar.</span></h1>
+            <p className="mx-auto mt-4 max-w-xl text-base font-semibold leading-relaxed text-slate-200 sm:text-xl lg:mx-0">Más de <strong className="text-white">2.000 entrenamientos listos para aplicar</strong>, 500 rutinas extras, nutrición, trabajo en casa y 4 bonos. Sin búsquedas interminables. Sin mensualidades.</p>
             <div className="mx-auto mt-5 grid max-w-xl grid-cols-3 gap-2 lg:mx-0">
-              {[
-                ["+2.000", "ejercicios"],
-                ["4", "bonos"],
-                ["Vitalicio", "acceso"],
-              ].map(([a, b]) => (
-                <div
-                  key={b}
-                  className="rounded-xl border border-white/10 bg-white/5 p-3 text-center"
-                >
-                  <b className="block text-lg text-yellow-400">{a}</b>
-                  <span className="text-[9px] font-bold uppercase">{b}</span>
-                </div>
-              ))}
-            </div>
-            <div className="mx-auto mt-6 max-w-xl lg:mx-0">
-              <CTA>Ver todo lo que recibo</CTA>
-              <p className="mt-3 flex items-center justify-center gap-1 text-[10px] text-slate-400 lg:justify-start">
-                <Lock className="h-3 w-3" /> Pago seguro por Hotmart
-              </p>
+              {[["+2.000", "entrenamientos"], ["+500", "rutinas extras"], ["US$ 6,50", "pago único"]].map(([value, label]) => <div key={label} className="rounded-xl border border-white/10 bg-white/5 p-3 text-center"><b className="block text-base text-yellow-400 sm:text-lg">{value}</b><span className="text-[8px] font-bold uppercase sm:text-[9px]">{label}</span></div>)}
             </div>
           </div>
-          <div className="relative mx-auto max-w-[430px]">
+          <div className="relative mx-auto max-w-[420px]">
             <div className="absolute inset-6 bg-green-500/30 blur-3xl" />
-            <img
-              src={hero}
-              alt="Método completo de fútbol"
-              className="relative w-full rounded-3xl shadow-2xl"
-              fetchPriority="high"
-            />
-            <div className="absolute -bottom-4 inset-x-3 rounded-2xl border border-yellow-400/50 bg-black/90 p-3 text-center">
-              <p className="text-[10px] font-black uppercase text-yellow-400">Plan Completo</p>
-              <p className="font-black">Todo por solo US$ 6,50</p>
-            </div>
+            <img src={hero} alt="Plan Completo con más de 2.000 entrenamientos de fútbol" className="relative w-full rounded-3xl shadow-2xl" fetchPriority="high" />
+            <div className="absolute -bottom-3 inset-x-3 rounded-2xl border border-yellow-400/50 bg-black/90 p-3 text-center"><p className="text-[10px] font-black uppercase text-yellow-400">Todo incluido</p><p className="text-lg font-black">Solo US$ 6,50</p></div>
           </div>
         </div>
       </section>
-      <section className="bg-slate-50 px-4 py-9">
-        <div className="mx-auto max-w-5xl">
-          <Heading tag="La transformación">
-            Más claridad. Más variedad. <span className="text-green-600">Más evolución.</span>
-          </Heading>
-          <div className="grid gap-3 sm:grid-cols-3">
-            {[
-              ["Ahorra horas", "No busques ejercicios sueltos."],
-              ["Entrena con dirección", "Encuentra el trabajo para cada objetivo."],
-              ["Aplica hoy", "Contenido práctico y listo para usar."],
-            ].map(([a, b]) => (
-              <div key={a} className="rounded-2xl border bg-white p-4 text-center">
-                <Zap className="mx-auto text-green-600" />
-                <h3 className="mt-2 font-black uppercase">{a}</h3>
-                <p className="mt-1 text-xs text-slate-600">{b}</p>
-              </div>
-            ))}
-          </div>
+
+      <section className="bg-slate-50 px-4 py-7">
+        <div className="mx-auto grid max-w-5xl gap-3 sm:grid-cols-3">
+          {[["No improvisas", "Elige el objetivo y encuentra el entrenamiento."], ["No pierdes tiempo", "Todo está reunido y organizado para usar."], ["No pagas cada mes", "US$ 6,50 una sola vez y acceso vitalicio."]].map(([title, text]) => <article key={title} className="border bg-white p-4 text-center"><CheckCircle2 className="mx-auto h-6 w-6 text-green-600" /><h2 className="mt-2 font-black uppercase">{title}</h2><p className="mt-1 text-xs leading-relaxed text-slate-600">{text}</p></article>)}
         </div>
       </section>
-      <section
-        aria-label="De la frustración a un plan de entrenamiento"
-        className="border-y border-slate-200 bg-white px-4 py-10 sm:py-14"
-      >
-        <div className="mx-auto max-w-5xl">
-          <Heading tag="¿Te suena familiar?">
-            Quieres mejorar.{" "}
-            <span className="text-green-600">Pero cada sesión empieza con la misma duda.</span>
-          </Heading>
-          <p className="mx-auto mb-6 max-w-2xl text-center text-sm leading-relaxed text-slate-600 sm:text-base">
-            Abres vídeos, guardas ejercicios y, cuando llega la hora de entrenar, no sabes por dónde
-            empezar. Como jugador quieres aprovechar tu esfuerzo. Como entrenador necesitas sesiones
-            que tengan sentido.
-          </p>
-          <div className="grid gap-4 md:grid-cols-3">
-            {[
-              [
-                "Repites siempre lo mismo",
-                "Te faltan ideas para trabajar técnica, físico y táctica sin caer en la rutina.",
-                "Más de 2.000 opciones organizadas",
-                "Encuentra ejercicios por posición y categoría para dar variedad y dirección a tus sesiones.",
-              ],
-              [
-                "Buscas más de lo que entrenas",
-                "Saltas de un vídeo a otro y terminas con material disperso, difícil de volver a encontrar.",
-                "Tu biblioteca en un solo lugar",
-                "Abre el contenido desde el móvil, elige tu objetivo y dedica ese tiempo a practicar o preparar tu sesión.",
-              ],
-              [
-                "Fuera del campo, pierdes el ritmo",
-                "Quieres seguir trabajando, pero te faltan ideas para entrenar por tu cuenta y cuidar tu preparación.",
-                "Un plan que también te acompaña en casa",
-                "Complementa el fútbol con rutinas individuales, nutrición y 500 entrenamientos de definición muscular.",
-              ],
-            ].map(([pain, detail, solution, benefit]) => (
-              <article key={pain} className="overflow-hidden rounded-2xl border border-slate-200">
-                <div className="bg-slate-50 p-5">
-                  <p className="mb-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                    La dificultad
-                  </p>
-                  <h3 className="font-black leading-snug">{pain}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{detail}</p>
-                </div>
-                <div className="border-t border-green-100 bg-green-50 p-5">
-                  <p className="mb-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-green-700">
-                    <CheckCircle2 className="h-4 w-4 shrink-0" /> Con el Plan Completo
-                  </p>
-                  <h4 className="font-black leading-snug text-green-900">{solution}</h4>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-700">{benefit}</p>
-                </div>
-              </article>
-            ))}
+
+      <section className="bg-[#07130b] px-4 py-9 text-white sm:py-12">
+        <div className="mx-auto grid max-w-5xl items-center gap-6 md:grid-cols-[.8fr_1.2fr]">
+          <div>
+            <Heading tag="Mira la entrega por dentro" dark>Esto es lo que tendrás <span className="text-green-400">en tus manos</span></Heading>
+            <p className="mx-auto max-w-md text-center text-sm leading-relaxed text-slate-300">Una biblioteca práctica para abrir, elegir y entrenar. El Plan Completo entrega todo por apenas <strong className="text-yellow-400">US$ 6,50.</strong></p>
           </div>
-          <p className="mx-auto mt-6 max-w-2xl text-center text-base font-bold leading-relaxed">
-            Imagina llegar a tu próxima sesión sabiendo qué trabajar. Tú pones la constancia; aquí
-            tienes el material para empezar.
-          </p>
-          <div className="mx-auto mt-5 max-w-xl">
-            <CTA>Quiero entrenar con más claridad</CTA>
-          </div>
+          <div className="mx-auto w-full max-w-[380px] overflow-hidden rounded-2xl border border-white/10 bg-black shadow-2xl"><video src={preview.url} controls playsInline preload="metadata" className="aspect-[3/4] w-full object-cover" /></div>
         </div>
       </section>
-      <section className="px-4 py-10 sm:py-14">
-        <div className="mx-auto max-w-5xl">
-          <Heading tag="Tu arsenal completo">
-            No compras archivos sueltos. <span className="text-green-600">Recibes un sistema.</span>
-          </Heading>
-          <img
-            src={arsenal}
-            alt="Biblioteca completa"
-            className="w-full rounded-3xl shadow-xl"
-            loading="lazy"
-          />
-          <div className="mx-auto mt-6 max-w-xl">
-            <CTA>Quiero acceder al sistema</CTA>
+
+      <section className="bg-white px-4 py-9 sm:py-12">
+        <div className="mx-auto max-w-6xl">
+          <Heading tag="Inventario del Plan Completo">Mucho más que ejercicios. <span className="text-green-600">Una entrega de gran volumen.</span></Heading>
+          <p className="mx-auto mb-6 max-w-2xl text-center text-sm leading-relaxed text-slate-600">Técnica, físico, táctica, trabajo individual y preparación reunidos para que siempre tengas qué entrenar. Todo esto entra en el único pago de <strong className="text-zinc-950">US$ 6,50.</strong></p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {inventory.map(([title, text, image]) => <article key={title} className="grid grid-cols-[105px_1fr] overflow-hidden border bg-slate-50 sm:block"><img src={image} alt={title} className="h-full min-h-[112px] w-full object-cover sm:aspect-video sm:h-auto" loading="lazy" /><div className="p-3.5"><h3 className="flex gap-2 text-sm font-black uppercase"><CheckCircle2 className="h-5 w-5 shrink-0 text-green-600" />{title}</h3><p className="mt-1.5 text-xs leading-relaxed text-slate-600">{text}</p></div></article>)}
           </div>
-        </div>
-      </section>
-      <section className="bg-[#07130b] px-4 py-10 text-white sm:py-14">
-        <div className="mx-auto max-w-4xl">
-          <Heading tag="Mira por dentro" dark>
-            Comprueba lo que tendrás <span className="text-green-400">en tus manos</span>
-          </Heading>
-          <p className="mx-auto -mt-3 mb-6 max-w-xl text-center text-sm text-slate-300">
-            Dale play y mira cómo está organizado antes de elegir.
-          </p>
-          <div className="mx-auto max-w-[430px] overflow-hidden rounded-3xl border border-white/10 bg-black shadow-2xl">
-            <video
-              src={preview.url}
-              controls
-              playsInline
-              preload="metadata"
-              className="aspect-[3/4] w-full object-cover"
-            />
-          </div>
-        </div>
-      </section>
-      <section className="bg-slate-50 px-4 py-10 sm:py-14">
-        <div className="mx-auto max-w-5xl">
-          <Heading tag="Todo lo que recibes">
-            Una biblioteca para cada parte <span className="text-green-600">de tu evolución</span>
-          </Heading>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {deliveries.map(([a, b, img]) => (
-              <article key={a} className="overflow-hidden rounded-2xl border bg-white shadow-sm">
-                <img
-                  src={img}
-                  alt={a}
-                  className="aspect-video w-full object-cover"
-                  loading="lazy"
-                />
-                <div className="p-4">
-                  <h3 className="flex gap-2 font-black uppercase">
-                    <CheckCircle2 className="h-5 w-5 shrink-0 text-green-600" />
-                    {a}
-                  </h3>
-                  <p className="mt-2 text-xs text-slate-600">{b}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-          <div className="mx-auto mt-7 max-w-xl">
-            <CTA>Quiero todo organizado</CTA>
-          </div>
-        </div>
-      </section>
-      <section className="bg-zinc-950 px-4 py-10 text-white sm:py-14">
-        <div className="mx-auto max-w-5xl">
-          <Heading tag="Prueba social" dark>
-            Jugadores y entrenadores <span className="text-green-400">ya lo usan</span>
-          </Heading>
-          <div className="mx-auto grid max-w-[660px] grid-cols-2 gap-3">
-            {[
-              [feedbackJugador.url, "Jugador"],
-              [feedbackEntrenador.url, "Entrenador"],
-            ].map(([src, label]) => (
-              <div
-                key={label}
-                className="relative overflow-hidden rounded-2xl border border-white/10"
-              >
-                <video
-                  src={src}
-                  controls
-                  playsInline
-                  preload="metadata"
-                  className="aspect-[9/16] w-full object-cover"
-                />
-                <span className="absolute left-2 top-2 rounded-full bg-green-600 px-2 py-1 text-[9px] font-black uppercase">
-                  {label}
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
-            {[testimonial1, testimonial2, testimonial3, testimonial4].map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                alt={`Testimonio ${i + 1}`}
-                className="aspect-[3/4] w-full rounded-xl object-cover"
-                loading="lazy"
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-      <section className="px-4 py-10 sm:py-14">
-        <div className="mx-auto max-w-5xl">
-          <Heading tag="Extras del Plan Completo">
-            Además, llevas <span className="text-green-600">4 bonos</span>
-          </Heading>
-          <div className="grid gap-4 sm:grid-cols-2">
-            {[
-              ["01", "Guía de Entrenamiento", bonus1],
-              ["02", "50 Ejercicios de Técnica Individual", bonus2],
-              ["03", "Circuitos de Preparación Física", bonus3],
-              ["04", "Bono Sorpresa Exclusivo", bonus4],
-            ].map(([n, t, img]) => (
-              <article
-                key={n as string}
-                className="flex items-center gap-4 rounded-2xl bg-[#07130b] p-3 text-white"
-              >
-                <img
-                  src={img}
-                  alt={t as string}
-                  className="h-24 w-28 rounded-xl object-cover"
-                  loading="lazy"
-                />
-                <div>
-                  <span className="text-[10px] font-black uppercase text-yellow-400">
-                    Bono {n as string} · Incluido
-                  </span>
-                  <h3 className="mt-1 text-sm font-black">{t as string}</h3>
-                  <p className="mt-1 text-[10px] text-slate-400">Gratis en el Plan Completo</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-      <section
-        aria-label="Valor y precio del Plan Completo"
-        className="bg-slate-50 px-4 py-10 sm:py-14"
-      >
-        <div className="mx-auto max-w-5xl">
-          <Heading tag="Pon todo lo que recibes en la balanza">
-            Mucho contenido. <span className="text-green-600">Un solo pago pequeño.</span>
-          </Heading>
-          <p className="mx-auto mb-6 max-w-2xl text-center text-sm leading-relaxed text-slate-600">
-            No tienes que elegir entre técnica, preparación física o material para entrenar en casa.
-            El Plan Completo reúne toda esta entrega en un único acceso.
-          </p>
-          <div className="grid items-center gap-6 md:grid-cols-2">
+
+          <div className="mt-7 grid gap-5 bg-[#07130b] p-5 text-white sm:p-7 md:grid-cols-[1.2fr_.8fr]">
             <div>
-              <img
-                src={stack}
-                alt="Material del paquete completo de fútbol"
-                className="mb-4 aspect-[3/2] w-full rounded-2xl object-cover"
-                loading="lazy"
-              />
-              <ul className="space-y-3">
-                {[
-                  "+2.000 entrenamientos por posición y categoría",
-                  "Nutrición de alto rendimiento",
-                  "Entrenamientos individuales en casa",
-                  "500 entrenamientos de definición muscular",
-                  "4 bonos adicionales",
-                  "Acceso vitalicio y actualizaciones",
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm font-semibold">
-                    <CheckCircle2 className="h-5 w-5 shrink-0 text-green-600" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="rounded-3xl border-2 border-green-500 bg-[#07130b] p-6 text-center text-white sm:p-8">
-              <p className="text-xs font-bold uppercase tracking-widest text-slate-300">
-                Valor de referencia del paquete
-              </p>
-              <p className="mt-2 text-3xl text-slate-400">
-                <s>US$ 29,90</s>
-              </p>
-              <p className="mt-5 text-sm font-bold text-green-300">Hoy, el Plan Completo cuesta</p>
-              <p className="mt-2 text-6xl font-black tracking-tight">US$ 6,50</p>
-              <p className="mt-3 inline-block rounded-full bg-yellow-400 px-4 py-2 text-sm font-black text-black">
-                US$ 23,40 menos · 78% de diferencia
-              </p>
-              <p className="mt-4 text-sm leading-relaxed text-slate-300">
-                Comparado con el valor de referencia de US$ 29,90.
-              </p>
-              <div className="mt-5 rounded-2xl border border-white/15 bg-white/5 p-4">
-                <p className="text-lg font-black text-yellow-400">
-                  Menos de US$ 0,01 por ejercicio
-                </p>
-                <p className="mt-1 text-xs leading-relaxed text-slate-300">
-                  Dividiendo US$ 6,50 entre solo los 2.000 ejercicios principales. Los complementos
-                  y los 4 bonos también van incluidos.
-                </p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-yellow-400">Lista completa de acceso</p>
+              <h3 className="mt-2 text-2xl font-black uppercase">Abre tu biblioteca y encuentra todo esto</h3>
+              <div className="mt-5 grid gap-x-5 gap-y-2.5 sm:grid-cols-2">
+                {included.map((item) => <p key={item} className="flex gap-2 text-xs font-semibold leading-relaxed"><Check className="h-4 w-4 shrink-0 text-green-400" />{item}</p>)}
               </div>
-              <p className="mt-5 text-sm font-bold">
-                Un solo pago. Sin mensualidades. Acceso vitalicio.
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-slate-300">
-                Y frente al Básico de US$ 5,00, la diferencia es de apenas{" "}
-                <strong className="text-white">US$ 1,50 para llevar el Completo.</strong>
-              </p>
+            </div>
+            <div className="flex flex-col justify-center border-t border-white/10 pt-5 text-center md:border-l md:border-t-0 md:pl-6 md:pt-0">
+              <p className="text-xs font-bold uppercase text-slate-300">Más de 2.500 materiales principales</p>
+              <p className="mt-2 text-5xl font-black text-yellow-400">US$ 6,50</p>
+              <p className="mt-2 text-xs leading-relaxed text-slate-300">Menos de un centavo por entrenamiento, sin contar todos los complementos y bonos.</p>
+              <div className="mt-4"><CTA /></div>
+            </div>
+          </div>
+
+          <div className="mt-8">
+            <p className="text-center text-[10px] font-black uppercase tracking-widest text-green-600">Y todavía llevas 4 bonos incluidos</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {bonuses.map(([number, title, image]) => <article key={number} className="flex items-center gap-3 border bg-slate-50 p-3 lg:block"><img src={image} alt={title} className="h-20 w-24 shrink-0 rounded-xl object-cover lg:aspect-video lg:h-auto lg:w-full" loading="lazy" /><div className="lg:pt-3"><span className="text-[9px] font-black uppercase text-green-600">Bono {number} · Incluido</span><h3 className="mt-1 text-xs font-black">{title}</h3></div></article>)}
             </div>
           </div>
         </div>
       </section>
-      <section
-        id="oferta"
-        className="scroll-mt-10 bg-gradient-to-b from-[#07130b] to-slate-900 px-4 py-12 text-white sm:py-16"
-      >
+
+      <section className="bg-zinc-950 px-4 py-9 text-white sm:py-12">
         <div className="mx-auto max-w-5xl">
-          <Heading tag="Elige tu acceso" dark>
-            Por US$ 1,50 más, <span className="text-yellow-400">te llevas mucho más</span>
-          </Heading>
-          <p className="mx-auto -mt-3 mb-8 max-w-xl text-center text-sm text-slate-300">
-            El Completo adiciona nutrición, casa, definición, 4 bonos, acceso vitalicio,
-            actualizaciones y garantía.
-          </p>
-          <div className="mx-auto grid max-w-4xl items-start gap-7 md:grid-cols-2">
-            <PlanCard plan="premium" choose={choose} />
-            <PlanCard plan="basic" choose={choose} />
+          <Heading tag="Prueba social" dark>Jugadores y entrenadores <span className="text-green-400">muestran su experiencia</span></Heading>
+          <div className="mx-auto grid max-w-[620px] grid-cols-2 gap-3">
+            {[[feedbackJugador.url, "Jugador"], [feedbackEntrenador.url, "Entrenador"]].map(([src, label]) => <div key={label} className="relative overflow-hidden rounded-2xl border border-white/10"><video src={src} controls playsInline preload="metadata" className="aspect-[9/16] w-full object-cover" /><span className="absolute left-2 top-2 rounded-full bg-green-600 px-2 py-1 text-[9px] font-black uppercase">{label}</span></div>)}
           </div>
+          <div className="mt-3 grid grid-cols-4 gap-2">{[testimonial1, testimonial2, testimonial3, testimonial4].map((src, index) => <img key={src} src={src} alt={`Testimonio ${index + 1}`} className="aspect-[3/4] w-full rounded-lg object-cover" loading="lazy" />)}</div>
+          <p className="mx-auto mt-5 max-w-xl text-center text-sm font-bold">Tú también puedes tener este arsenal completo hoy por solo <span className="text-yellow-400">US$ 6,50.</span></p>
         </div>
       </section>
-      <section className="bg-green-50 px-4 py-10 text-center">
-        <ShieldCheck className="mx-auto h-14 w-14 text-green-600" />
-        <h2 className="mt-3 text-3xl font-black uppercase">Prueba durante 7 días</h2>
-        <p className="mx-auto mt-3 max-w-xl text-sm text-slate-600">
-          Conoce el Plan Completo con 7 días de garantía, conforme a las condiciones de Hotmart.
-        </p>
-        <div className="mx-auto mt-6 max-w-xl">
-          <CTA>Quiero acceder sin riesgo</CTA>
+
+      <section id="oferta" className="scroll-mt-10 bg-slate-100 px-4 py-11 sm:py-14">
+        <div className="mx-auto max-w-5xl">
+          <Heading tag="Elige tu acceso">El Completo entrega mucho más <span className="text-green-600">por solo US$ 6,50</span></Heading>
+          <p className="mx-auto -mt-2 mb-8 max-w-xl text-center text-sm leading-relaxed text-slate-600">Por apenas US$ 1,50 más que el Básico, llevas más de 2.000 entrenamientos, 500 rutinas extras, todos los complementos, 4 bonos, actualizaciones y acceso vitalicio.</p>
+          <div className="mx-auto grid max-w-4xl items-start gap-7 md:grid-cols-2"><PlanCard plan="premium" choose={choose} /><PlanCard plan="basic" choose={choose} /></div>
         </div>
       </section>
-      <section className="px-4 py-10">
+
+      <section className="bg-green-50 px-4 py-8 text-center">
+        <ShieldCheck className="mx-auto h-16 w-16 text-green-600" />
+        <h2 className="mt-2 text-3xl font-black uppercase">7 días para conocerlo sin riesgo</h2>
+        <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-600">Accede al Plan Completo por US$ 6,50 y revisa toda la biblioteca. Tu compra cuenta con 7 días de garantía, conforme a las condiciones de Hotmart.</p>
+        <div className="mx-auto mt-5 max-w-xl"><CTA>Acceder a todo por US$ 6,50</CTA></div>
+      </section>
+
+      <section className="px-4 py-9">
         <div className="mx-auto max-w-3xl">
-          <Heading tag="Preguntas frecuentes">
-            Todo claro antes <span className="text-green-600">de decidir</span>
-          </Heading>
-          <div className="divide-y border-y">
-            {faqs.map(([q, a]) => (
-              <details key={q} className="group py-5">
-                <summary className="cursor-pointer list-none pr-6 font-black">
-                  {q}
-                  <span className="float-right text-green-600">+</span>
-                </summary>
-                <p className="mt-2 text-sm text-slate-600">{a}</p>
-              </details>
-            ))}
-          </div>
+          <Heading tag="Preguntas frecuentes">Todo claro antes <span className="text-green-600">de acceder</span></Heading>
+          <div className="divide-y border-y">{faqs.map(([question, answer]) => <details key={question} className="group py-4"><summary className="cursor-pointer list-none pr-6 text-sm font-black">{question}<span className="float-right text-green-600">+</span></summary><p className="mt-2 text-sm leading-relaxed text-slate-600">{answer}</p></details>)}</div>
         </div>
       </section>
-      <section className="bg-[#07130b] px-4 py-12 text-center text-white">
-        <h2 className="text-3xl font-black uppercase">
-          Tu próximo entrenamiento puede empezar <span className="text-yellow-400">hoy.</span>
-        </h2>
-        <div className="mx-auto mt-6 max-w-xl">
-          <CTA>Elegir mi plan ahora</CTA>
-        </div>
-      </section>
-      <footer className="bg-black px-4 py-7 text-center text-[9px] text-slate-500">
-        <p className="font-black text-white">+2.000 ENTRENAMIENTOS DE FÚTBOL</p>
-        <p className="mt-2">
-          Este sitio no forma parte de Facebook, Meta o Instagram. Los resultados pueden variar.
-        </p>
-      </footer>
-      <div className="fixed inset-x-0 bottom-0 z-[80] border-t bg-white/95 p-2.5 backdrop-blur">
-        <button
-          type="button"
-          onClick={() => document.getElementById("oferta")?.scrollIntoView({ behavior: "smooth" })}
-          className="mx-auto flex min-h-[54px] w-full max-w-xl items-center justify-center gap-2 rounded-xl bg-yellow-400 text-[13px] font-black uppercase"
-        >
-          <PlayCircle className="h-5 w-5" /> Ver Completo · US$ 6,50
-        </button>
-      </div>
-      {plan && (
-        <div
-          className="fixed inset-0 z-[120] flex items-end justify-center bg-black/85 sm:items-center sm:p-4"
-          role="dialog"
-          aria-modal="true"
-        >
-          <button className="absolute inset-0" onClick={() => setPlan(null)} aria-label="Cerrar" />
-          <div className="relative max-h-[94dvh] w-full overflow-y-auto rounded-t-3xl bg-white sm:max-w-[540px] sm:rounded-3xl">
-            <div className="sticky top-0 flex items-center justify-between bg-[#07130b] px-5 py-4 text-white">
-              <div>
-                <p className="text-[9px] font-black uppercase text-yellow-400">
-                  Confirma tu elección
-                </p>
-                <p className="font-black">Plan {plan === "premium" ? "Completo" : "Básico"}</p>
-              </div>
-              <button onClick={() => setPlan(null)} aria-label="Cerrar">
-                <X />
-              </button>
-            </div>
-            <div className="p-5 text-center sm:p-7">
-              {plan === "premium" ? (
-                <>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-yellow-400 px-3 py-2 text-[10px] font-black uppercase">
-                    <Star className="h-3 w-3 fill-current" /> Mejor elección
-                  </span>
-                  <h2 className="mt-4 text-[27px] font-black uppercase">
-                    Por US$ 1,50 más, no dejas nada fuera
-                  </h2>
-                  <img
-                    src={hero}
-                    alt="Plan Completo"
-                    className="mx-auto mt-4 max-h-[220px] rounded-2xl"
-                  />
-                  <div className="mt-4 rounded-2xl bg-[#07130b] p-4 text-white">
-                    <p className="text-xs line-through text-slate-400">US$ 29,90</p>
-                    <p className="text-5xl font-black">US$ 6,50</p>
-                    <p className="text-[10px] font-black uppercase text-yellow-400">
-                      Pago único · Acceso vitalicio
-                    </p>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <h2 className="text-[27px] font-black uppercase">Plan Básico</h2>
-                  <p className="mt-2 text-sm text-slate-600">
-                    No incluye todos los complementos del Plan Completo.
-                  </p>
-                  <p className="mt-4 text-5xl font-black">US$ 5,00</p>
-                  <button
-                    onClick={() => setPlan("premium")}
-                    className="mt-4 text-sm font-black text-green-600 underline"
-                  >
-                    Llevar todo por solo US$ 1,50 más
-                  </button>
-                </>
-              )}
-              <div className="mt-5 space-y-2 rounded-2xl bg-slate-50 p-4 text-left">
-                {(plan === "premium"
-                  ? [
-                      "+2.000 entrenamientos",
-                      "Nutrición + entrenamientos en casa",
-                      "500 rutinas de definición",
-                      "4 bonos + acceso vitalicio",
-                      "Actualizaciones + garantía",
-                    ]
-                  : ["Biblioteca básica", "Material digital", "Acceso multidispositivo"]
-                ).map((i) => (
-                  <p key={i} className="flex gap-2 text-sm font-bold">
-                    <Check className="h-5 w-5 text-green-600" />
-                    {i}
-                  </p>
-                ))}
-              </div>
-              <a
-                href={checkoutUrl(CHECKOUT[plan])}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-5 flex min-h-[62px] items-center justify-center gap-2 rounded-2xl bg-green-600 px-5 text-[16px] font-black uppercase text-white"
-              >
-                Ir al checkout seguro <ArrowRight />
-              </a>
-              <p className="mt-3 flex justify-center gap-1 text-[10px] text-slate-500">
-                <Lock className="h-3 w-3" /> Hotmart abrirá en una nueva pestaña
-              </p>
-            </div>
+
+      <section className="bg-[#07130b] px-4 py-10 text-center text-white"><p className="text-xs font-black uppercase tracking-widest text-green-400">Más de 2.500 materiales + 4 bonos</p><h2 className="mx-auto mt-3 max-w-2xl text-3xl font-black uppercase">Todo organizado. Acceso vitalicio. <span className="text-yellow-400">Solo US$ 6,50.</span></h2><div className="mx-auto mt-5 max-w-xl"><CTA>Quiero el Plan Completo por US$ 6,50</CTA></div></section>
+      <footer className="bg-black px-4 py-7 text-center text-[9px] text-slate-500"><p className="font-black text-white">+2.000 ENTRENAMIENTOS DE FÚTBOL</p><p className="mt-2">Este sitio no forma parte de Facebook, Meta o Instagram. Los resultados pueden variar.</p></footer>
+
+      <div className="fixed inset-x-0 bottom-0 z-[80] border-t bg-white/95 p-2.5 backdrop-blur"><button type="button" onClick={() => document.getElementById("oferta")?.scrollIntoView({ behavior: "smooth" })} className="mx-auto flex min-h-[54px] w-full max-w-xl items-center justify-center gap-2 rounded-xl bg-yellow-400 text-[13px] font-black uppercase"><PlayCircle className="h-5 w-5" /> Completo · Todo por US$ 6,50</button></div>
+
+      {plan && <div className="fixed inset-0 z-[120] flex items-end justify-center bg-black/85 sm:items-center sm:p-4" role="dialog" aria-modal="true">
+        <button className="absolute inset-0" onClick={() => setPlan(null)} aria-label="Cerrar" />
+        <div className="relative max-h-[94dvh] w-full overflow-y-auto rounded-t-3xl bg-white sm:max-w-[540px] sm:rounded-3xl">
+          <div className="sticky top-0 z-10 flex items-center justify-between bg-[#07130b] px-5 py-4 text-white"><div><p className="text-[9px] font-black uppercase text-yellow-400">Confirma tu elección</p><p className="font-black">Plan {plan === "premium" ? "Completo" : "Básico"}</p></div><button onClick={() => setPlan(null)} aria-label="Cerrar"><X /></button></div>
+          <div className="p-5 text-center sm:p-7">
+            {plan === "premium" ? <><span className="inline-flex items-center gap-1 rounded-full bg-yellow-400 px-3 py-2 text-[10px] font-black uppercase"><Star className="h-3 w-3 fill-current" /> Toda la entrega</span><h2 className="mt-4 text-[27px] font-black uppercase">Más de 2.500 materiales + 4 bonos</h2><img src={hero} alt="Plan Completo" className="mx-auto mt-4 max-h-[210px] rounded-2xl" /><div className="mt-4 bg-[#07130b] p-4 text-white"><p className="text-xs line-through text-slate-400">Valor de referencia: US$ 29,90</p><p className="text-5xl font-black text-yellow-400">US$ 6,50</p><p className="text-[10px] font-black uppercase">Pago único · Acceso vitalicio</p></div></> : <><h2 className="text-[27px] font-black uppercase">Plan Básico</h2><p className="mt-2 text-sm text-slate-600">Incluye solo la biblioteca esencial y deja fuera los complementos del Completo.</p><p className="mt-4 text-5xl font-black">US$ 5,00</p><button onClick={() => setPlan("premium")} className="mt-4 text-sm font-black text-green-600 underline">Llevar toda la entrega por solo US$ 1,50 más</button></>}
+            <div className="mt-5 space-y-2 bg-slate-50 p-4 text-left">{(plan === "premium" ? ["+2.000 entrenamientos organizados", "+500 rutinas de definición", "Nutrición y entrenamientos en casa", "4 bonos, actualizaciones y acceso vitalicio"] : ["Biblioteca básica", "Material digital", "Acceso multidispositivo"]).map((item) => <p key={item} className="flex gap-2 text-sm font-bold"><Check className="h-5 w-5 shrink-0 text-green-600" />{item}</p>)}</div>
+            <a href={checkoutUrl(CHECKOUT[plan])} target="_blank" rel="noopener noreferrer" className="mt-5 flex min-h-[62px] items-center justify-center gap-2 rounded-2xl bg-green-600 px-5 text-[15px] font-black uppercase text-white">{plan === "premium" ? "Comprar todo por US$ 6,50" : "Comprar Básico por US$ 5,00"}<ArrowRight /></a>
+            <p className="mt-3 flex justify-center gap-1 text-[10px] text-slate-500"><Lock className="h-3 w-3" /> Hotmart abrirá en una nueva pestaña</p>
           </div>
         </div>
-      )}
+      </div>}
     </main>
   );
 }
