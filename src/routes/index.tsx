@@ -158,7 +158,7 @@ function Heading({
   );
 }
 
-function CTA({ children = "Quiero el Plan Completo por US$ 5,00" }: { children?: ReactNode }) {
+function CTA({ children = "Quiero el sistema completo ahora" }: { children?: ReactNode }) {
   return (
     <button
       type="button"
@@ -238,7 +238,7 @@ function PlanCard({ plan, choose }: { plan: Plan; choose: (plan: Plan) => void }
         onClick={() => choose(plan)}
         className={`min-h-[60px] w-full rounded-2xl px-4 py-4 text-[14px] font-black uppercase text-white active:scale-[.98] ${full ? "bg-green-600 shadow-lg" : "bg-slate-800"}`}
       >
-        {full ? "Llevar todo por US$ 5,00" : "Elegir Básico por US$ 4,50"}
+        {full ? "Acceder a todo por US$ 5,00" : "Elegir Básico por US$ 4,50"}
       </button>
     </article>
   );
@@ -278,22 +278,21 @@ function Index() {
             <h1 className="mt-4 text-[34px] font-black uppercase leading-[1.06] text-zinc-950 sm:text-5xl">
               Deja de improvisar.
               <span className="mt-2 block text-green-600">
-                Dale un objetivo a cada entrenamiento.
+                Llega a cada entrenamiento con un sistema completo listo para aplicar.
               </span>
             </h1>
             <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
-              Quieres mejorar tu juego o preparar sesiones que realmente aprovechen el tiempo en el
-              campo. Pero encontrar ejercicios, ordenarlos y saber qué trabajar puede convertirse en
-              otra tarea más.
+              +2.000 entrenamientos organizados por posición y categoría + nutrición de alto
+              rendimiento + entrenamientos en casa + 500 de definición muscular. Todo en un solo
+              lugar. Acceso inmediato.
             </p>
             <p className="mt-4 text-base leading-relaxed text-slate-700">
-              Imagina abrir tu móvil y tener{" "}
-              <strong>más de 2.000 entrenamientos por posición y categoría</strong>, junto con
-              material para tu preparación física, nutrición y trabajo individual. Una biblioteca a
-              la que volver antes de cada sesión.
+              Es fácil perder horas buscando ejercicios sueltos y terminar repitiendo siempre lo
+              mismo. Aquí tienes <strong>material organizado, variado y listo para usar</strong>:
+              técnica, táctica, físico, finalización, 1x1, trabajo por posición y por categoría.
             </p>
             <div className="mt-6">
-              <CTA>Descubrir el Plan Completo</CTA>
+              <CTA>Quiero el sistema completo ahora</CTA>
             </div>
             <p className="mt-3 text-center text-xs text-slate-500 lg:text-left">
               Pago único · Acceso vitalicio · Garantía de 7 días
@@ -311,30 +310,32 @@ function Index() {
       <section className="bg-slate-50 px-4 py-10 sm:py-14">
         <div className="mx-auto max-w-5xl">
           <Heading tag="¿Te pasa antes de entrenar?">
-            Tienes las ganas.<span className="text-green-600"> Ahora necesitas una dirección.</span>
+            ¿Sigues armando entrenamientos<span className="text-green-600"> a última hora?</span>
           </Heading>
           <p className="mx-auto mb-7 max-w-2xl text-center text-base leading-relaxed text-slate-600">
-            Guardar más vídeos no siempre te ayuda a decidir qué hacer mañana. Estas son tres
-            situaciones que la biblioteca te ayuda a resolver.
+            Si todavía saltas de video en video, repites los mismos ejercicios y sientes que tus
+            sesiones no tienen una dirección clara, el problema no es tu esfuerzo. Es la falta de un
+            sistema organizado. Con este acceso dejas de improvisar y empiezas a trabajar con
+            material organizado por posición y categoría, listo para aplicar.
           </p>
           <div className="grid gap-4 md:grid-cols-3">
             {[
               [
                 "Repites los mismos ejercicios",
-                "La sesión llega y vuelves a lo conocido, aunque querías trabajar algo diferente.",
-                "Encuentra nuevas opciones",
-                "Consulta ejercicios de técnica, físico y táctica para variar el trabajo según tu objetivo.",
+                "Quieres trabajar algo distinto, pero terminas usando los mismos ejercicios por falta de opciones a mano.",
+                "Elige con un objetivo claro",
+                "Encuentra técnica, físico y táctica organizados para preparar sesiones con variedad y dirección.",
               ],
               [
                 "Pierdes tiempo buscando",
                 "Saltas entre vídeos y carpetas sin encontrar aquel ejercicio que habías guardado.",
-                "Ten el material a mano",
+                "Deja de empezar de cero",
                 "Accede a contenido organizado por posición y categoría desde el móvil, tablet u ordenador.",
               ],
               [
                 "Entrenar solo se hace difícil",
                 "Fuera del entrenamiento de equipo, te faltan ideas para seguir practicando.",
-                "Continúa también en casa",
+                "Dale continuidad a tu trabajo",
                 "Usa las rutinas individuales y complementa tu trabajo con preparación física y nutrición.",
               ],
             ].map(([pain, detail, solution, benefit]) => (
@@ -357,8 +358,8 @@ function Index() {
             ))}
           </div>
           <p className="mx-auto mt-7 max-w-2xl text-center text-base font-semibold leading-relaxed">
-            Tú pones la constancia. El material te ayuda a pasar de «¿qué entreno hoy?» a elegir un
-            objetivo y empezar.
+            Deja de llegar al campo con la pregunta «¿qué hacemos hoy?». Abre tu biblioteca, elige
+            el objetivo y prepara una sesión con intención.
           </p>
         </div>
       </section>
@@ -366,13 +367,14 @@ function Index() {
       <section className="px-4 py-10 sm:py-14">
         <div className="mx-auto max-w-4xl">
           <Heading tag="Tu biblioteca de fútbol">
-            Abre. Elige tu objetivo.
-            <span className="text-green-600"> Prepara tu próxima sesión.</span>
+            Todo lo que quieres trabajar.
+            <span className="text-green-600"> Organizado para encontrarlo.</span>
           </Heading>
           <p className="mx-auto mb-6 max-w-2xl text-center text-base leading-relaxed text-slate-600">
-            Para practicar por tu cuenta o planificar el entrenamiento de un equipo: reúne ideas,
-            consulta el trabajo de cada categoría y adapta los ejercicios a tu nivel y al espacio
-            disponible.
+            Técnica individual; finalización y definición; 1x1 y duelos; agilidad y velocidad;
+            trabajo táctico y posicional; preparación física; ejercicios por posición y material por
+            categoría, desde categorías menores hasta adulto. Encuentra qué trabajar y adapta la
+            sesión a tu nivel y al espacio disponible.
           </p>
           <img
             src={arsenal}
@@ -413,36 +415,36 @@ function Index() {
       <section className="bg-white px-4 py-10 sm:py-14">
         <div className="mx-auto max-w-5xl">
           <Heading tag="Lo que recibes en el Completo">
-            Cada parte del paquete<span className="text-green-600"> tiene un propósito.</span>
+            Un sistema completo<span className="text-green-600"> dentro y fuera del campo.</span>
           </Heading>
           <p className="mx-auto mb-7 max-w-2xl text-center text-base leading-relaxed text-slate-600">
-            El fútbol es el punto de partida. Los complementos te dan material para trabajar también
-            fuera del campo y cuidar tu preparación.
+            Prepara tus sesiones de fútbol y da continuidad al trabajo con nutrición, entrenamientos
+            en casa y definición muscular. Cada entrega cumple una función en tu preparación.
           </p>
           <div className="grid gap-5 sm:grid-cols-2">
             {[
               [
                 "01",
                 "+2.000 entrenamientos de fútbol",
-                "Técnica, pases, recepción, remates, dribles, agilidad y trabajo táctico. Encuentra opciones por posición y categoría para preparar sesiones con una intención clara.",
+                "Biblioteca completa, organizada y lista para aplicar. Ideal para jugadores y entrenadores: elige tu posición, categoría y objetivo para preparar la sesión sin empezar de cero.",
                 tecnica,
               ],
               [
                 "02",
                 "Nutrición de alto rendimiento",
-                "Material de orientación para entender mejor el papel de la alimentación en tu energía y recuperación. Un complemento para mirar tu preparación más allá del balón.",
+                "Material para orientar tu alimentación hacia una mejor energía, recuperación y rendimiento. Dale a la nutrición un lugar en tu preparación.",
                 nutrition,
               ],
               [
                 "03",
                 "Entrenamientos individuales en casa",
-                "Ideas para seguir practicando por tu cuenta cuando no tienes una sesión de equipo. Adapta el trabajo a tu espacio, nivel y disponibilidad.",
+                "Sigue trabajando para mejorar incluso los días que no tienes sesión de equipo. Encuentra entrenamientos individuales para dar continuidad a tu práctica en casa.",
                 casa,
               ],
               [
                 "04",
                 "500 entrenamientos de definición",
-                "Una colección adicional para trabajar fuerza y acondicionamiento. Amplía tus opciones de preparación física con material que puedes consultar cuando lo necesites.",
+                "Complemento físico para trabajar fuerza y acondicionamiento, y preparar tu presencia en el campo. 500 entrenamientos de definición muscular para ampliar tus opciones.",
                 definicion,
               ],
             ].map(([number, title, description, img]) => (
@@ -475,7 +477,7 @@ function Index() {
             </p>
           </div>
           <div className="mx-auto mt-6 max-w-xl">
-            <CTA>Ver las opciones de acceso</CTA>
+            <CTA>Empezar a entrenar con dirección</CTA>
           </div>
         </div>
       </section>
@@ -550,9 +552,8 @@ function Index() {
               conforme a las condiciones de Hotmart.
             </p>
             <p className="border-t border-green-200 pt-5 text-lg font-bold leading-relaxed text-green-950 sm:text-xl">
-              Imagina tu próxima sesión: abres la biblioteca, eliges qué quieres trabajar y llegas
-              con una idea clara. El progreso lo construyes tú. Aquí tienes recursos para acompañar
-              ese esfuerzo, entrenamiento tras entrenamiento.
+              No es solo una carpeta de ejercicios. Es un sistema completo para dejar de entrenar
+              sin dirección y empezar a mejorar con método, tanto dentro como fuera del campo.
             </p>
           </div>
         </div>
@@ -655,9 +656,11 @@ function Index() {
               US$ 24,90 menos · Aproximadamente 83% de diferencia
             </p>
             <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-slate-300">
-              Incluye la biblioteca de fútbol, nutrición, entrenamientos en casa, definición
-              muscular y los 4 bonos.{" "}
-              <strong className="text-white">Un solo pago por todo el paquete.</strong>
+              Por US$ 5,00 te llevas más de 2.500 entrenamientos entre fútbol y definición muscular,
+              además de nutrición, trabajo en casa y 4 bonos.{" "}
+              <strong className="text-white">
+                Tu sistema completo, en un solo pago y sin mensualidades.
+              </strong>
             </p>
             <div className="mx-auto mt-6 max-w-xl rounded-2xl border border-white/15 bg-white/5 p-4">
               <p className="text-lg font-black text-yellow-400">Menos de US$ 0,01 por ejercicio</p>
@@ -725,11 +728,11 @@ function Index() {
           Más de 2.500 materiales + 4 bonos
         </p>
         <h2 className="mx-auto mt-3 max-w-2xl text-3xl font-black uppercase">
-          Tu próxima sesión empieza con una decisión:{" "}
-          <span className="text-yellow-400">entrenar con más dirección.</span>
+          Deja de improvisar.{" "}
+          <span className="text-yellow-400">Empieza a entrenar con dirección.</span>
         </h2>
         <div className="mx-auto mt-5 max-w-xl">
-          <CTA>Quiero el Plan Completo por US$ 5,00</CTA>
+          <CTA>Quiero el sistema completo ahora</CTA>
         </div>
       </section>
       <footer className="bg-black px-4 py-7 text-center text-[9px] text-slate-500">
@@ -829,7 +832,7 @@ function Index() {
                 rel="noopener noreferrer"
                 className="mt-5 flex min-h-[62px] items-center justify-center gap-2 rounded-2xl bg-green-600 px-5 text-[15px] font-black uppercase text-white"
               >
-                {plan === "premium" ? "Comprar todo por US$ 5,00" : "Comprar Básico por US$ 4,50"}
+                {plan === "premium" ? "Acceder a todo por US$ 5,00" : "Comprar Básico por US$ 4,50"}
                 <ArrowRight />
               </a>
               <p className="mt-3 flex justify-center gap-1 text-[10px] text-slate-500">
