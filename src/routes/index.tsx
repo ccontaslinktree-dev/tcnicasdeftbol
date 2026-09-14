@@ -8,7 +8,6 @@ import {
   Lock,
   PlayCircle,
   ShieldCheck,
-  Target,
   Trophy,
   X,
 } from "lucide-react";
@@ -32,7 +31,6 @@ import feedbackEntrenador from "@/assets/feedback-entrenador.mp4.asset.json";
 
 const CHECKOUT = {
   premium: "https://pay.hotmart.com/P107284207G?checkoutMode=2",
-  basic: "https://pay.hotmart.com/B107438269A?checkoutMode=2",
 };
 type Plan = keyof typeof CHECKOUT;
 
@@ -157,7 +155,7 @@ function Heading({
   );
 }
 
-function CTA({ children = "Quiero el sistema completo ahora" }: { children?: ReactNode }) {
+function CTA({ children = "Quiero dejar de improvisar ahora" }: { children?: ReactNode }) {
   return (
     <button
       type="button"
@@ -170,44 +168,26 @@ function CTA({ children = "Quiero el sistema completo ahora" }: { children?: Rea
   );
 }
 
-function PlanCard({ plan, choose }: { plan: Plan; choose: (plan: Plan) => void }) {
-  const full = plan === "premium";
-  const items = full
-    ? [
-        "+2.000 entrenamientos organizados",
-        "500 rutinas de definición",
-        "Nutrición y entrenamiento en casa",
-        "4 bonos adicionales",
-        "Acceso vitalicio y actualizaciones",
-        "Garantía de 7 días",
-      ]
-    : [
-        "Biblioteca básica de fútbol",
-        "Material digital para entrenar",
-        "Acceso desde cualquier dispositivo",
-      ];
+function PlanCard({ choose }: { choose: (plan: Plan) => void }) {
+  const items = [
+    "+2.000 entrenamientos por posición y categoría",
+    "Nutrición de alto rendimiento",
+    "Entrenamientos individuales en casa",
+    "500 entrenamientos de definición muscular",
+    "4 bonos adicionales",
+    "Acceso vitalicio y actualizaciones",
+    "Garantía de 7 días",
+  ];
 
   return (
-    <article
-      className={`relative rounded-3xl bg-white text-slate-900 ${full ? "order-first border-4 border-green-500 p-5 shadow-[0_26px_70px_-22px_rgba(34,197,94,.7)] sm:p-8" : "border border-slate-300 p-5 md:order-last"}`}
-    >
-      {full && (
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-yellow-400 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-black">
-          Más de 2.500 materiales + 4 bonos
-        </div>
-      )}
+    <article className="relative rounded-3xl border-4 border-green-500 bg-white p-5 text-slate-900 shadow-[0_26px_70px_-22px_rgba(34,197,94,.7)] sm:p-8">
+      <div className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-yellow-400 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-black">
+        Sistema completo · Todo incluido
+      </div>
       <div className="text-center">
-        <div
-          className={`mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full ${full ? "bg-green-600 text-white" : "bg-slate-200"}`}
-        >
-          {full ? <Crown /> : <Target />}
-        </div>
-        <p className="text-[11px] font-black uppercase tracking-widest text-green-600">
-          Plan {full ? "Completo" : "Básico"}
-        </p>
-        <h3 className="mt-1 text-[25px] font-black uppercase">
-          {full ? "La biblioteca completa" : "Solo lo esencial"}
-        </h3>
+        <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-white"><Crown /></div>
+        <p className="text-[11px] font-black uppercase tracking-widest text-green-600">Plan Completo</p>
+        <h3 className="mt-1 text-[25px] font-black uppercase">Deja de improvisar. Entrena con método.</h3>
       </div>
       <div className="my-5 space-y-2.5">
         {items.map((item) => (
@@ -217,27 +197,20 @@ function PlanCard({ plan, choose }: { plan: Plan; choose: (plan: Plan) => void }
           </div>
         ))}
       </div>
-      <div className={`mb-5 p-4 text-center ${full ? "bg-[#07130b] text-white" : "bg-slate-100"}`}>
-        {full && (
-          <p className="text-xs text-slate-400 line-through">Valor de referencia: US$ 29,90</p>
-        )}
+      <div className="mb-5 bg-[#07130b] p-4 text-center text-white">
+        <p className="text-xs text-slate-400 line-through">Valor de referencia: US$ 29,90</p>
         <p className="mt-1 text-[11px] font-black uppercase">Hoy por solo</p>
         <div className="flex items-end justify-center gap-1">
-          <span className="text-xs font-bold">US$</span>
-          <span className="text-5xl font-black leading-none">{full ? "5,00" : "4,50"}</span>
+          <span className="text-xs font-bold">US$</span><span className="text-5xl font-black leading-none">5,00</span>
         </div>
-        {full && (
-          <p className="mt-2 text-[10px] font-black uppercase text-yellow-400">
-            Pago único · Sin mensualidades
-          </p>
-        )}
+        <p className="mt-2 text-[10px] font-black uppercase text-yellow-400">Pago único · Sin mensualidades</p>
       </div>
       <button
         type="button"
-        onClick={() => choose(plan)}
-        className={`min-h-[60px] w-full rounded-2xl px-4 py-4 text-[14px] font-black uppercase text-white active:scale-[.98] ${full ? "bg-green-600 shadow-lg" : "bg-slate-800"}`}
+        onClick={() => choose("premium")}
+        className="min-h-[60px] w-full rounded-2xl bg-green-600 px-4 py-4 text-[14px] font-black uppercase text-white shadow-lg active:scale-[.98]"
       >
-        {full ? "Acceder a todo por US$ 5,00" : "Elegir Básico por US$ 4,50"}
+        Acceder al sistema completo por US$ 5,00
       </button>
     </article>
   );
@@ -257,7 +230,7 @@ function Index() {
   }, [plan]);
 
   const choose = (selected: Plan) => {
-    track("InitiateCheckout", selected === "premium" ? 5 : 4.5);
+    track("InitiateCheckout", 5);
     setPlan(selected);
   };
 
@@ -265,7 +238,7 @@ function Index() {
     if (!plan) return;
     try {
       // Separate outbound intent from opening the plan modal. Never delay the native link.
-      track("HotmartCheckoutClick", plan === "premium" ? 5 : 4.5, true);
+      track("HotmartCheckoutClick", 5, true);
     } catch {
       // Analytics failure must not prevent navigation to Hotmart.
     }
@@ -274,7 +247,7 @@ function Index() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-white pb-24 text-slate-900 antialiased">
       <div className="fixed inset-x-0 top-0 z-[90] border-b border-yellow-400/40 bg-[#07130b] px-3 py-2 text-center text-[10px] font-black uppercase text-white sm:text-xs">
-        Plan Completo · Solo US$ 5,00 · Acceso vitalicio
+        🔥 Precio especial activo · Plan Completo por US$ 5,00
       </div>
       <div className="h-9" />
 
@@ -287,13 +260,12 @@ function Index() {
             <h1 className="mt-4 text-[34px] font-black uppercase leading-[1.06] text-zinc-950 sm:text-5xl">
               Deja de improvisar.
               <span className="mt-2 block text-green-600">
-                Llega a cada entrenamiento con un sistema completo listo para aplicar.
+                Accede al método organizado con +2.000 entrenamientos listos para aplicar por posición y categoría.
               </span>
             </h1>
             <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
-              +2.000 entrenamientos organizados por posición y categoría + nutrición de alto
-              rendimiento + entrenamientos en casa + 500 de definición muscular. Todo en un solo
-              lugar. Acceso inmediato.
+              +2.000 entrenamientos de fútbol + nutrición de alto rendimiento + entrenamientos en casa
+              + 500 de definición muscular. Todo organizado. Acceso inmediato. Un solo pago.
             </p>
             <p className="mt-4 text-base leading-relaxed text-slate-700">
               Es fácil perder horas buscando ejercicios sueltos y terminar repitiendo siempre lo
@@ -301,10 +273,10 @@ function Index() {
               técnica, táctica, físico, finalización, 1x1, trabajo por posición y por categoría.
             </p>
             <div className="mt-6">
-              <CTA>Quiero el sistema completo ahora</CTA>
+              <CTA>Quiero dejar de improvisar ahora</CTA>
             </div>
             <p className="mt-3 text-center text-xs text-slate-500 lg:text-left">
-              Pago único · Acceso vitalicio · Garantía de 7 días
+              +2.000 entrenamientos organizados para jugadores y entrenadores · Acceso vitalicio
             </p>
           </div>
           <img
@@ -319,56 +291,43 @@ function Index() {
       <section className="bg-slate-50 px-4 py-10 sm:py-14">
         <div className="mx-auto max-w-5xl">
           <Heading tag="¿Te pasa antes de entrenar?">
-            ¿Sigues armando entrenamientos<span className="text-green-600"> a última hora?</span>
+            ¿Te identificas con alguna<span className="text-green-600"> de estas situaciones?</span>
           </Heading>
-          <p className="mx-auto mb-7 max-w-2xl text-center text-base leading-relaxed text-slate-600">
-            Si todavía saltas de video en video, repites los mismos ejercicios y sientes que tus
-            sesiones no tienen una dirección clara, el problema no es tu esfuerzo. Es la falta de un
-            sistema organizado. Con este acceso dejas de improvisar y empiezas a trabajar con
-            material organizado por posición y categoría, listo para aplicar.
-          </p>
-          <div className="grid gap-4 md:grid-cols-3">
+          <ul className="mx-auto mb-7 max-w-2xl space-y-3 text-base leading-relaxed text-slate-700">
             {[
-              [
-                "Repites los mismos ejercicios",
-                "Quieres trabajar algo distinto, pero terminas usando los mismos ejercicios por falta de opciones a mano.",
-                "Elige con un objetivo claro",
-                "Encuentra técnica, físico y táctica organizados para preparar sesiones con variedad y dirección.",
-              ],
-              [
-                "Pierdes tiempo buscando",
-                "Saltas entre vídeos y carpetas sin encontrar aquel ejercicio que habías guardado.",
-                "Deja de empezar de cero",
-                "Accede a contenido organizado por posición y categoría desde el móvil, tablet u ordenador.",
-              ],
-              [
-                "Entrenar solo se hace difícil",
-                "Fuera del entrenamiento de equipo, te faltan ideas para seguir practicando.",
-                "Dale continuidad a tu trabajo",
-                "Usa las rutinas individuales y complementa tu trabajo con preparación física y nutrición.",
-              ],
-            ].map(([pain, detail, solution, benefit]) => (
-              <article
-                key={pain}
-                className="overflow-hidden rounded-2xl border border-slate-200 bg-white"
-              >
-                <div className="p-5">
-                  <h3 className="text-lg font-black">{pain}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{detail}</p>
-                </div>
-                <div className="border-t border-green-100 bg-green-50 p-5">
-                  <h4 className="flex items-start gap-2 font-black text-green-900">
-                    <CheckCircle2 className="h-5 w-5 shrink-0" />
-                    {solution}
-                  </h4>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-700">{benefit}</p>
-                </div>
-              </article>
+              "Llegas al entrenamiento sin un plan claro y terminas improvisando.",
+              "Repites siempre los mismos ejercicios porque no sabes qué más hacer.",
+              "Pierdes tiempo buscando material suelto en YouTube o Instagram.",
+              "Sientes que tus jugadores, o tú, no evolucionan como deberían.",
+              "No tienes material organizado por posición y categoría.",
+            ].map((pain) => (
+              <li key={pain} className="flex items-start gap-3">
+                <X className="mt-1 h-5 w-5 shrink-0 text-slate-500" aria-hidden="true" />
+                <span>{pain}</span>
+              </li>
             ))}
+          </ul>
+          <div className="grid gap-4 md:grid-cols-2">
+            <article className="rounded-2xl border border-slate-200 bg-white p-5">
+              <h3 className="text-lg font-black text-slate-700">SIN el método</h3>
+              <ul className="mt-4 space-y-3 text-sm leading-relaxed text-slate-600">
+                {["Improvisas cada sesión.", "Pierdes tiempo buscando ejercicios.", "Repites siempre lo mismo.", "Te cuesta definir qué trabajar en la siguiente sesión."].map((item) => (
+                  <li key={item} className="flex gap-2"><X className="h-5 w-5 shrink-0" aria-hidden="true" />{item}</li>
+                ))}
+              </ul>
+            </article>
+            <article className="rounded-2xl border border-green-200 bg-green-50 p-5">
+              <h3 className="text-lg font-black text-green-900">CON el método</h3>
+              <ul className="mt-4 space-y-3 text-sm leading-relaxed text-slate-700">
+                {["Preparas tu sesión sin empezar de cero.", "Encuentras material por posición y categoría.", "Tienes variedad para renovar tus entrenamientos.", "Eliges un objetivo y entrenas con dirección clara."].map((item) => (
+                  <li key={item} className="flex gap-2"><CheckCircle2 className="h-5 w-5 shrink-0 text-green-700" aria-hidden="true" />{item}</li>
+                ))}
+              </ul>
+            </article>
           </div>
           <p className="mx-auto mt-7 max-w-2xl text-center text-base font-semibold leading-relaxed">
-            Deja de llegar al campo con la pregunta «¿qué hacemos hoy?». Abre tu biblioteca, elige
-            el objetivo y prepara una sesión con intención.
+            El problema no es tu esfuerzo. Es la falta de un sistema claro y organizado.
+            Hoy puedes dar el primer paso: tener el material a mano y elegir qué vas a trabajar.
           </p>
         </div>
       </section>
@@ -380,10 +339,10 @@ function Index() {
             <span className="text-green-600"> Organizado para encontrarlo.</span>
           </Heading>
           <p className="mx-auto mb-6 max-w-2xl text-center text-base leading-relaxed text-slate-600">
-            Técnica individual; finalización y definición; 1x1 y duelos; agilidad y velocidad;
-            trabajo táctico y posicional; preparación física; ejercicios por posición y material por
-            categoría, desde categorías menores hasta adulto. Encuentra qué trabajar y adapta la
-            sesión a tu nivel y al espacio disponible.
+            Técnica individual: control, pase, regate y recepción. Finalización y definición. 1x1 y duelos.
+            Agilidad, velocidad y coordinación. Trabajo táctico y posicional. Preparación física específica.
+            Ejercicios por posición: portero, defensa, mediocampo y delantero. Material por categoría
+            para encontrar lo que necesitas y adaptar el trabajo a tu sesión.
           </p>
           <img
             src={arsenal}
@@ -445,7 +404,7 @@ function Index() {
             hoy y tener nuevas opciones para mañana.
           </p>
           <div className="mx-auto mt-6 max-w-xl">
-            <CTA>Quiero acceder al sistema completo</CTA>
+            <CTA>Quiero dejar de improvisar ahora</CTA>
           </div>
         </div>
       </section>
@@ -464,25 +423,25 @@ function Index() {
               [
                 "01",
                 "+2.000 entrenamientos de fútbol",
-                "Biblioteca completa, organizada y lista para aplicar. Ideal para jugadores y entrenadores: elige tu posición, categoría y objetivo para preparar la sesión sin empezar de cero.",
+                "Organizados y listos para aplicar. Ideal para jugadores y entrenadores: encuentra qué trabajar por posición y categoría sin perderte entre ejercicios sueltos.",
                 tecnica,
               ],
               [
                 "02",
                 "Nutrición de alto rendimiento",
-                "Material para orientar tu alimentación hacia una mejor energía, recuperación y rendimiento. Dale a la nutrición un lugar en tu preparación.",
+                "Orientación para apoyar tu energía y recuperación. Dale a la alimentación un lugar en tu preparación, junto con el trabajo en el campo.",
                 nutrition,
               ],
               [
                 "03",
                 "Entrenamientos individuales en casa",
-                "Sigue trabajando para mejorar incluso los días que no tienes sesión de equipo. Encuentra entrenamientos individuales para dar continuidad a tu práctica en casa.",
+                "Sigue trabajando para mejorar fuera del campo. Entrenamientos individuales en casa para dar continuidad a tu práctica cuando no tienes sesión de equipo.",
                 casa,
               ],
               [
                 "04",
                 "500 entrenamientos de definición",
-                "Complemento físico para trabajar fuerza y acondicionamiento, y preparar tu presencia en el campo. 500 entrenamientos de definición muscular para ampliar tus opciones.",
+                "Complemento físico para trabajar fuerza y presencia en el campo. 500 entrenamientos de definición muscular para ampliar tu preparación.",
                 definicion,
               ],
             ].map(([number, title, description, img]) => (
@@ -515,7 +474,7 @@ function Index() {
             </p>
           </div>
           <div className="mx-auto mt-6 max-w-xl">
-            <CTA>Empezar a entrenar con dirección</CTA>
+            <CTA>Empezar a entrenar con método</CTA>
           </div>
         </div>
       </section>
@@ -555,8 +514,8 @@ function Index() {
               a la biblioteca para preparar la siguiente sesión.
             </p>
             <p className="border-t border-green-200 pt-5 text-lg font-bold leading-relaxed text-green-950">
-              Tú eliges qué quieres trabajar. El Plan Completo reúne el material para que puedas
-              preparar ese trabajo con dirección, dentro y fuera del campo.
+              No es solo una carpeta de ejercicios. Es un sistema organizado para dejar de improvisar
+              y empezar a entrenar con dirección real.
             </p>
           </div>
         </div>
@@ -613,7 +572,7 @@ function Index() {
               El Plan Completo reúne fútbol, nutrición, entrenamiento en casa, definición muscular
               y 4 bonos, con acceso vitalicio y actualizaciones.
             </p>
-            <div className="mt-5"><CTA>Acceder a todo por US$ 5,00</CTA></div>
+            <div className="mt-5"><CTA>Acceder al sistema completo por US$ 5,00</CTA></div>
           </div>
         </div>
       </section>
@@ -691,17 +650,16 @@ function Index() {
 
       <section id="oferta" className="scroll-mt-10 bg-slate-100 px-4 py-11 sm:py-14">
         <div className="mx-auto max-w-5xl">
-          <Heading tag="Elige tu acceso">
-            La diferencia de precio es pequeña. <span className="text-green-600">La diferencia de acceso importa.</span>
+          <Heading tag="Tu acceso completo">
+            Todo lo que necesitas para preparar tus sesiones.<span className="text-green-600"> Un solo acceso por US$ 5,00.</span>
           </Heading>
           <p className="mx-auto -mt-2 mb-8 max-w-xl text-center text-sm leading-relaxed text-slate-600">
-            El Básico cuesta US$ 4,50. Por solo US$ 0,50 más, el Completo incluye los entrenamientos
-            de fútbol y todos los complementos descritos en esta página. Si quieres el paquete
-            completo, puedes elegirlo desde el principio por US$ 5,00.
+            Accede a los entrenamientos de fútbol, nutrición, trabajo en casa, definición muscular
+            y 4 bonos. Todo el paquete, con acceso vitalicio y actualizaciones. Un solo pago
+            para dejar de buscar material suelto y empezar a preparar sesiones con método.
           </p>
-          <div className="mx-auto grid max-w-4xl items-start gap-7 md:grid-cols-2">
-            <PlanCard plan="premium" choose={choose} />
-            <PlanCard plan="basic" choose={choose} />
+          <div className="mx-auto max-w-xl">
+            <PlanCard choose={choose} />
           </div>
         </div>
       </section>
@@ -714,7 +672,7 @@ function Index() {
           días de garantía, conforme a las condiciones de Hotmart.
         </p>
         <div className="mx-auto mt-5 max-w-xl">
-          <CTA>Acceder a todo por US$ 5,00</CTA>
+          <CTA>Acceder al sistema completo por US$ 5,00</CTA>
         </div>
       </section>
 
@@ -746,7 +704,7 @@ function Index() {
           <span className="text-yellow-400">Empieza a entrenar con dirección.</span>
         </h2>
         <div className="mx-auto mt-5 max-w-xl">
-          <CTA>Quiero el sistema completo ahora</CTA>
+          <CTA>Quiero dejar de improvisar ahora</CTA>
         </div>
       </section>
       <footer className="bg-black px-4 py-7 text-center text-[9px] text-slate-500">
@@ -780,7 +738,7 @@ function Index() {
                 <p className="text-[9px] font-black uppercase text-yellow-400">
                   Confirma tu elección
                 </p>
-                <p className="font-black">Plan {plan === "premium" ? "Completo" : "Básico"}</p>
+                <p className="font-black">Plan Completo</p>
               </div>
               <button onClick={() => setPlan(null)} aria-label="Cerrar">
                 <X />
@@ -788,30 +746,18 @@ function Index() {
             </div>
             <div className="p-5 text-center sm:p-7">
               <h2 id="checkout-plan-title" className="text-2xl font-black">
-                Tu elección: Plan {plan === "premium" ? "Completo" : "Básico"}
+                Tu elección: Plan Completo
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-slate-600">
-                {plan === "premium"
-                  ? "Toda la entrega presentada en esta página. Acceso vitalicio y actualizaciones en un solo pago."
-                  : "Biblioteca básica y material digital para entrenar desde cualquier dispositivo."}
+                Toda la entrega presentada en esta página. Acceso vitalicio y actualizaciones en un solo pago.
               </p>
               <p className="mt-4 text-4xl font-black text-green-700">
-                US$ {plan === "premium" ? "5,00" : "4,50"}
+                US$ 5,00
               </p>
-              {plan === "premium" ? (
-                <p className="mt-3 text-sm leading-relaxed text-slate-700">
-                  +2.000 entrenamientos de fútbol · Nutrición · Trabajo en casa ·
-                  500 entrenamientos de definición · 4 bonos
-                </p>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => choose("premium")}
-                  className="mt-3 min-h-[44px] text-sm font-bold text-green-700 underline"
-                >
-                  Prefiero el Completo por solo US$ 0,50 más
-                </button>
-              )}
+              <p className="mt-3 text-sm leading-relaxed text-slate-700">
+                +2.000 entrenamientos de fútbol · Nutrición · Trabajo en casa ·
+                500 entrenamientos de definición · 4 bonos
+              </p>
               <a
                 href={checkoutUrl(CHECKOUT[plan])}
                 target="_blank"
@@ -822,15 +768,13 @@ function Index() {
                 }}
                 className="mt-5 flex min-h-[62px] items-center justify-center gap-2 rounded-2xl bg-green-600 px-4 py-4 text-[15px] font-black text-white"
               >
-                Continuar al pago seguro — US$ {plan === "premium" ? "5,00" : "4,50"}
+                Continuar al pago seguro — US$ 5,00
                 <ArrowRight className="h-5 w-5 shrink-0" />
               </a>
               <p className="mt-3 flex items-center justify-center gap-1 text-xs text-slate-500">
                 <Lock className="h-3 w-3 shrink-0" /> El pago se abrirá en Hotmart, en una nueva pestaña.
               </p>
-              {plan === "premium" && (
-                <p className="mt-2 text-xs text-slate-500">7 días de garantía conforme a las condiciones de Hotmart.</p>
-              )}
+              <p className="mt-2 text-xs text-slate-500">7 días de garantía conforme a las condiciones de Hotmart.</p>
             </div>
           </div>
         </div>
