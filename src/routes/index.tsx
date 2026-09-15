@@ -58,7 +58,7 @@ import featAgilidad from "@/assets/feature-agilidad.jpg";
 import featChutes from "@/assets/feature-chutes.jpg";
 import featPasses from "@/assets/feature-passes.jpg";
 
-const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=10";
+const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/G107438250J?checkoutMode=10";
 
 const BUYERS = [
   "Juan Mendoza", "Carlos Rodríguez", "Sofía García", "Mateo López", "Valentina Peña", 
