@@ -12,11 +12,11 @@ export default defineTool({
       product: "+2.000 Ejercicios de Fútbol — Biblioteca Completa",
       description:
         "Biblioteca con más de 2.000 entrenamientos de fútbol organizados por posición y categoría: físico, táctico, dribles, agilidad, chutes, pases y más. Acceso inmediato, listo para aplicar.",
-      price_usd: 5,
+      price_usd: 6.5,
       original_price_usd: 29.9,
-      discount_percent: 83,
+      discount_percent: 78,
       urgency: "Solo Hoy",
-      checkout_url: "https://pay.hotmart.com/",
+      checkout_url: "https://pay.hotmart.com/P107284207G?checkoutMode=10",
       guarantee_days: 7,
       delivery: "Acceso inmediato a la biblioteca online",
       categories: [
