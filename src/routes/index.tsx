@@ -59,7 +59,19 @@ import featChutes from "@/assets/feature-chutes.jpg";
 import featPasses from "@/assets/feature-passes.jpg";
 
 const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=10";
-const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/G107438250J?checkoutMode=10";
+const OFFER_COPY =
+  "Accede a la plataforma completa con más de 2.000 ejercicios, más de 250 sesiones completas en video y 4 bonos exclusivos. Todo organizado dentro de una sola plataforma para que dejes de improvisar y empieces a entrenar como un profesional.";
+const OFFER_ITEMS = [
+  "+2.000 ejercicios profesionales",
+  "+250 sesiones completas en video",
+  "Todo el material dentro de la plataforma",
+  "Entrenamientos organizados por posición y categoría",
+  "4 bonos exclusivos",
+  "Acceso inmediato",
+  "Acceso vitalicio",
+  "Actualizaciones automáticas",
+  "Garantía de 7 días",
+];
 
 const BUYERS = [
   "Juan Mendoza", "Carlos Rodríguez", "Sofía García", "Mateo López", "Valentina Peña", 
@@ -75,7 +87,7 @@ function PurchaseNotification() {
   useEffect(() => {
     const showNotification = () => {
       const name = BUYERS[Math.floor(Math.random() * BUYERS.length)];
-      const product = Math.random() > 0.3 ? "Plan Premium" : "Plan Básico";
+      const product = "la Plataforma Completa";
       setPurchase({ name, product });
       setShowConfetti(true);
       
@@ -187,7 +199,7 @@ function fireEvent(name: string, value?: number) {
 }
 
 function goCheckout(url: string) {
-  fireEvent("InitiateCheckout", url === PREMIUM_CHECKOUT_URL ? 5.50 : 4.50);
+  fireEvent("InitiateCheckout", 6.5);
   
   if (typeof window !== "undefined") {
     const searchParams = new URLSearchParams(window.location.search);
@@ -255,7 +267,6 @@ function Index() {
   const { mm, ss } = useCountdown(29);
   const viewers = useLiveViewers();
   const [showPremiumPopout, setShowPremiumPopout] = useState(false);
-  const [showBasicPopout, setShowBasicPopout] = useState(false);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
 
   useEffect(() => {
@@ -275,16 +286,6 @@ function Index() {
     setShowPremiumPopout(true);
   }, []);
 
-  const openBasicOffer = useCallback(() => {
-    setShowBasicPopout(true);
-  }, []);
-
-  const handleClosePremium = useCallback(() => {
-    setShowPremiumPopout(false);
-    setTimeout(() => {
-      setShowBasicPopout(true);
-    }, 300);
-  }, []);
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] antialiased overflow-x-hidden">
@@ -677,36 +678,28 @@ function Index() {
       <section id="oferta" className="px-5 py-16 sm:py-20 bg-gradient-to-b from-[#0a0a0a] to-[#0f172a] text-white scroll-mt-16">
         <div className="max-w-[1100px] mx-auto">
           <div className="text-center mb-10 sm:mb-14">
-            <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">🔥 Precio Especial Solo Hoy</p>
+            <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">🔥 Precio especial de lanzamiento</p>
             <h2 className="font-black uppercase text-[clamp(26px,5vw,44px)] leading-tight mb-4">
-              Elige tu paquete y <span className="text-[#facc15]">empieza ahora</span>
+              La plataforma completa por <span className="text-[#facc15]">US$ 6,50</span>
             </h2>
             <p className="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base">
-              Precio promocional válido <b className="text-white">solo por hoy</b>. Mañana vuelve al valor normal, no dejes escapar esta oportunidad.
+              Precio especial de lanzamiento: <b className="text-white">US$ 6,50</b>. Esta condición promocional puede cambiar en cualquier momento.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-[960px] mx-auto">
-            {/* Plan Premium - On page */}
-            <div className="relative group bg-white rounded-[32px] p-6 sm:p-8 flex flex-col border-2 border-[#16a34a] shadow-[0_20px_50px_-12px_rgba(22,163,74,0.3)] transform transition-all duration-500 hover:scale-[1.02]">
+          <div className="max-w-[520px] mx-auto">
+            <div className="relative bg-white rounded-[32px] p-6 sm:p-8 flex flex-col border-2 border-[#16a34a] shadow-[0_20px_50px_-12px_rgba(22,163,74,0.3)] transition-all duration-500 hover:scale-[1.02]">
               <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#16a34a] text-white px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest shadow-lg flex items-center gap-2 whitespace-nowrap">
                 <Sparkles className="w-4 h-4 text-[#facc15]" />
-                RECOMENDADO · MEJOR VALOR
-              </div>
-              
-              <div className="mb-8">
-                <h3 className="text-[#0a0a0a] font-black uppercase text-2xl sm:text-3xl mb-1">Plan Premium</h3>
-                <p className="text-slate-500 font-bold italic text-sm">Biblioteca Completa + Todos los Bonos</p>
+                PLATAFORMA COMPLETA
               </div>
 
-              <div className="space-y-4 mb-10 flex-grow">
-                {[
-                  "+2.000 Ejercicios Profesionales",
-                  "4 Bonos Sorpresa Incluidos",
-                  "Acceso Vitalicio e Inmediato",
-                  "Actualizaciones Automáticas",
-                  "Garantía de 7 Días",
-                ].map((item) => (
+              <p className="text-[#0f172a] text-sm sm:text-base font-medium leading-relaxed mt-4 mb-6">
+                {OFFER_COPY}
+              </p>
+
+              <div className="space-y-3 mb-8">
+                {OFFER_ITEMS.map((item) => (
                   <div key={item} className="flex items-center gap-3">
                     <div className="bg-[#16a34a] rounded-full p-1 shrink-0">
                       <CheckCircle2 className="w-3.5 h-3.5 text-white" />
@@ -717,125 +710,50 @@ function Index() {
               </div>
 
               <div className="bg-slate-50 rounded-2xl p-6 mb-8 border border-slate-100">
-                <p className="text-slate-400 font-bold text-xl line-through leading-none">$29.90</p>
+                <p className="text-slate-400 font-bold text-xl line-through leading-none">US$ 29,90</p>
                 <div className="flex items-baseline gap-2 mt-1">
-                  <span className="text-5xl font-black text-[#0f172a]">$5.50</span>
+                  <span className="text-5xl font-black text-[#0f172a]">US$ 6,50</span>
                   <span className="text-2xl font-black text-[#16a34a]">USD</span>
                 </div>
-                <div className="mt-4 flex items-center gap-3">
-                  <div className="bg-[#facc15] text-[#0a0a0a] px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider shadow-sm">
-                    Ahorras 81%
-                  </div>
-                  <div className="flex items-center gap-1 text-[#dc2626] font-black text-xs uppercase tracking-tight animate-pulse">
-                    <Clock className="w-4 h-4" /> Oferta por tiempo limitado
-                  </div>
-                </div>
+                <p className="text-[#0f172a] font-black text-sm mt-3">Pago único · Acceso vitalicio</p>
+                <p className="text-slate-500 font-bold text-xs mt-1">Acceso inmediato a la plataforma completa</p>
               </div>
 
               <button
                 onClick={openPremiumOffer}
-                className="w-full bg-[#16a34a] hover:bg-[#15803d] active:scale-[0.98] text-white font-black uppercase py-5 rounded-2xl shadow-[0_10px_25px_-5px_rgba(22,163,74,0.4)] transition-all flex items-center justify-center gap-3 text-lg"
+                className="w-full bg-[#16a34a] hover:bg-[#15803d] active:scale-[0.98] text-white font-black uppercase py-5 px-3 rounded-2xl shadow-[0_10px_25px_-5px_rgba(22,163,74,0.4)] transition-all flex items-center justify-center gap-2 text-base sm:text-lg"
               >
-                Quiero el Plan Premium
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Plan Fútbol 360 - On page */}
-            <div className="relative group bg-slate-900 rounded-[32px] p-6 sm:p-8 flex flex-col border-2 border-slate-800 shadow-2xl transform transition-all duration-500 hover:scale-[1.02]">
-              <div className="mb-8">
-                <h3 className="text-white font-black uppercase text-2xl sm:text-3xl mb-1">Fútbol 360</h3>
-                <p className="text-slate-400 font-bold italic text-sm">Acceso Esencial al Método</p>
-              </div>
-
-              <div className="bg-blue-500/10 border border-blue-500/20 p-4 rounded-2xl mb-8">
-                <div className="flex items-center gap-2 text-blue-400 mb-2">
-                  <Target className="w-5 h-5" />
-                  <p className="font-black uppercase text-xs tracking-wider">¿Qué incluye?</p>
-                </div>
-                <p className="text-slate-300 text-sm font-bold leading-relaxed">
-                  Entrenamiento completo para niños, mujeres y preparación física; mejora en todas las áreas.
-                </p>
-              </div>
-
-              <div className="space-y-3 mb-10 flex-grow">
-                {[
-                  "Ejercicios Seleccionados",
-                  "Preparación Física Base",
-                  "Ideal para Niños y Mujeres",
-                  "Acceso Inmediato",
-                ].map((item) => (
-                  <div key={item} className="flex items-center gap-3">
-                    <div className="bg-white/10 rounded-full p-1 shrink-0">
-                      <CheckCircle2 className="w-3 h-3 text-white/50" />
-                    </div>
-                    <span className="text-slate-300 font-bold text-sm tracking-tight">{item}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="bg-white/5 rounded-2xl p-6 mb-8 border border-white/10 flex items-center justify-between">
-                <div>
-                  <p className="text-slate-500 font-bold text-lg line-through leading-none">$19.90</p>
-                  <div className="flex items-baseline gap-1.5 mt-1">
-                    <span className="text-4xl font-black text-white">$4.50</span>
-                    <span className="text-xl font-black text-slate-400">USD</span>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="bg-white/10 text-white/80 px-2.5 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider mb-2">
-                    Económico
-                  </div>
-                  <p className="text-slate-400 font-black text-xs uppercase tracking-tight">77% OFF</p>
-                </div>
-              </div>
-
-              <button
-                onClick={openBasicOffer}
-                className="w-full bg-white hover:bg-slate-100 active:scale-[0.98] text-[#0a0a0a] font-black uppercase py-5 rounded-2xl shadow-xl transition-all flex items-center justify-center gap-3 text-lg"
-              >
-                Quiero el Plan Básico
-                <ArrowRight className="w-5 h-5" />
+                Quiero la plataforma completa · US$ 6,50
+                <ArrowRight className="w-5 h-5 shrink-0" />
               </button>
             </div>
           </div>
 
-
-      {/* Pop-out Premium */}
-      <Dialog open={showPremiumPopout} onOpenChange={(open) => {
-        if (!open) handleClosePremium();
-        else setShowPremiumPopout(true);
-      }}>
+      <Dialog open={showPremiumPopout} onOpenChange={setShowPremiumPopout}>
         <DialogContent className="max-w-[92vw] sm:max-w-[450px] max-h-[90vh] overflow-y-auto p-0 border-none rounded-3xl bg-white shadow-2xl">
           <div className="bg-[#16a34a] p-4 text-center relative">
-            <button 
-              onClick={handleClosePremium}
+            <button
+              onClick={() => setShowPremiumPopout(false)}
               className="absolute right-4 top-4 text-white/80 hover:text-white transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
             <div className="bg-white/20 backdrop-blur rounded-full px-4 py-1.5 inline-flex items-center gap-2 mb-2">
               <Sparkles className="w-4 h-4 text-[#facc15]" />
-              <span className="text-white text-xs font-black uppercase tracking-wider">Oportunidad Única</span>
+              <span className="text-white text-xs font-black uppercase tracking-wider">Precio de lanzamiento</span>
             </div>
-            <h2 className="text-white font-black uppercase text-2xl leading-tight">Plan Premium</h2>
-            <p className="text-white/90 text-sm font-medium italic mt-1">+2.000 Ejercicios + Todos los Bonos</p>
+            <h2 className="text-white font-black uppercase text-2xl leading-tight">Plataforma Completa</h2>
+            <p className="text-white/90 text-sm font-medium italic mt-1">Acceso inmediato a la plataforma completa</p>
           </div>
 
           <div className="p-6">
-            <div className="flex items-center gap-2 text-red-600 mb-6 bg-red-50 p-3 rounded-2xl border border-red-100 animate-pulse">
+            <div className="flex items-center gap-2 text-red-600 mb-5 bg-red-50 p-3 rounded-2xl border border-red-100 animate-pulse">
               <Clock className="w-5 h-5" />
               <p className="text-sm font-black uppercase tracking-tight">¡Vence en {mm}:{ss}!</p>
             </div>
 
-            <div className="grid grid-cols-1 gap-3 mb-6">
-              {[
-                "+2.000 Ejercicios Profesionales",
-                "4 Bonos Sorpresa Incluidos",
-                "Acceso Vitalicio e Inmediato",
-                "Actualizaciones Automáticas",
-                "Garantía de 7 Días",
-              ].map((item) => (
+            <div className="grid grid-cols-1 gap-2.5 mb-6">
+              {OFFER_ITEMS.map((item) => (
                 <div key={item} className="flex items-center gap-3">
                   <div className="bg-[#16a34a] rounded-full p-1 shrink-0">
                     <CheckCircle2 className="w-3.5 h-3.5 text-white" />
@@ -845,106 +763,26 @@ function Index() {
               ))}
             </div>
 
-            <div className="bg-slate-50 rounded-2xl p-5 mb-8 border border-slate-100">
-              <p className="text-slate-400 font-bold text-lg line-through leading-none">$29.90</p>
+            <div className="bg-slate-50 rounded-2xl p-5 mb-6 border border-slate-100">
+              <p className="text-slate-400 font-bold text-lg line-through leading-none">US$ 29,90</p>
               <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-4xl font-black text-[#0f172a]">$5.50</span>
+                <span className="text-4xl font-black text-[#0f172a]">US$ 6,50</span>
                 <span className="text-xl font-black text-[#16a34a]">USD</span>
               </div>
-              <div className="mt-3 flex items-center gap-2">
-                <div className="bg-[#facc15] text-[#0a0a0a] px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-wider">
-                  Mejor Oferta
-                </div>
-                <p className="text-[#dc2626] font-black text-xs uppercase tracking-tight">Ahorras 81%</p>
-              </div>
+              <p className="text-[#0f172a] font-black text-sm mt-2">Pago único · Acceso vitalicio</p>
+              <p className="text-slate-500 text-xs mt-2">Precio especial de lanzamiento: US$ 6,50. Esta condición promocional puede cambiar en cualquier momento.</p>
             </div>
 
             <button
               onClick={() => goCheckout(PREMIUM_CHECKOUT_URL)}
-              className="w-full bg-[#16a34a] hover:bg-[#15803d] text-white font-black uppercase py-5 rounded-2xl shadow-xl shadow-green-200 transition-all flex items-center justify-center gap-3 group text-lg"
+              className="w-full bg-[#16a34a] hover:bg-[#15803d] text-white font-black uppercase py-5 px-3 rounded-2xl shadow-xl shadow-green-200 transition-all flex items-center justify-center gap-2 group text-base sm:text-lg"
             >
-              Quiero el Plan Premium
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              Quiero la plataforma completa · US$ 6,50
+              <ArrowRight className="w-5 h-5 shrink-0 group-hover:translate-x-1 transition-transform" />
             </button>
-            
+
             <p className="text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-4 flex items-center justify-center gap-2">
               <Lock className="w-3.5 h-3.5" /> Pago 100% Seguro · Acceso Instantáneo
-            </p>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Pop-out Basic */}
-      <Dialog open={showBasicPopout} onOpenChange={setShowBasicPopout}>
-        <DialogContent className="max-w-[92vw] sm:max-w-[450px] max-h-[90vh] overflow-y-auto p-0 border-none rounded-3xl bg-white shadow-2xl">
-          <div className="bg-slate-900 p-4 text-center relative">
-            <button 
-              onClick={() => setShowBasicPopout(false)}
-              className="absolute right-4 top-4 text-white/50 hover:text-white transition-colors"
-            >
-              <X className="w-6 h-6" />
-            </button>
-            <div className="bg-white/10 backdrop-blur rounded-full px-4 py-1.5 inline-flex items-center gap-2 mb-2">
-              <Target className="w-4 h-4 text-[#facc15]" />
-              <span className="text-white text-xs font-black uppercase tracking-wider">Acceso Esencial</span>
-            </div>
-            <h2 className="text-white font-black uppercase text-2xl leading-tight">Plan Fútbol 360</h2>
-            <p className="text-white/70 text-sm font-medium italic mt-1">Lo básico para empezar a ganar</p>
-          </div>
-
-          <div className="p-6">
-            <div className="bg-blue-50 border border-blue-100 p-4 rounded-2xl mb-6">
-              <div className="flex items-center gap-2 text-blue-600 mb-2">
-                <TrendingUp className="w-5 h-5" />
-                <p className="font-black uppercase text-xs tracking-wider">¿Qué es Fútbol 360?</p>
-              </div>
-              <p className="text-[#0f172a] text-sm font-bold leading-relaxed">
-                Entrenamiento completo para niños, mujeres y preparación física, todo en un mismo lugar; mejora en todas las áreas del fútbol.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-2.5 mb-6">
-              {[
-                "Ejercicios Seleccionados",
-                "Preparación Física Base",
-                "Ideal para Niños y Mujeres",
-                "Acceso Inmediato",
-              ].map((item) => (
-                <div key={item} className="flex items-center gap-3">
-                  <div className="bg-slate-200 rounded-full p-1 shrink-0">
-                    <CheckCircle2 className="w-3 h-3 text-slate-600" />
-                  </div>
-                  <span className="text-slate-600 font-bold text-sm tracking-tight">{item}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="bg-slate-50 rounded-2xl p-5 mb-8 border border-slate-100 flex items-center justify-between">
-              <div>
-                <p className="text-slate-400 font-bold text-sm line-through leading-none">$19.90</p>
-                <div className="flex items-baseline gap-1.5 mt-1">
-                  <span className="text-3xl font-black text-[#0f172a]">$4.50</span>
-                  <span className="text-lg font-black text-slate-500">USD</span>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="bg-slate-200 text-slate-600 px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-wider mb-1">
-                  Económico
-                </div>
-                <p className="text-slate-400 font-black text-xs uppercase tracking-tight">Ahorras 77%</p>
-              </div>
-            </div>
-
-            <button
-              onClick={() => goCheckout(BASIC_CHECKOUT_URL)}
-              className="w-full bg-slate-900 hover:bg-black text-white font-black uppercase py-5 rounded-2xl shadow-xl transition-all flex items-center justify-center gap-3 group text-lg"
-            >
-              Quiero el Plan Básico
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-            
-            <p className="text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-4">
-              ✅ Acceso 100% Digital e Inmediato
             </p>
           </div>
         </DialogContent>
@@ -1078,13 +916,7 @@ function Index() {
             onClick={openPremiumOffer}
             className="flex-1 bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[13px] py-3.5 px-2 rounded-xl shadow-lg flex items-center justify-center gap-2"
           >
-            <Zap className="w-4 h-4 fill-current" /> Plan Premium
-          </button>
-          <button
-            onClick={openBasicOffer}
-            className="flex-1 bg-slate-900 hover:bg-black active:scale-[0.98] transition-all text-white font-black uppercase text-[13px] py-3.5 px-2 rounded-xl shadow-lg flex items-center justify-center gap-2"
-          >
-            Plan Básico
+            <Zap className="w-4 h-4 fill-current" /> Quiero la plataforma completa · US$ 6,50
           </button>
         </div>
       </div>

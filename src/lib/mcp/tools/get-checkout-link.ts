@@ -10,9 +10,9 @@ export default defineTool({
     content: [
       {
         type: "text",
-        text: "Checkout: https://pay.hotmart.com/",
+        text: "Checkout: https://pay.hotmart.com/P107284207G?checkoutMode=10",
       },
     ],
-    structuredContent: { checkout_url: "https://pay.hotmart.com/" },
+    structuredContent: { checkout_url: "https://pay.hotmart.com/P107284207G?checkoutMode=10" },
   }),
 });
