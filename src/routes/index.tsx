@@ -688,6 +688,13 @@ function Index() {
                 PAQUETE BÁSICO
               </div>
               <h3 className="mt-4 text-center text-2xl font-black uppercase text-[#0f172a]">Plan básico</h3>
+              <img
+                src={methodList}
+                alt="Vista previa del material incluido en el plan básico"
+                className="mt-5 max-h-56 w-full rounded-2xl border border-slate-100 bg-slate-50 object-contain shadow-sm"
+                loading="lazy"
+                decoding="async"
+              />
               <p className="mt-4 text-center text-sm leading-relaxed text-slate-600">
                 Acceso a la opción básica de 2000 Ejercicios de Fútbol. Revisa el contenido, precio y condiciones de este plan directamente en el checkout seguro de Hotmart antes de confirmar.
               </p>
