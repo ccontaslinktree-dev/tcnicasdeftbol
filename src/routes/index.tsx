@@ -61,7 +61,7 @@ import featPasses from "@/assets/feature-passes.jpg";
 const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/G107438250J?checkoutMode=10";
 const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/A107783439V?checkoutMode=10";
 const OFFER_COPY =
-  "Accede a la plataforma completa con más de 2.000 ejercicios, más de 250 sesiones completas en video y 4 bonos exclusivos. Todo organizado dentro de una sola plataforma para que dejes de improvisar y empieces a entrenar como un profesional. Tu entrega: una plataforma completa, organizada por posición y categoría, con +2.000 ejercicios y +250 sesiones, todo en video y en un único lugar.";
+  "Accede a la plataforma completa con más de 2.000 ejercicios, más de 250 sesiones completas en video y 4 bonos exclusivos. Todo organizado para que dejes de improvisar y empieces a entrenar como un profesional.";
 const OFFER_ITEMS = [
   "+2.000 ejercicios profesionales",
   "+250 sesiones completas en video",
@@ -688,6 +688,12 @@ function Index() {
             </p>
           </div>
 
+          <div className="mx-auto mb-8 max-w-[900px] rounded-2xl border border-[#facc15]/50 bg-white/10 px-5 py-4 text-center shadow-lg">
+            <p className="text-base font-bold leading-relaxed text-white sm:text-lg">
+              Tu entrega: una plataforma completa, organizada por posición y categoría, con <span className="text-[#facc15]">+2.000 ejercicios y +250 sesiones</span>, todo en video y en un único lugar.
+            </p>
+          </div>
+
           <div className="mx-auto grid max-w-[1050px] grid-cols-1 items-stretch gap-6 lg:grid-cols-2">
             <div className="relative flex flex-col rounded-[32px] border border-slate-200 bg-white p-6 shadow-xl sm:p-8">
               <div className="absolute -top-5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-slate-700 px-6 py-2 text-xs font-black uppercase tracking-widest text-white shadow-lg">
@@ -932,18 +938,18 @@ function Index() {
           isFooterVisible ? 'translate-y-0' : 'translate-y-full'
         }`}
       >
-        <div className="max-w-[560px] mx-auto flex gap-2">
+        <div className="mx-auto grid w-full max-w-[700px] grid-cols-2 gap-2 sm:gap-3">
           <button
             onClick={() => goCheckout(BASIC_CHECKOUT_URL)}
-            className="rounded-xl border border-slate-300 bg-white px-3 py-3.5 text-[11px] font-black uppercase text-slate-700 shadow-lg sm:flex-1 sm:text-[13px]"
+            className="w-full min-w-0 rounded-xl border border-slate-300 bg-white px-2 py-3 text-[10px] font-black uppercase leading-tight text-slate-700 shadow-lg sm:px-3 sm:py-3.5 sm:text-[13px]"
           >
             Plan básico
           </button>
           <button
             onClick={openPremiumOffer}
-            className="flex-1 bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[12px] py-3.5 px-2 rounded-xl shadow-lg flex items-center justify-center gap-2 sm:text-[13px]"
+            className="flex w-full min-w-0 items-center justify-center gap-1.5 rounded-xl bg-[#facc15] px-2 py-3 text-[10px] font-black uppercase leading-tight text-[#0a0a0a] shadow-lg transition-all hover:bg-[#eab308] active:scale-[0.98] sm:gap-2 sm:px-3 sm:py-3.5 sm:text-[13px]"
           >
-            <Zap className="w-4 h-4 fill-current" /> Plataforma completa · US$ 6,50
+            <Zap className="h-4 w-4 shrink-0 fill-current" /> <span>Plataforma completa · US$ 6,50</span>
           </button>
         </div>
       </div>
