@@ -160,3 +160,36 @@ div[style*="Edit with Lovable"],
     color: var(--color-foreground);
   }
 }
+
+/* Scoped theme for the /soporte help center only */
+.support-theme {
+  --background: oklch(0.17 0.03 255);
+  --foreground: oklch(0.97 0.01 250);
+  --card: oklch(0.22 0.035 255);
+  --card-foreground: oklch(0.97 0.01 250);
+  --popover: oklch(0.22 0.035 255);
+  --popover-foreground: oklch(0.97 0.01 250);
+  --primary: oklch(0.8 0.2 150);
+  --primary-foreground: oklch(0.17 0.03 255);
+  --secondary: oklch(0.27 0.035 255);
+  --secondary-foreground: oklch(0.97 0.01 250);
+  --muted: oklch(0.26 0.03 255);
+  --muted-foreground: oklch(0.72 0.03 250);
+  --accent: oklch(0.3 0.06 160);
+  --accent-foreground: oklch(0.95 0.05 150);
+  --destructive: oklch(0.68 0.2 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.8 0.2 150);
+  font-family: "Manrope", system-ui, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+.support-theme .font-display { font-family: "Barlow Condensed", "Manrope", sans-serif; letter-spacing: 0.01em; }
+.support-pitch {
+  background-image:
+    radial-gradient(circle at 50% 0%, oklch(0.8 0.2 150 / 0.18), transparent 55%),
+    linear-gradient(to right, oklch(1 0 0 / 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 80px 100%;
+}
