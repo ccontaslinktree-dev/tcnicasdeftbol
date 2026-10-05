@@ -58,7 +58,8 @@ import featAgilidad from "@/assets/feature-agilidad.jpg";
 import featChutes from "@/assets/feature-chutes.jpg";
 import featPasses from "@/assets/feature-passes.jpg";
 
-const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/P107284207G?checkoutMode=10";
+const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/G107438250J?checkoutMode=10";
+const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/A107783439V?checkoutMode=10";
 const OFFER_COPY =
   "Accede a la plataforma completa con más de 2.000 ejercicios, más de 250 sesiones completas en video y 4 bonos exclusivos. Todo organizado dentro de una sola plataforma para que dejes de improvisar y empieces a entrenar como un profesional.";
 const OFFER_ITEMS = [
@@ -198,8 +199,8 @@ function fireEvent(name: string, value?: number) {
   }).catch(() => {});
 }
 
-function goCheckout(url: string) {
-  fireEvent("InitiateCheckout", 6.5);
+function goCheckout(url: string, value?: number) {
+  fireEvent("InitiateCheckout", value);
   
   if (typeof window !== "undefined") {
     const searchParams = new URLSearchParams(window.location.search);
@@ -678,16 +679,36 @@ function Index() {
       <section id="oferta" className="px-5 py-16 sm:py-20 bg-gradient-to-b from-[#0a0a0a] to-[#0f172a] text-white scroll-mt-16">
         <div className="max-w-[1100px] mx-auto">
           <div className="text-center mb-10 sm:mb-14">
-            <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">🔥 Precio especial de lanzamiento</p>
+            <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">🔥 Elige la opción que mejor se adapta a ti</p>
             <h2 className="font-black uppercase text-[clamp(26px,5vw,44px)] leading-tight mb-4">
-              La plataforma completa por <span className="text-[#facc15]">US$ 6,50</span>
+              Plan básico o <span className="text-[#facc15]">plataforma completa</span>
             </h2>
             <p className="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base">
-              Precio especial de lanzamiento: <b className="text-white">US$ 6,50</b>. Esta condición promocional puede cambiar en cualquier momento.
+              El plan completo cuesta <b className="text-white">US$ 6,50</b>. El precio y los detalles del plan básico se muestran en su checkout de Hotmart.
             </p>
           </div>
 
-          <div className="max-w-[520px] mx-auto">
+          <div className="mx-auto grid max-w-[1050px] grid-cols-1 items-stretch gap-6 lg:grid-cols-2">
+            <div className="relative flex flex-col rounded-[32px] border border-slate-200 bg-white p-6 shadow-xl sm:p-8">
+              <div className="absolute -top-5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-slate-700 px-6 py-2 text-xs font-black uppercase tracking-widest text-white shadow-lg">
+                PAQUETE BÁSICO
+              </div>
+              <h3 className="mt-4 text-center text-2xl font-black uppercase text-[#0f172a]">Plan básico</h3>
+              <p className="mt-4 text-center text-sm leading-relaxed text-slate-600">
+                Acceso a la opción básica de 2000 Ejercicios de Fútbol. Revisa el contenido, precio y condiciones de este plan directamente en el checkout seguro de Hotmart antes de confirmar.
+              </p>
+              <div className="mt-auto pt-8">
+                <button
+                  onClick={() => goCheckout(BASIC_CHECKOUT_URL)}
+                  className="w-full rounded-2xl border-2 border-[#16a34a] px-4 py-4 text-base font-black uppercase text-[#15803d] transition hover:bg-green-50 active:scale-[0.98]"
+                >
+                  Ver plan básico en Hotmart
+                  <ArrowRight className="ml-2 inline h-5 w-5" />
+                </button>
+                <p className="mt-3 text-center text-xs text-slate-500">Pago procesado de forma segura por Hotmart</p>
+              </div>
+            </div>
+
             <div className="relative bg-white rounded-[32px] p-6 sm:p-8 flex flex-col border-2 border-[#16a34a] shadow-[0_20px_50px_-12px_rgba(22,163,74,0.3)] transition-all duration-500 hover:scale-[1.02]">
               <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#16a34a] text-white px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest shadow-lg flex items-center gap-2 whitespace-nowrap">
                 <Sparkles className="w-4 h-4 text-[#facc15]" />
@@ -774,7 +795,7 @@ function Index() {
             </div>
 
             <button
-              onClick={() => goCheckout(PREMIUM_CHECKOUT_URL)}
+              onClick={() => goCheckout(PREMIUM_CHECKOUT_URL, 6.5)}
               className="w-full bg-[#16a34a] hover:bg-[#15803d] text-white font-black uppercase py-5 px-3 rounded-2xl shadow-xl shadow-green-200 transition-all flex items-center justify-center gap-2 group text-base sm:text-lg"
             >
               Quiero la plataforma completa · US$ 6,50
@@ -913,10 +934,16 @@ function Index() {
       >
         <div className="max-w-[560px] mx-auto flex gap-2">
           <button
-            onClick={openPremiumOffer}
-            className="flex-1 bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[13px] py-3.5 px-2 rounded-xl shadow-lg flex items-center justify-center gap-2"
+            onClick={() => goCheckout(BASIC_CHECKOUT_URL)}
+            className="rounded-xl border border-slate-300 bg-white px-3 py-3.5 text-[11px] font-black uppercase text-slate-700 shadow-lg sm:flex-1 sm:text-[13px]"
           >
-            <Zap className="w-4 h-4 fill-current" /> Quiero la plataforma completa · US$ 6,50
+            Plan básico
+          </button>
+          <button
+            onClick={openPremiumOffer}
+            className="flex-1 bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[12px] py-3.5 px-2 rounded-xl shadow-lg flex items-center justify-center gap-2 sm:text-[13px]"
+          >
+            <Zap className="w-4 h-4 fill-current" /> Plataforma completa · US$ 6,50
           </button>
         </div>
       </div>
