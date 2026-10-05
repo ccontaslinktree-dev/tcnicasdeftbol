@@ -429,19 +429,7 @@ function Index() {
           <p className="text-slate-600 max-w-2xl mx-auto mb-8 text-sm sm:text-lg font-medium">
             Entrenamientos físicos, tácticas, dribles, agilidad, chutes y mucho más... listos para aplicar
           </p>
-          
-          <div className="relative rounded-[2rem] overflow-hidden shadow-2xl bg-[#0f172a] max-w-[380px] mx-auto border-8 border-[#f1f5f9]">
-            <div className="aspect-[9/16] w-full">
-              <iframe
-                src="https://www.youtube.com/embed/uGwcBN7Fw7Y?modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&controls=1"
-                title="Vista previa del material"
-                className="w-full h-full"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
-          </div>
+
 
           <div className="mt-10 sm:mt-12">
             <button
