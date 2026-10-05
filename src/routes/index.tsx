@@ -61,7 +61,7 @@ import featPasses from "@/assets/feature-passes.jpg";
 const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/G107438250J?checkoutMode=10";
 const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/A107783439V?checkoutMode=10";
 const OFFER_COPY =
-  "Accede a la plataforma completa con más de 2.000 ejercicios, más de 250 sesiones completas en video y 4 bonos exclusivos. Todo organizado dentro de una sola plataforma para que dejes de improvisar y empieces a entrenar como un profesional.";
+  "Accede a la plataforma completa con más de 2.000 ejercicios, más de 250 sesiones completas en video y 4 bonos exclusivos. Todo organizado dentro de una sola plataforma para que dejes de improvisar y empieces a entrenar como un profesional. Tu entrega: una plataforma completa, organizada por posición y categoría, con +2.000 ejercicios y +250 sesiones, todo en video y en un único lugar.";
 const OFFER_ITEMS = [
   "+2.000 ejercicios profesionales",
   "+250 sesiones completas en video",
