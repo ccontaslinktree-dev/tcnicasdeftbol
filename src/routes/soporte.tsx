@@ -617,7 +617,7 @@ function TeamPanel({ token }: { token: string }) {
               Estado: <strong>{STATUS_LABEL[created.status] ?? created.status}</strong>
             </p>
             <p className="mx-auto mt-3 max-w-sm text-sm text-muted-foreground">
-              El equipo revisará tu caso y te escribirá al email que indicaste.
+              Tu ticket quedó registrado. Guarda la referencia para consultar el estado aquí usando tu email.
             </p>
             <button onClick={() => setCreated(null)} className="mt-5 rounded-lg border border-border px-4 py-2 text-sm font-semibold">
               Crear otro ticket
