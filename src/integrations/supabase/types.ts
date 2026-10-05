@@ -14,7 +14,98 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      support_chat_messages: {
+        Row: {
+          created_at: string
+          id: string
+          message: Json
+          role: string
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: Json
+          role: string
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: Json
+          role?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_chat_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "support_chat_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_chat_sessions: {
+        Row: {
+          client_token: string
+          created_at: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          client_token: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          client_token?: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      support_tickets: {
+        Row: {
+          client_token: string
+          created_at: string
+          description: string
+          email: string
+          id: string
+          name: string
+          reference: string
+          status: string
+          topic: string
+          updated_at: string
+        }
+        Insert: {
+          client_token: string
+          created_at?: string
+          description: string
+          email: string
+          id?: string
+          name: string
+          reference: string
+          status?: string
+          topic: string
+          updated_at?: string
+        }
+        Update: {
+          client_token?: string
+          created_at?: string
+          description?: string
+          email?: string
+          id?: string
+          name?: string
+          reference?: string
+          status?: string
+          topic?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
