@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import type { UIMessage } from "ai";
 import { TICKET_TOPICS } from "./knowledge";
 
 const token = z.string().uuid();
@@ -13,7 +14,7 @@ export const loadChatHistory = createServerFn({ method: "POST" })
       .select("id")
       .eq("client_token", data.token)
       .maybeSingle();
-    if (!s) return { messages: [] as unknown[] };
+    if (!s) return { messages: [] as UIMessage[] };
     const { data: rows, error } = await supabaseAdmin
       .from("support_chat_messages")
       .select("message")
@@ -21,7 +22,7 @@ export const loadChatHistory = createServerFn({ method: "POST" })
       .order("created_at")
       .limit(100);
     if (error) throw new Error("No se pudo cargar la conversación");
-    return { messages: (rows ?? []).map((r) => r.message) as unknown[] };
+    return { messages: (rows ?? []).map((r) => r.message) as UIMessage[] };
   });
 
 export const clearChatHistory = createServerFn({ method: "POST" })
