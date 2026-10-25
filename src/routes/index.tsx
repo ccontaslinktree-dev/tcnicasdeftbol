@@ -48,7 +48,7 @@ import featAgilidad from "@/assets/feature-agilidad.jpg";
 import featChutes from "@/assets/feature-chutes.jpg";
 import featPasses from "@/assets/feature-passes.jpg";
 
-const CHECKOUT_URL = "https://pay.hotmart.com/D106764059R?checkoutMode=10";
+const CHECKOUT_URL = "https://pay.hotmart.com/G107438250J?checkoutMode=10";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -111,7 +111,7 @@ function fireEvent(name: string, value?: number) {
 }
 
 function goCheckout(source: string) {
-  fireEvent("InitiateCheckout", 5);
+  fireEvent("InitiateCheckout", 6.5);
   try {
     sessionStorage.setItem("cta_source", source);
   } catch {}
@@ -531,7 +531,7 @@ function Index() {
 
           <div className="bg-white text-[#0f172a] rounded-3xl p-6 sm:p-8 text-left shadow-2xl border-4 border-[#facc15]">
             <div className="bg-[#dc2626] text-white text-xs font-black uppercase tracking-widest inline-block px-3 py-1 rounded-full mb-3">
-              🔥 ¡83% DE DESCUENTO!
+              🔥 ¡78% DE DESCUENTO!
             </div>
             <h3 className="font-black text-2xl mb-1">Paquete Premium</h3>
             <p className="text-sm text-slate-500">+2.000 entrenamientos + 4 bonos exclusivos</p>
@@ -555,9 +555,9 @@ function Index() {
                 De <span className="line-through font-bold">$29,90</span> solo por hoy
               </p>
               <p className="font-black text-5xl text-[#16a34a] mt-1">
-                $5 <span className="text-2xl">USD</span>
+                $6,50 <span className="text-2xl">USD</span>
               </p>
-              <p className="text-sm font-bold text-[#dc2626] mt-1">83% DESCUENTO · Ahorras $24,90</p>
+              <p className="text-sm font-bold text-[#dc2626] mt-1">78% DESCUENTO · Ahorras $23,40</p>
               <p className="text-xs text-slate-500 mt-2">✅ Pago único · Acceso vitalicio</p>
             </div>
 
