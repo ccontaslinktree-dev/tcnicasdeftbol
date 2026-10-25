@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -13,13 +13,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
 import {
   CheckCircle2,
   XCircle,
@@ -36,9 +29,6 @@ import {
   Sparkles,
   Flame,
   Star,
-  ArrowRight,
-  TrendingUp,
-  X,
 } from "lucide-react";
 import heroProduct from "@/assets/hero-product.png";
 import bonus1 from "@/assets/bonus-1.jpg";
@@ -58,86 +48,7 @@ import featAgilidad from "@/assets/feature-agilidad.jpg";
 import featChutes from "@/assets/feature-chutes.jpg";
 import featPasses from "@/assets/feature-passes.jpg";
 
-const PREMIUM_CHECKOUT_URL = "https://pay.hotmart.com/G107438250J?checkoutMode=10";
-const BASIC_CHECKOUT_URL = "https://pay.hotmart.com/A107783439V?checkoutMode=10";
-const OFFER_COPY =
-  "Accede a la plataforma completa con más de 2.000 ejercicios, más de 250 sesiones completas en video y 4 bonos exclusivos. Todo organizado para que dejes de improvisar y empieces a entrenar como un profesional.";
-const OFFER_ITEMS = [
-  "+2.000 ejercicios profesionales",
-  "+250 sesiones completas en video",
-  "Todo el material dentro de la plataforma",
-  "Entrenamientos organizados por posición y categoría",
-  "4 bonos exclusivos",
-  "Acceso inmediato",
-  "Acceso vitalicio",
-  "Actualizaciones automáticas",
-  "Garantía de 7 días",
-];
-
-const BUYERS = [
-  "Juan Mendoza", "Carlos Rodríguez", "Sofía García", "Mateo López", "Valentina Peña", 
-  "Lucas Blanco", "Martina Silva", "Thiago Díaz", "Isabella Méndez", "Joaquín Valenzuela",
-  "Elena Figueroa", "Nicolás Torres", "Camila Ortiz", "Bautista Herrera", "Victoria Quintana",
-  "Facundo Morales", "Julieta Romero", "Santiago Castro", "Lucía Navarro", "Diego Acosta"
-];
-
-function PurchaseNotification() {
-  const [purchase, setPurchase] = useState<{name: string, product: string} | null>(null);
-  const [showConfetti, setShowConfetti] = useState(false);
-
-  useEffect(() => {
-    const showNotification = () => {
-      const name = BUYERS[Math.floor(Math.random() * BUYERS.length)];
-      const product = "la Plataforma Completa";
-      setPurchase({ name, product });
-      setShowConfetti(true);
-      
-      setTimeout(() => setPurchase(null), 5000);
-      setTimeout(() => setShowConfetti(false), 3000);
-    };
-
-    const timer = setInterval(() => {
-      if (Math.random() > 0.4) showNotification();
-    }, 8000);
-
-    // Show one shortly after load
-    const initial = setTimeout(showNotification, 5000);
-
-    return () => {
-      clearInterval(timer);
-      clearTimeout(initial);
-    };
-  }, []);
-
-  if (!purchase) return null;
-
-  return (
-    <>
-      {showConfetti && (
-        <div className="fixed inset-0 pointer-events-none z-[200] flex items-center justify-center">
-          <div className="absolute top-1/4 left-1/4 animate-bounce text-2xl">🎉</div>
-          <div className="absolute top-1/3 right-1/4 animate-bounce delay-75 text-2xl">⭐</div>
-          <div className="absolute bottom-1/4 left-1/3 animate-bounce delay-150 text-2xl">🔥</div>
-          <div className="absolute bottom-1/3 right-1/3 animate-bounce delay-300 text-2xl">⚽</div>
-        </div>
-      )}
-      <div className="fixed bottom-4 left-4 z-[100] animate-in fade-in slide-in-from-left-10 duration-500">
-        <div className="bg-white rounded-2xl p-4 shadow-2xl border border-slate-200 flex items-center gap-3 max-w-[280px]">
-          <div className="w-10 h-10 bg-[#16a34a] rounded-full flex items-center justify-center shrink-0">
-            <CheckCircle2 className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <p className="text-xs font-black text-[#0f172a]">{purchase.name} acaba de inscribirse</p>
-            <p className="text-[11px] text-[#16a34a] font-bold">{purchase.product}</p>
-            <p className="text-[9px] text-slate-400 mt-0.5 flex items-center gap-1">
-              <Clock className="w-2.5 h-2.5" /> hace unos segundos
-            </p>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
+const CHECKOUT_URL = "https://pay.hotmart.com/D106764059R?checkoutMode=10";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -199,33 +110,19 @@ function fireEvent(name: string, value?: number) {
   }).catch(() => {});
 }
 
-function goCheckout(url: string, value?: number) {
-  fireEvent("InitiateCheckout", value);
-  
-  if (typeof window !== "undefined") {
-    const searchParams = new URLSearchParams(window.location.search);
-    const utms = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
-    const targetUrl = new URL(url);
-    
-    // Add SCK for Hotmart tracking if any UTM exists
-    let hasUtm = false;
-    utms.forEach(param => {
-      const val = searchParams.get(param);
-      if (val) {
-        targetUrl.searchParams.set(param, val);
-        hasUtm = true;
-      }
-    });
-
-    if (hasUtm) {
-      targetUrl.searchParams.set("sck", "meta_ads");
-    }
-
-    window.location.href = targetUrl.toString();
-  }
+function goCheckout(source: string) {
+  fireEvent("InitiateCheckout", 5);
+  try {
+    sessionStorage.setItem("cta_source", source);
+  } catch {}
+  window.location.href = CHECKOUT_URL;
 }
 
-// scrollToOffer removed in favor of pop-out
+function scrollToOffer() {
+  if (typeof document === "undefined") return;
+  const el = document.getElementById("oferta");
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
 const testimonials = [testimonial1, testimonial2, testimonial3, testimonial4];
 
@@ -267,30 +164,9 @@ function Index() {
 
   const { mm, ss } = useCountdown(29);
   const viewers = useLiveViewers();
-  const [showPremiumPopout, setShowPremiumPopout] = useState(false);
-  const [isFooterVisible, setIsFooterVisible] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      // Show sticky button after hero section
-      if (window.scrollY > 600) {
-        setIsFooterVisible(true);
-      } else {
-        setIsFooterVisible(false);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const openPremiumOffer = useCallback(() => {
-    setShowPremiumPopout(true);
-  }, []);
-
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] antialiased overflow-x-hidden">
-      <PurchaseNotification />
       {/* Top banner */}
       <div className="fixed top-0 inset-x-0 z-[90] bg-[#16a34a] text-white text-center font-black uppercase tracking-wide border-b-2 border-[#15803d] py-2.5 px-2 text-[clamp(10px,3vw,15px)]">
         Descuento Exclusivo Solo Hoy
@@ -326,8 +202,6 @@ function Index() {
             width={1024}
             height={1536}
             loading="eager"
-            fetchPriority="high"
-            decoding="async"
           />
           <p className="mt-6 text-sm text-slate-500 flex items-center justify-center gap-1.5">
             <Lock className="w-4 h-4" /> Pago 100% seguro · Acceso inmediato por e-mail
@@ -364,7 +238,7 @@ function Index() {
         <div className="max-w-[720px] mx-auto bg-white border-2 border-[#facc15] rounded-2xl p-4 flex items-center gap-3 shadow-sm">
           <div className="animate-pulse w-2.5 h-2.5 rounded-full bg-red-500" />
           <p className="text-sm sm:text-base font-bold text-[#0a0a0a]">
-            🔥 Últimas <span className="text-[#dc2626]">12 plazas</span> del cupo de hoy · {viewers} personas viendo esta oferta ahora
+            🔥 Últimas <span className="text-[#dc2626]">37 plazas</span> del cupo de hoy · {viewers} personas viendo esta oferta ahora
           </p>
         </div>
       </div>
@@ -401,7 +275,7 @@ function Index() {
                 key={i}
                 className="relative shrink-0 w-[200px] sm:w-[280px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border-2 border-[#facc15]/30 transition-transform duration-300 hover:scale-105 active:scale-95"
               >
-                <img src={f.img} alt={f.t} className="w-full h-full object-cover" loading="lazy" decoding="async" />
+                <img src={f.img} alt={f.t} className="w-full h-full object-cover" loading="lazy" />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/70 to-transparent p-3 sm:p-4">
                   <p className="font-black text-white text-xs sm:text-base uppercase tracking-wide">{f.t}</p>
                 </div>
@@ -412,37 +286,13 @@ function Index() {
 
         <div className="max-w-[900px] mx-auto px-5 mt-8 sm:mt-10 text-center">
           <button
-            onClick={openPremiumOffer}
+            onClick={scrollToOffer}
             className="w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[clamp(15px,4vw,20px)] py-4 sm:py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(250,204,21,0.55)]"
           >
             Quiero acceso ahora
           </button>
         </div>
       </section>
-
-      {/* New section: Así se ve el material por dentro */}
-      <section className="px-5 py-12 sm:py-16 bg-white">
-        <div className="max-w-[900px] mx-auto text-center">
-          <h2 className="font-black uppercase text-[clamp(24px,5vw,40px)] leading-tight mb-3">
-            Así se ve el <span className="text-[#16a34a]">material</span> por dentro
-          </h2>
-          <p className="text-slate-600 max-w-2xl mx-auto mb-8 text-sm sm:text-lg font-medium">
-            Entrenamientos físicos, tácticas, dribles, agilidad, chutes y mucho más... listos para aplicar
-          </p>
-
-
-          <div className="mt-10 sm:mt-12">
-            <button
-              onClick={openPremiumOffer}
-              className="w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] active:scale-[0.98] transition-all text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-4 sm:py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.4)] group"
-            >
-              Quiero acceso ahora
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-          </div>
-        </div>
-      </section>
-
 
       {/* Includes */}
       <section className="px-5 py-12 sm:py-14">
@@ -495,7 +345,6 @@ function Index() {
                       alt={`Vista ${i + 1}`}
                       className="w-full object-contain sm:object-cover transition-transform duration-500 hover:scale-[1.06] active:scale-95"
                       loading="lazy"
-                      decoding="async"
                     />
                   </div>
                 </CarouselItem>
@@ -511,7 +360,7 @@ function Index() {
       <section className="px-5 py-10">
         <div className="max-w-[900px] mx-auto text-center">
           <button
-            onClick={openPremiumOffer}
+            onClick={scrollToOffer}
             className="mt-8 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             <PlayCircle className="w-6 h-6" /> Desbloquear la Biblioteca Completa
@@ -542,7 +391,7 @@ function Index() {
             ))}
           </div>
           <button
-            onClick={openPremiumOffer}
+            onClick={scrollToOffer}
             className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             Quiero acceder ahora
@@ -573,7 +422,7 @@ function Index() {
             ))}
           </div>
           <button
-            onClick={openPremiumOffer}
+            onClick={scrollToOffer}
             className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             Quiero Empezar Ahora Mismo
@@ -664,151 +513,104 @@ function Index() {
       </section>
 
       {/* Offer / pricing */}
-      <section id="oferta" className="px-5 py-16 sm:py-20 bg-gradient-to-b from-[#0a0a0a] to-[#0f172a] text-white scroll-mt-16">
-        <div className="max-w-[1100px] mx-auto">
-          <div className="text-center mb-10 sm:mb-14">
-            <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">🔥 Elige la opción que mejor se adapta a ti</p>
-            <h2 className="font-black uppercase text-[clamp(26px,5vw,44px)] leading-tight mb-4">
-              Plan básico o <span className="text-[#facc15]">plataforma completa</span>
-            </h2>
-            <p className="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base">
-              El plan completo cuesta <b className="text-white">US$ 6,50</b>. El precio y los detalles del plan básico se muestran en su checkout de Hotmart.
-            </p>
+      <section id="oferta" className="px-5 py-14 bg-gradient-to-b from-[#0a0a0a] to-[#0f172a] text-white scroll-mt-16">
+        <div className="max-w-[720px] mx-auto text-center">
+          <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">🔥 Precio Especial Solo Hoy</p>
+          <h2 className="font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3">
+            Elige tu paquete y <span className="text-[#facc15]">empieza ahora</span>
+          </h2>
+          <p className="text-slate-300 mb-6">
+            Precio promocional válido <b className="text-white">solo por hoy</b>. Mañana vuelve al valor normal, no dejes escapar esta oportunidad.
+          </p>
+
+          <div className="inline-flex items-center gap-2 bg-red-600/20 border-2 border-red-500 rounded-full px-5 py-2.5 mb-8 animate-pulse">
+            <Clock className="w-5 h-5 text-red-400" />
+            <span className="text-sm font-bold">⏰ ¡Promoción terminando! Acaba en</span>
+            <span className="font-mono font-black text-red-400 text-lg">{mm}:{ss}</span>
           </div>
 
-          <div className="mx-auto mb-8 max-w-[900px] rounded-2xl border border-[#facc15]/50 bg-white/10 px-5 py-4 text-center shadow-lg">
-            <p className="text-base font-bold leading-relaxed text-white sm:text-lg">
-              Tu entrega: una plataforma completa, organizada por posición y categoría, con <span className="text-[#facc15]">+2.000 ejercicios y +250 sesiones</span>, todo en video y en un único lugar.
-            </p>
-          </div>
+          <div className="bg-white text-[#0f172a] rounded-3xl p-6 sm:p-8 text-left shadow-2xl border-4 border-[#facc15]">
+            <div className="bg-[#dc2626] text-white text-xs font-black uppercase tracking-widest inline-block px-3 py-1 rounded-full mb-3">
+              🔥 ¡83% DE DESCUENTO!
+            </div>
+            <h3 className="font-black text-2xl mb-1">Paquete Premium</h3>
+            <p className="text-sm text-slate-500">+2.000 entrenamientos + 4 bonos exclusivos</p>
 
-          <div className="mx-auto grid max-w-[1050px] grid-cols-1 items-stretch gap-6 lg:grid-cols-2">
-            <div className="relative flex flex-col rounded-[32px] border border-slate-200 bg-white p-6 shadow-xl sm:p-8">
-              <div className="absolute -top-5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-slate-700 px-6 py-2 text-xs font-black uppercase tracking-widest text-white shadow-lg">
-                PAQUETE BÁSICO
-              </div>
-              <h3 className="mt-4 text-center text-2xl font-black uppercase text-[#0f172a]">Plan básico</h3>
-              <img
-                src={methodList}
-                alt="Vista previa del material incluido en el plan básico"
-                className="mt-5 max-h-56 w-full rounded-2xl border border-slate-100 bg-slate-50 object-contain shadow-sm"
-                loading="lazy"
-                decoding="async"
-              />
-              <p className="mt-4 text-center text-sm leading-relaxed text-slate-600">
-                Acceso a la opción básica de 2000 Ejercicios de Fútbol. Revisa el contenido, precio y condiciones de este plan directamente en el checkout seguro de Hotmart antes de confirmar.
+            <label className="block text-xs font-bold uppercase text-slate-500 mt-4 mb-1">🌎 Elige tu país</label>
+            <select className="w-full border-2 border-slate-200 rounded-xl px-3 py-2.5 font-semibold bg-white">
+              <option>🇲🇽 México</option>
+              <option>🇨🇴 Colombia</option>
+              <option>🇦🇷 Argentina</option>
+              <option>🇨🇱 Chile</option>
+              <option>🇵🇪 Perú</option>
+              <option>🇧🇷 Brasil</option>
+              <option>🇺🇾 Uruguay</option>
+              <option>🇧🇴 Bolivia</option>
+              <option>🇵🇾 Paraguay</option>
+              <option>🇪🇸 España</option>
+            </select>
+
+            <div className="my-5">
+              <p className="text-slate-500">
+                De <span className="line-through font-bold">$29,90</span> solo por hoy
               </p>
-              <div className="mt-auto pt-8">
-                <button
-                  onClick={() => goCheckout(BASIC_CHECKOUT_URL)}
-                  className="w-full rounded-2xl border-2 border-[#16a34a] px-4 py-4 text-base font-black uppercase text-[#15803d] transition hover:bg-green-50 active:scale-[0.98]"
-                >
-                  Ver plan básico en Hotmart
-                  <ArrowRight className="ml-2 inline h-5 w-5" />
-                </button>
-                <p className="mt-3 text-center text-xs text-slate-500">Pago procesado de forma segura por Hotmart</p>
-              </div>
-            </div>
-
-            <div className="relative bg-white rounded-[32px] p-6 sm:p-8 flex flex-col border-2 border-[#16a34a] shadow-[0_20px_50px_-12px_rgba(22,163,74,0.3)] transition-all duration-500 hover:scale-[1.02]">
-              <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-[#16a34a] text-white px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest shadow-lg flex items-center gap-2 whitespace-nowrap">
-                <Sparkles className="w-4 h-4 text-[#facc15]" />
-                PLATAFORMA COMPLETA
-              </div>
-
-              <p className="text-[#0f172a] text-sm sm:text-base font-medium leading-relaxed mt-4 mb-6">
-                {OFFER_COPY}
+              <p className="font-black text-5xl text-[#16a34a] mt-1">
+                $5 <span className="text-2xl">USD</span>
               </p>
-
-              <div className="space-y-3 mb-8">
-                {OFFER_ITEMS.map((item) => (
-                  <div key={item} className="flex items-center gap-3">
-                    <div className="bg-[#16a34a] rounded-full p-1 shrink-0">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-white" />
-                    </div>
-                    <span className="text-[#0f172a] font-bold text-sm tracking-tight">{item}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="bg-slate-50 rounded-2xl p-6 mb-8 border border-slate-100">
-                <p className="text-slate-400 font-bold text-xl line-through leading-none">US$ 29,90</p>
-                <div className="flex items-baseline gap-2 mt-1">
-                  <span className="text-5xl font-black text-[#0f172a]">US$ 6,50</span>
-                  <span className="text-2xl font-black text-[#16a34a]">USD</span>
-                </div>
-                <p className="text-[#0f172a] font-black text-sm mt-3">Pago único · Acceso vitalicio</p>
-                <p className="text-slate-500 font-bold text-xs mt-1">Acceso inmediato a la plataforma completa</p>
-              </div>
-
-              <button
-                onClick={openPremiumOffer}
-                className="w-full bg-[#16a34a] hover:bg-[#15803d] active:scale-[0.98] text-white font-black uppercase py-5 px-3 rounded-2xl shadow-[0_10px_25px_-5px_rgba(22,163,74,0.4)] transition-all flex items-center justify-center gap-2 text-base sm:text-lg"
-              >
-                Quiero la plataforma completa · US$ 6,50
-                <ArrowRight className="w-5 h-5 shrink-0" />
-              </button>
-            </div>
-          </div>
-
-      <Dialog open={showPremiumPopout} onOpenChange={setShowPremiumPopout}>
-        <DialogContent className="max-w-[92vw] sm:max-w-[450px] max-h-[90vh] overflow-y-auto p-0 border-none rounded-3xl bg-white shadow-2xl">
-          <div className="bg-[#16a34a] p-4 text-center relative">
-            <button
-              onClick={() => setShowPremiumPopout(false)}
-              className="absolute right-4 top-4 text-white/80 hover:text-white transition-colors"
-            >
-              <X className="w-6 h-6" />
-            </button>
-            <div className="bg-white/20 backdrop-blur rounded-full px-4 py-1.5 inline-flex items-center gap-2 mb-2">
-              <Sparkles className="w-4 h-4 text-[#facc15]" />
-              <span className="text-white text-xs font-black uppercase tracking-wider">Precio de lanzamiento</span>
-            </div>
-            <h2 className="text-white font-black uppercase text-2xl leading-tight">Plataforma Completa</h2>
-            <p className="text-white/90 text-sm font-medium italic mt-1">Acceso inmediato a la plataforma completa</p>
-          </div>
-
-          <div className="p-6">
-            <div className="flex items-center gap-2 text-red-600 mb-5 bg-red-50 p-3 rounded-2xl border border-red-100 animate-pulse">
-              <Clock className="w-5 h-5" />
-              <p className="text-sm font-black uppercase tracking-tight">¡Vence en {mm}:{ss}!</p>
+              <p className="text-sm font-bold text-[#dc2626] mt-1">83% DESCUENTO · Ahorras $24,90</p>
+              <p className="text-xs text-slate-500 mt-2">✅ Pago único · Acceso vitalicio</p>
             </div>
 
-            <div className="grid grid-cols-1 gap-2.5 mb-6">
-              {OFFER_ITEMS.map((item) => (
-                <div key={item} className="flex items-center gap-3">
-                  <div className="bg-[#16a34a] rounded-full p-1 shrink-0">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-white" />
-                  </div>
-                  <span className="text-[#0f172a] font-bold text-sm tracking-tight">{item}</span>
+            <ul className="space-y-2 text-sm">
+              {[
+                "+2.000 entrenamientos organizados",
+                "Todas las posiciones",
+                "Todas las categorías",
+                "Entrenamientos técnicos, tácticos y preparación física",
+                "Acceso vitalicio e inmediato por e-mail",
+                "Actualizaciones semanales GRATIS",
+                "Garantía incondicional de 7 días",
+              ].map((li) => (
+                <li key={li} className="flex gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-[#16a34a] flex-shrink-0 mt-0.5" />
+                  <span>{li}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-5 border-t border-slate-200 pt-4">
+              <p className="text-xs font-black uppercase text-slate-500 mb-2">🎁 Bonos exclusivos incluidos</p>
+              {[
+                ["01", "Guía de Entrenamiento", 47],
+                ["02", "50 Ejercicios de Técnica Individual", 39],
+                ["03", "Pack de Circuitos de Preparación Física", 49],
+                ["04", "Bono Sorpresa Exclusivo", 45],
+              ].map(([n, t, p]) => (
+                <div key={n as string} className="flex items-center justify-between text-sm py-1.5 border-b border-slate-100 last:border-0 gap-2">
+                  <span className="min-w-0">
+                    <b>BONO {n}</b> · {t}
+                  </span>
+                  <span className="shrink-0 flex items-center gap-2">
+                    <span className="line-through text-slate-400 text-xs">${p}</span>
+                    <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md text-xs">INCLUIDO</span>
+                  </span>
                 </div>
               ))}
             </div>
 
-            <div className="bg-slate-50 rounded-2xl p-5 mb-6 border border-slate-100">
-              <p className="text-slate-400 font-bold text-lg line-through leading-none">US$ 29,90</p>
-              <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-4xl font-black text-[#0f172a]">US$ 6,50</span>
-                <span className="text-xl font-black text-[#16a34a]">USD</span>
-              </div>
-              <p className="text-[#0f172a] font-black text-sm mt-2">Pago único · Acceso vitalicio</p>
-              <p className="text-slate-500 text-xs mt-2">Precio especial de lanzamiento: US$ 6,50. Esta condición promocional puede cambiar en cualquier momento.</p>
-            </div>
-
             <button
-              onClick={() => goCheckout(PREMIUM_CHECKOUT_URL, 6.5)}
-              className="w-full bg-[#16a34a] hover:bg-[#15803d] text-white font-black uppercase py-5 px-3 rounded-2xl shadow-xl shadow-green-200 transition-all flex items-center justify-center gap-2 group text-base sm:text-lg"
+              onClick={() => goCheckout("offer")}
+              className="mt-6 w-full flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-all hover:scale-[1.02] text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)] animate-pulse"
             >
-              Quiero la plataforma completa · US$ 6,50
-              <ArrowRight className="w-5 h-5 shrink-0 group-hover:translate-x-1 transition-transform" />
+              Quiero el Paquete Premium
             </button>
-
-            <p className="text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-4 flex items-center justify-center gap-2">
-              <Lock className="w-3.5 h-3.5" /> Pago 100% Seguro · Acceso Instantáneo
+            <p className="mt-3 text-xs text-slate-500 text-center flex items-center justify-center gap-1.5">
+              <Lock className="w-3.5 h-3.5" /> Pago 100% seguro vía tarjeta o transferencia
+            </p>
+            <p className="mt-2 text-xs text-slate-500 text-center">
+              ✅ Acceso inmediato después de la compra! ¿Finalizaste el pedido? Revisa tu e-mail y accede ahora mismo.
             </p>
           </div>
-        </DialogContent>
-      </Dialog>
         </div>
       </section>
 
@@ -830,7 +632,7 @@ function Index() {
             Tienes <b>7 días completos</b> para explorar los +2.000 ejercicios, los 4 bonos y todo el método. Si sientes que no es para ti, por cualquier motivo, nos escribes un email y te devolvemos <b>hasta el último céntimo</b>.
           </p>
           <button
-            onClick={openPremiumOffer}
+            onClick={scrollToOffer}
             className="w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             Empezar sin Riesgo
@@ -899,7 +701,7 @@ function Index() {
             ))}
           </Accordion>
           <button
-            onClick={openPremiumOffer}
+            onClick={scrollToOffer}
             className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
           >
             Quiero mi Kit Completo Hoy
@@ -926,28 +728,6 @@ function Index() {
           <p className="pt-2">© {new Date().getFullYear()} 2000 Ejercicios de Fútbol · Todos los derechos reservados.</p>
         </div>
       </footer>
-
-      {/* Sticky Bottom CTA */}
-      <div 
-        className={`fixed bottom-0 inset-x-0 z-[80] bg-white/95 backdrop-blur-md border-t border-slate-200 p-4 transition-transform duration-500 transform ${
-          isFooterVisible ? 'translate-y-0' : 'translate-y-full'
-        }`}
-      >
-        <div className="mx-auto grid w-full max-w-[700px] grid-cols-2 gap-2 sm:gap-3">
-          <button
-            onClick={() => goCheckout(BASIC_CHECKOUT_URL)}
-            className="w-full min-w-0 rounded-xl border border-slate-300 bg-white px-2 py-3 text-[10px] font-black uppercase leading-tight text-slate-700 shadow-lg sm:px-3 sm:py-3.5 sm:text-[13px]"
-          >
-            Plan básico
-          </button>
-          <button
-            onClick={openPremiumOffer}
-            className="flex w-full min-w-0 items-center justify-center gap-1.5 rounded-xl bg-[#facc15] px-2 py-3 text-[10px] font-black uppercase leading-tight text-[#0a0a0a] shadow-lg transition-all hover:bg-[#eab308] active:scale-[0.98] sm:gap-2 sm:px-3 sm:py-3.5 sm:text-[13px]"
-          >
-            <Zap className="h-4 w-4 shrink-0 fill-current" /> <span>Plataforma completa · US$ 6,50</span>
-          </button>
-        </div>
-      </div>
 
       {/* Meta Pixel noscript */}
       <noscript>
