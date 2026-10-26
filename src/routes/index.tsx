@@ -115,7 +115,13 @@ function goCheckout(source: string) {
   try {
     sessionStorage.setItem("cta_source", source);
   } catch {}
-  window.location.href = CHECKOUT_URL;
+  const checkoutUrl = new URL(CHECKOUT_URL);
+  new URLSearchParams(window.location.search).forEach((value, key) => {
+    if (!checkoutUrl.searchParams.has(key)) {
+      checkoutUrl.searchParams.append(key, value);
+    }
+  });
+  window.location.href = checkoutUrl.toString();
 }
 
 function scrollToOffer() {
