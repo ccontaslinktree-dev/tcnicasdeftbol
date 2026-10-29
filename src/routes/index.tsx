@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, type ReactNode } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -21,12 +21,9 @@ import {
   Trophy,
   Target,
   Users,
-  Clock,
   Mail,
   Lock,
-  PlayCircle,
-  Eye,
-  Sparkles,
+  ArrowDown,
   Flame,
   Star,
 } from "lucide-react";
@@ -54,26 +51,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-function useCountdown(minutes: number) {
-  const [left, setLeft] = useState(minutes * 60);
-  useEffect(() => {
-    const t = setInterval(() => setLeft((s) => (s > 0 ? s - 1 : 0)), 1000);
-    return () => clearInterval(t);
-  }, []);
-  const mm = String(Math.floor(left / 60)).padStart(2, "0");
-  const ss = String(left % 60).padStart(2, "0");
-  return { mm, ss };
-}
-
-function useLiveViewers(base = 1247) {
-  const [n, setN] = useState(base);
-  useEffect(() => {
-    const t = setInterval(() => setN((v) => v + Math.floor(Math.random() * 5 - 2)), 3000);
-    return () => clearInterval(t);
-  }, []);
-  return n;
-}
-
 function eid() {
   return `evt_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 }
@@ -95,7 +72,11 @@ function fireEvent(name: string, value?: number) {
   };
   fetch(`${supaUrl}/functions/v1/meta-capi`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", apikey: supaKey, Authorization: `Bearer ${supaKey}` },
+    headers: {
+      "Content-Type": "application/json",
+      apikey: supaKey,
+      Authorization: `Bearer ${supaKey}`,
+    },
     body: JSON.stringify({
       event_name: name,
       event_id,
@@ -114,7 +95,9 @@ function goCheckout(source: string) {
   fireEvent("InitiateCheckout", 6.5);
   try {
     sessionStorage.setItem("cta_source", source);
-  } catch {}
+  } catch {
+    // Continue to checkout even when browser storage is unavailable.
+  }
   const checkoutUrl = new URL(CHECKOUT_URL);
   new URLSearchParams(window.location.search).forEach((value, key) => {
     if (!checkoutUrl.searchParams.has(key)) {
@@ -124,10 +107,42 @@ function goCheckout(source: string) {
   window.location.href = checkoutUrl.toString();
 }
 
-function scrollToOffer() {
-  if (typeof document === "undefined") return;
-  const el = document.getElementById("oferta");
-  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+type ReadingStage =
+  | "plan"
+  | "biblioteca"
+  | "incluye"
+  | "metodo"
+  | "como-funciona"
+  | "testimonios"
+  | "bonos"
+  | "equipo"
+  | "comparacion"
+  | "garantia"
+  | "preguntas"
+  | "oferta";
+
+function NextSectionLink({
+  to,
+  children,
+  dark = false,
+}: {
+  to: ReadingStage;
+  children: ReactNode;
+  dark?: boolean;
+}) {
+  return (
+    <a
+      href={`#${to}`}
+      className={`mt-8 w-full max-w-[560px] mx-auto flex items-center justify-center gap-3 rounded-2xl px-5 py-4 sm:py-5 text-center font-bold text-base sm:text-lg leading-snug transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#15803d] ${
+        dark
+          ? "bg-[#facc15] hover:bg-[#eab308] text-[#0a0a0a]"
+          : "bg-[#15803d] hover:bg-[#166534] text-white"
+      }`}
+    >
+      <span>{children}</span>
+      <ArrowDown className="w-5 h-5 shrink-0" aria-hidden="true" />
+    </a>
+  );
 }
 
 const testimonials = [testimonial1, testimonial2, testimonial3, testimonial4];
@@ -168,96 +183,115 @@ function Index() {
     fireEvent("ViewContent");
   }, []);
 
-  const { mm, ss } = useCountdown(29);
-  const viewers = useLiveViewers();
-
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-[#0f172a] antialiased overflow-x-hidden">
-      {/* Top banner */}
-      <div className="fixed top-0 inset-x-0 z-[90] bg-[#16a34a] text-white text-center font-black uppercase tracking-wide border-b-2 border-[#15803d] py-2.5 px-2 text-[clamp(10px,3vw,15px)]">
-        Descuento Exclusivo Solo Hoy
-      </div>
-      <div style={{ height: 44 }} />
-
-      {/* HERO */}
-      <section className="px-5 pt-6 pb-8 text-center">
-        <div className="max-w-[1100px] mx-auto">
-          <h1 className="font-black uppercase leading-[1.12] tracking-tight text-[#0a0a0a] mb-6 text-[clamp(22px,5.2vw,48px)]">
-            Domina el Fútbol con{" "}
-            <span className="bg-[#facc15] text-[#0a0a0a] px-2 py-0.5 rounded-md">
-              +2.000 Entrenamientos Profesionales
-            </span>{" "}
-            organizados para Jugadores y Entrenadores, listos para aplicar
+    <main className="football-reading-page min-h-screen bg-[#f8fafc] text-[#0f172a] antialiased overflow-x-hidden">
+      {/* Introduction: understand the promise and watch before any CTA. */}
+      <section aria-labelledby="intro-title" className="px-5 pt-8 sm:pt-12 pb-8 text-center">
+        <div className="max-w-[900px] mx-auto">
+          <p className="text-[#15803d] text-xs sm:text-sm font-black uppercase tracking-widest mb-4">
+            Para entrenadores y jugadores de fútbol
+          </p>
+          <h1
+            id="intro-title"
+            className="font-black leading-[1.12] tracking-tight text-[#0a0a0a] mb-5 text-[clamp(30px,6vw,54px)]"
+          >
+            Deja de improvisar tus entrenamientos.{" "}
+            <span className="text-[#15803d]">Llega al campo con un plan.</span>
           </h1>
-          <div className="max-w-[680px] mx-auto mb-6 bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white rounded-2xl px-4 py-3 sm:px-5 sm:py-4 shadow-lg border border-[#facc15]/40 flex items-start gap-3 text-left">
-            <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 text-[#facc15] mt-0.5 animate-pulse" />
-            <p className="font-bold leading-snug text-[clamp(12px,3.4vw,15px)]">
-              <span className="text-[#facc15] font-black uppercase">Actualizaciones automáticas:</span> añadimos nuevos ejercicios constantemente, además de las estrategias clásicas que grandes clubes usan para lograr resultados de élite. Tu biblioteca crece contigo, siempre.
-            </p>
-          </div>
-          <p className="text-slate-600 font-medium max-w-[640px] mx-auto mb-7 leading-relaxed text-[clamp(14px,3.6vw,19px)]">
-            Accede a la <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">biblioteca completa</span> organizada por{" "}
-            <b className="text-[#0a0a0a]">posición y categoría</b>, método profesional, acceso inmediato{" "}
-            <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md">+ 4 Bonos exclusivos</span>
+          <p className="text-slate-600 max-w-[660px] mx-auto mb-7 leading-relaxed text-base sm:text-lg">
+            Conoce una biblioteca digital con{" "}
+            <b className="text-[#0a0a0a]">+2.000 ejercicios organizados por posición y categoría</b>
+            . Mira el material por dentro y descubre cómo utilizarlo para preparar tu próxima
+            sesión.
           </p>
-
-          <img
-            src={heroProduct}
-            alt="+2.000 Entrenamientos de Fútbol"
-            className="mx-auto max-w-[520px] w-full rounded-2xl shadow-2xl transition-transform duration-500 hover:scale-[1.03] hover:-rotate-1"
-            width={1024}
-            height={1536}
-            loading="eager"
-          />
-          <p className="mt-6 text-sm text-slate-500 flex items-center justify-center gap-1.5">
-            <Lock className="w-4 h-4" /> Pago 100% seguro · Acceso inmediato por e-mail
-          </p>
-        </div>
-      </section>
-
-      {/* Video preview - moved to 2nd section for stronger conversion */}
-      <section className="px-5 pb-4 pt-2">
-        <div className="max-w-[900px] mx-auto text-center">
-          <p className="text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Vista previa exclusiva</p>
-          <h2 className="font-black uppercase text-[clamp(22px,5vw,38px)] leading-tight mb-3">
-            Mira por dentro la <span className="text-[#16a34a]">biblioteca</span> que vas a recibir
-          </h2>
-          <p className="text-slate-600 mb-5 text-sm sm:text-base">Un adelanto real del material organizado y listo para aplicar 👇</p>
           <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-black max-w-[520px] mx-auto">
             <video
               src={previewAsset.url}
+              aria-label="Vista previa de la biblioteca de ejercicios de fútbol"
               controls
               playsInline
               preload="metadata"
               className="w-full aspect-[3/4] object-cover"
             />
-            <div className="absolute top-3 left-3 bg-black/70 backdrop-blur text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-              EN VIVO · <Eye className="w-3.5 h-3.5" /> {viewers} viendo
-            </div>
           </div>
+          <p className="mt-4 text-sm text-slate-500">
+            Una vista previa del material. Después, conoce qué incluye y cómo se utiliza.
+          </p>
+          <NextSectionLink to="plan">
+            Descubrir cómo me ayuda a preparar mis entrenamientos
+          </NextSectionLink>
         </div>
       </section>
 
-      {/* Urgency badge */}
-      <div className="px-5">
-        <div className="max-w-[720px] mx-auto bg-white border-2 border-[#facc15] rounded-2xl p-4 flex items-center gap-3 shadow-sm">
-          <div className="animate-pulse w-2.5 h-2.5 rounded-full bg-red-500" />
-          <p className="text-sm sm:text-base font-bold text-[#0a0a0a]">
-            🔥 Últimas <span className="text-[#dc2626]">37 plazas</span> del cupo de hoy · {viewers} personas viendo esta oferta ahora
+      {/* Recognize the problem before presenting the deliverables. */}
+      <section
+        id="plan"
+        tabIndex={-1}
+        aria-labelledby="plan-title"
+        className="px-5 py-12 sm:py-14 bg-white"
+      >
+        <div className="max-w-[1000px] mx-auto">
+          <p className="text-center text-[#15803d] font-black uppercase tracking-widest text-xs mb-2">
+            Empieza por darle sentido a cada sesión
           </p>
+          <h2
+            id="plan-title"
+            className="text-center font-black text-[clamp(26px,5vw,40px)] leading-tight mb-4"
+          >
+            ¿Buscas ejercicios a última hora y terminas repitiendo lo mismo?
+          </h2>
+          <p className="text-center text-slate-600 max-w-2xl mx-auto mb-8 leading-relaxed">
+            Si cada entrenamiento empieza con «¿qué hacemos hoy?», necesitas un punto de partida. La
+            biblioteca te permite elegir material por posición y categoría para preparar una sesión
+            con un objetivo claro.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-5">
+            {[
+              {
+                icon: Users,
+                title: "Si eres entrenador",
+                text: "Deja de reunir vídeos sueltos antes de cada práctica. Consulta los ejercicios organizados y elige qué trabajar con tu equipo.",
+              },
+              {
+                icon: Target,
+                title: "Si eres jugador",
+                text: "Dale una intención a tu entrenamiento. Encuentra material para tu posición y prepara el trabajo técnico que quieres llevar al campo.",
+              },
+            ].map(({ icon: Icon, title, text }) => (
+              <div key={title} className="rounded-2xl border border-slate-200 bg-[#f8fafc] p-6">
+                <Icon className="w-7 h-7 text-[#15803d] mb-3" aria-hidden="true" />
+                <h3 className="font-black text-xl mb-2">{title}</h3>
+                <p className="text-slate-600 leading-relaxed">{text}</p>
+              </div>
+            ))}
+          </div>
+          <NextSectionLink to="biblioteca">
+            Explorar los entrenamientos de la biblioteca
+          </NextSectionLink>
         </div>
-      </div>
+      </section>
 
-      {/* What you get - scrolling marquee (moved up as 3rd section) */}
-      <section className="py-12 sm:py-14 bg-[#0a0a0a] text-white overflow-hidden mt-10">
+      {/* Explore the training categories. */}
+      <section
+        id="biblioteca"
+        tabIndex={-1}
+        aria-labelledby="biblioteca-title"
+        className="py-12 sm:py-14 bg-[#0a0a0a] text-white overflow-hidden"
+      >
         <div className="max-w-[1100px] mx-auto px-5 text-center mb-6 sm:mb-8">
-          <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">Lo que vas a recibir</p>
-          <h2 className="font-black uppercase text-[clamp(24px,5vw,40px)] leading-tight mb-3">
-            +2.000 entrenamientos <span className="text-[#facc15]">organizados</span> para aplicar hoy
+          <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">
+            Lo que vas a recibir
+          </p>
+          <h2
+            id="biblioteca-title"
+            className="font-black uppercase text-[clamp(24px,5vw,40px)] leading-tight mb-3"
+          >
+            +2.000 entrenamientos <span className="text-[#facc15]">organizados</span> para aplicar
+            hoy
           </h2>
           <p className="text-slate-300 max-w-2xl mx-auto text-sm sm:text-base">
-            Físicos, tácticos, dribles, agilidad, chutes, pases y mucho más.
+            Trabajo físico, táctica, regates, agilidad, remates y pases: explora las áreas que
+            puedes trabajar en tus sesiones.
           </p>
         </div>
 
@@ -266,15 +300,15 @@ function Index() {
             {[
               { img: featFisico, t: "Entrenamientos Físicos" },
               { img: featTactico, t: "Tácticas y Estrategias" },
-              { img: featDribles, t: "Dribles y Regates" },
+              { img: featDribles, t: "Conducción y Regates" },
               { img: featAgilidad, t: "Agilidad y Velocidad" },
-              { img: featChutes, t: "Chutes y Definición" },
+              { img: featChutes, t: "Remates y Definición" },
               { img: featPasses, t: "Pases y Juego Colectivo" },
               { img: featFisico, t: "Entrenamientos Físicos" },
               { img: featTactico, t: "Tácticas y Estrategias" },
-              { img: featDribles, t: "Dribles y Regates" },
+              { img: featDribles, t: "Conducción y Regates" },
               { img: featAgilidad, t: "Agilidad y Velocidad" },
-              { img: featChutes, t: "Chutes y Definición" },
+              { img: featChutes, t: "Remates y Definición" },
               { img: featPasses, t: "Pases y Juego Colectivo" },
             ].map((f, i) => (
               <div
@@ -283,7 +317,9 @@ function Index() {
               >
                 <img src={f.img} alt={f.t} className="w-full h-full object-cover" loading="lazy" />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/70 to-transparent p-3 sm:p-4">
-                  <p className="font-black text-white text-xs sm:text-base uppercase tracking-wide">{f.t}</p>
+                  <p className="font-black text-white text-xs sm:text-base uppercase tracking-wide">
+                    {f.t}
+                  </p>
                 </div>
               </div>
             ))}
@@ -291,36 +327,80 @@ function Index() {
         </div>
 
         <div className="max-w-[900px] mx-auto px-5 mt-8 sm:mt-10 text-center">
-          <button
-            onClick={scrollToOffer}
-            className="w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#facc15] hover:bg-[#eab308] active:scale-[0.98] transition-all text-[#0a0a0a] font-black uppercase text-[clamp(15px,4vw,20px)] py-4 sm:py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(250,204,21,0.55)]"
-          >
-            Quiero acceso ahora
-          </button>
+          <NextSectionLink to="incluye" dark>
+            Ver todo lo que voy a recibir
+          </NextSectionLink>
         </div>
       </section>
 
       {/* Includes */}
-      <section className="px-5 py-12 sm:py-14">
+      <section
+        id="incluye"
+        tabIndex={-1}
+        aria-labelledby="incluye-title"
+        className="px-5 py-12 sm:py-14"
+      >
         <div className="max-w-[1100px] mx-auto">
-          <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Lo que Incluye tu Kit</p>
-          <h2 className="text-center font-black uppercase text-[clamp(24px,5vw,40px)] leading-tight mb-3">
-            Todo para <span className="text-[#16a34a]">jugar mejor</span>
+          <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">
+            Lo que Incluye tu Kit
+          </p>
+          <h2
+            id="incluye-title"
+            className="text-center font-black uppercase text-[clamp(24px,5vw,40px)] leading-tight mb-3"
+          >
+            Una biblioteca digital <span className="text-[#16a34a]">lista para consultar</span>
           </h2>
           <p className="text-center text-slate-600 max-w-xl mx-auto mb-8 sm:mb-10 text-sm sm:text-base">
-            Método completo, organizado y profesional.
+            Recibes acceso online a los ejercicios organizados y a los materiales complementarios.
+            Consulta el contenido desde tu móvil, tablet u ordenador.
           </p>
+
+          <img
+            src={heroProduct}
+            alt="Presentación de la biblioteca digital con más de 2.000 entrenamientos de fútbol"
+            className="mx-auto mb-8 max-w-[360px] w-full rounded-2xl shadow-lg"
+            width={1024}
+            height={1536}
+            loading="lazy"
+          />
 
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {[
-              { i: Trophy, t: "+2.000 entrenamientos organizados", d: "Biblioteca completa lista para acceder desde cualquier dispositivo." },
-              { i: Target, t: "Organizados por posición y categorías", d: "Portero, defensa, mediocampo y delantero, desde Sub-8 hasta Adulto." },
-              { i: Zap, t: "Técnica individual y colectiva", d: "Control, regate, pase y jugadas de conjunto." },
-              { i: Flame, t: "Preparación física y prevención", d: "Velocidad, fuerza, resistencia y menos lesiones." },
-              { i: Star, t: "4 Bonos exclusivos incluidos", d: "Materiales extra para acelerar tu evolución." },
-              { i: Mail, t: "Acceso instantáneo por e-mail", d: "Al finalizar la compra recibes al instante toda la biblioteca." },
+              {
+                i: Trophy,
+                t: "+2.000 entrenamientos organizados",
+                d: "Biblioteca completa lista para acceder desde cualquier dispositivo.",
+              },
+              {
+                i: Target,
+                t: "Organizados por posición y categorías",
+                d: "Portero, defensa, mediocampo y delantero, desde Sub-8 hasta Adulto.",
+              },
+              {
+                i: Zap,
+                t: "Técnica individual y colectiva",
+                d: "Control, regate, pase y jugadas de conjunto.",
+              },
+              {
+                i: Flame,
+                t: "Preparación física",
+                d: "Ejercicios de velocidad, fuerza y resistencia para complementar el trabajo técnico.",
+              },
+              {
+                i: Star,
+                t: "4 Bonos exclusivos incluidos",
+                d: "Materiales extra para acelerar tu evolución.",
+              },
+              {
+                i: Mail,
+                t: "Acceso instantáneo por e-mail",
+                d: "Al finalizar la compra recibes al instante toda la biblioteca.",
+              },
             ].map(({ i: Icon, t, d }) => (
-              <div key={t} className="group bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] hover:border-[#16a34a]/40 transition-all duration-300">
+              <div
+                key={t}
+                className="group bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] hover:border-[#16a34a]/40 transition-all duration-300"
+              >
                 <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-[#16a34a]/10 text-[#16a34a] flex items-center justify-center mb-2 sm:mb-3 group-hover:scale-110 group-hover:bg-[#16a34a] group-hover:text-white transition-all duration-300">
                   <Icon className="w-5 h-5" />
                 </div>
@@ -329,16 +409,25 @@ function Index() {
               </div>
             ))}
           </div>
+          <NextSectionLink to="metodo">Ver el material por dentro</NextSectionLink>
         </div>
       </section>
 
       {/* Product carousel - method visual */}
-      <section className="px-5 py-10 sm:py-12 bg-white">
+      <section
+        id="metodo"
+        tabIndex={-1}
+        aria-labelledby="metodo-title"
+        className="px-5 py-10 sm:py-12 bg-white"
+      >
         <div className="max-w-[1100px] mx-auto">
           <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">
             +2.000 Entrenamientos Profesionales
           </p>
-          <h2 className="text-center font-black uppercase text-[clamp(24px,5vw,40px)] leading-tight mb-6 sm:mb-8">
+          <h2
+            id="metodo-title"
+            className="text-center font-black uppercase text-[clamp(24px,5vw,40px)] leading-tight mb-6 sm:mb-8"
+          >
             El <span className="text-[#16a34a]">método completo</span> en un solo lugar
           </h2>
           <Carousel className="max-w-2xl mx-auto">
@@ -348,7 +437,14 @@ function Index() {
                   <div className="overflow-hidden rounded-2xl bg-white">
                     <img
                       src={src}
-                      alt={`Vista ${i + 1}`}
+                      alt={
+                        [
+                          "Organización de los ejercicios de fútbol",
+                          "Guía de entrenamiento",
+                          "Ejercicios de técnica individual",
+                          "Circuitos de preparación física",
+                        ][i]
+                      }
                       className="w-full object-contain sm:object-cover transition-transform duration-500 hover:scale-[1.06] active:scale-95"
                       loading="lazy"
                     />
@@ -356,36 +452,49 @@ function Index() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className="left-2 sm:-left-12" aria-label="Ver material anterior" />
+            <CarouselNext className="right-2 sm:-right-12" aria-label="Ver material siguiente" />
           </Carousel>
-        </div>
-      </section>
-
-      {/* CTA after value stack */}
-      <section className="px-5 py-10">
-        <div className="max-w-[900px] mx-auto text-center">
-          <button
-            onClick={scrollToOffer}
-            className="mt-8 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
-          >
-            <PlayCircle className="w-6 h-6" /> Desbloquear la Biblioteca Completa
-          </button>
+          <NextSectionLink to="como-funciona">
+            Entender cómo se utiliza en cada sesión
+          </NextSectionLink>
         </div>
       </section>
 
       {/* How it works */}
-      <section className="px-5 py-14 bg-white">
+      <section
+        id="como-funciona"
+        tabIndex={-1}
+        aria-labelledby="como-funciona-title"
+        className="px-5 py-14 bg-white"
+      >
         <div className="max-w-[1100px] mx-auto">
-          <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Paso a paso</p>
-          <h2 className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-10">
+          <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">
+            Paso a paso
+          </p>
+          <h2
+            id="como-funciona-title"
+            className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-10"
+          >
             Cómo funciona en <span className="text-[#16a34a]">3 pasos</span>
           </h2>
           <div className="grid md:grid-cols-3 gap-5">
             {[
-              { n: 1, t: "Accede desde donde quieras", d: "Móvil, tablet u ordenador, 100% online y con acceso inmediato tras la compra." },
-              { n: 2, t: "Elige por posición y categoría", d: "Filtra el ejercicio ideal según edad, posición y objetivo del día." },
-              { n: 3, t: "Abre el material y entrena", d: "Material completo organizado, listo para aplicar directamente en el campo." },
+              {
+                n: 1,
+                t: "Accede desde donde quieras",
+                d: "Móvil, tablet u ordenador, 100% online y con acceso inmediato tras la compra.",
+              },
+              {
+                n: 2,
+                t: "Elige por posición y categoría",
+                d: "Filtra el ejercicio ideal según edad, posición y objetivo del día.",
+              },
+              {
+                n: 3,
+                t: "Abre el material y entrena",
+                d: "Material completo organizado, listo para aplicar directamente en el campo.",
+              },
             ].map((s) => (
               <div key={s.n} className="bg-[#f8fafc] rounded-2xl p-6 border border-slate-200">
                 <div className="w-12 h-12 rounded-full bg-[#16a34a] text-white font-black text-xl flex items-center justify-center mb-4">
@@ -396,20 +505,27 @@ function Index() {
               </div>
             ))}
           </div>
-          <button
-            onClick={scrollToOffer}
-            className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
-          >
-            Quiero acceder ahora
-          </button>
+          <NextSectionLink to="testimonios">
+            Leer las experiencias de otros jugadores y entrenadores
+          </NextSectionLink>
         </div>
       </section>
 
       {/* Testimonials */}
-      <section className="px-5 py-14">
+      <section
+        id="testimonios"
+        tabIndex={-1}
+        aria-labelledby="testimonios-title"
+        className="px-5 py-14"
+      >
         <div className="max-w-[1100px] mx-auto">
-          <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Resultados reales</p>
-          <h2 className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3">
+          <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">
+            Resultados reales
+          </p>
+          <h2
+            id="testimonios-title"
+            className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3"
+          >
             Mira <span className="text-[#16a34a]">quiénes ya están entrenando</span> con nosotros
           </h2>
           <p className="text-center text-slate-600 max-w-xl mx-auto mb-10">
@@ -417,7 +533,10 @@ function Index() {
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {testimonials.map((src, i) => (
-              <div key={i} className="rounded-2xl overflow-hidden shadow-md bg-white border border-slate-200 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+              <div
+                key={i}
+                className="rounded-2xl overflow-hidden shadow-md bg-white border border-slate-200 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
+              >
                 <img
                   src={src}
                   alt={`Testimonio ${i + 1}`}
@@ -427,37 +546,70 @@ function Index() {
               </div>
             ))}
           </div>
-          <button
-            onClick={scrollToOffer}
-            className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
-          >
-            Quiero Empezar Ahora Mismo
-          </button>
+          <NextSectionLink to="bonos">Conocer los 4 bonos incluidos</NextSectionLink>
         </div>
       </section>
 
       {/* 4 Bonus */}
-      <section className="px-5 py-14 bg-white">
+      <section
+        id="bonos"
+        tabIndex={-1}
+        aria-labelledby="bonos-title"
+        className="px-5 py-14 bg-white"
+      >
         <div className="max-w-[1100px] mx-auto">
           <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">
             🎁 Regalos Exclusivos
           </p>
-          <h2 className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3">
-            4 <span className="text-[#16a34a]">Bonos</span> por tu compra hoy
+          <h2
+            id="bonos-title"
+            className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3"
+          >
+            4 <span className="text-[#16a34a]">materiales extra</span> para complementar tus
+            entrenamientos
           </h2>
           <p className="text-center text-slate-600 max-w-xl mx-auto mb-10">
-            Materiales complementarios diseñados para acelerar tus resultados dentro y fuera del campo.
+            Materiales complementarios diseñados para acelerar tus resultados dentro y fuera del
+            campo.
           </p>
           <div className="grid sm:grid-cols-2 gap-5">
             {[
-              { n: "01", t: "Guía de Entrenamiento", d: "Manual completo con planificación semanal y progresión paso a paso.", price1: 47, price2: 19, img: bonus1 },
-              { n: "02", t: "50 Ejercicios de Técnica Individual", d: "Ejercicios prácticos para dominar el balón y mejorar tu técnica base.", price1: 39, price2: 17, img: bonus2 },
-              { n: "03", t: "Circuitos de Preparación Física", d: "Circuitos completos para ganar resistencia, fuerza y explosividad.", price1: 49, price2: 21, img: bonus3 },
-              { n: "04", t: "Bono Sorpresa Exclusivo", d: "🎁 Un regalo secreto que solo descubrirás al entrar.", price1: 45, price2: 18, img: bonusSurprise },
+              {
+                n: "01",
+                t: "Guía de Entrenamiento",
+                d: "Manual completo con planificación semanal y progresión paso a paso.",
+                img: bonus1,
+              },
+              {
+                n: "02",
+                t: "50 Ejercicios de Técnica Individual",
+                d: "Ejercicios prácticos para dominar el balón y mejorar tu técnica base.",
+                img: bonus2,
+              },
+              {
+                n: "03",
+                t: "Circuitos de Preparación Física",
+                d: "Circuitos completos para ganar resistencia, fuerza y explosividad.",
+                img: bonus3,
+              },
+              {
+                n: "04",
+                t: "Bono Sorpresa Exclusivo",
+                d: "🎁 Un regalo secreto que solo descubrirás al entrar.",
+                img: bonusSurprise,
+              },
             ].map((b) => (
-              <div key={b.n} className="group rounded-2xl bg-[#0a0a0a] text-white overflow-hidden border border-[#facc15]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:border-[#facc15] active:scale-[0.98]">
+              <div
+                key={b.n}
+                className="group rounded-2xl bg-[#0a0a0a] text-white overflow-hidden border border-[#facc15]/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:border-[#facc15] active:scale-[0.98]"
+              >
                 <div className="overflow-hidden">
-                  <img src={b.img} alt={b.t} className="w-full aspect-[4/3] object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                  <img
+                    src={b.img}
+                    alt={b.t}
+                    className="w-full aspect-[4/3] object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
                 </div>
                 <div className="p-5">
                   <div className="text-xs font-black uppercase tracking-widest text-[#facc15] mb-1">
@@ -466,8 +618,6 @@ function Index() {
                   <h3 className="font-black text-lg mb-1">{b.t}</h3>
                   <p className="text-sm text-slate-300 leading-relaxed mb-3">{b.d}</p>
                   <div className="flex items-center gap-3 flex-wrap">
-                    <span className="line-through text-slate-400 font-bold text-lg">${b.price1}</span>
-                    <span className="line-through text-slate-400 font-bold text-lg">${b.price2}</span>
                     <span className="bg-[#facc15] text-[#0a0a0a] font-black px-3 py-1.5 rounded-md text-sm shadow-lg uppercase tracking-wide">
                       Incluido en tu compra
                     </span>
@@ -477,29 +627,36 @@ function Index() {
             ))}
           </div>
           <div className="mt-8 text-center">
-            <p className="text-slate-600">Valor real de los bonos <span className="line-through font-bold">$180</span> <span className="line-through font-bold">$75</span></p>
-            <p className="font-black text-2xl mt-1">
-              hoy <span className="text-[#16a34a]">incluidos en tu pedido</span>
+            <p className="font-bold text-lg text-[#15803d]">
+              Los 4 bonos están incluidos junto con la biblioteca.
             </p>
           </div>
+          <NextSectionLink to="equipo">Conocer el enfoque de la biblioteca</NextSectionLink>
         </div>
       </section>
 
       {/* Who we are */}
-      <section className="px-5 py-14">
+      <section id="equipo" tabIndex={-1} aria-labelledby="equipo-title" className="px-5 py-14">
         <div className="max-w-[900px] mx-auto text-center">
-          <p className="text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Quiénes somos</p>
-          <h2 className="font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-4">
-            Equipo{" "}
-            <span className="text-[#16a34a]">2000 Ejercicios de Fútbol</span>, Metodología que forma jugadores de verdad
+          <p className="text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">
+            Quiénes somos
+          </p>
+          <h2
+            id="equipo-title"
+            className="font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-4"
+          >
+            Equipo <span className="text-[#16a34a]">2000 Ejercicios de Fútbol</span>, Metodología
+            que forma jugadores de verdad
           </h2>
           <p className="text-slate-600 leading-relaxed max-w-2xl mx-auto mb-4">
-            Somos un equipo apasionado por el fútbol formativo. Reunimos en un solo lugar una biblioteca digital con{" "}
-            <b>+2.000 ejercicios</b> organizados por posición, edad y objetivo, con la misma progresión y los mismos
-            vídeos que se aplican en canteras y academias profesionales.
+            Somos un equipo apasionado por el fútbol formativo. Reunimos en un solo lugar una
+            biblioteca digital con <b>+2.000 ejercicios</b> organizados por posición, edad y
+            objetivo, con la misma progresión y los mismos vídeos que se aplican en canteras y
+            academias profesionales.
           </p>
           <p className="text-slate-600 leading-relaxed max-w-2xl mx-auto mb-8">
-            Sin relleno, sin teoría vacía. Solo material organizado que funciona en el campo, listo para aplicar.
+            Sin relleno, sin teoría vacía. Solo material organizado que funciona en el campo, listo
+            para aplicar.
           </p>
           <div className="flex justify-center gap-8">
             <div>
@@ -515,141 +672,24 @@ function Index() {
               <p className="text-xs uppercase text-slate-500 font-bold">Acceso inmediato</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Offer / pricing */}
-      <section id="oferta" className="px-5 py-14 bg-gradient-to-b from-[#0a0a0a] to-[#0f172a] text-white scroll-mt-16">
-        <div className="max-w-[720px] mx-auto text-center">
-          <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">🔥 Precio Especial Solo Hoy</p>
-          <h2 className="font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3">
-            Elige tu paquete y <span className="text-[#facc15]">empieza ahora</span>
-          </h2>
-          <p className="text-slate-300 mb-6">
-            Precio promocional válido <b className="text-white">solo por hoy</b>. Mañana vuelve al valor normal, no dejes escapar esta oportunidad.
-          </p>
-
-          <div className="inline-flex items-center gap-2 bg-red-600/20 border-2 border-red-500 rounded-full px-5 py-2.5 mb-8 animate-pulse">
-            <Clock className="w-5 h-5 text-red-400" />
-            <span className="text-sm font-bold">⏰ ¡Promoción terminando! Acaba en</span>
-            <span className="font-mono font-black text-red-400 text-lg">{mm}:{ss}</span>
-          </div>
-
-          <div className="bg-white text-[#0f172a] rounded-3xl p-6 sm:p-8 text-left shadow-2xl border-4 border-[#facc15]">
-            <div className="bg-[#dc2626] text-white text-xs font-black uppercase tracking-widest inline-block px-3 py-1 rounded-full mb-3">
-              🔥 ¡78% DE DESCUENTO!
-            </div>
-            <h3 className="font-black text-2xl mb-1">Paquete Premium</h3>
-            <p className="text-sm text-slate-500">+2.000 entrenamientos + 4 bonos exclusivos</p>
-
-            <label className="block text-xs font-bold uppercase text-slate-500 mt-4 mb-1">🌎 Elige tu país</label>
-            <select className="w-full border-2 border-slate-200 rounded-xl px-3 py-2.5 font-semibold bg-white">
-              <option>🇲🇽 México</option>
-              <option>🇨🇴 Colombia</option>
-              <option>🇦🇷 Argentina</option>
-              <option>🇨🇱 Chile</option>
-              <option>🇵🇪 Perú</option>
-              <option>🇧🇷 Brasil</option>
-              <option>🇺🇾 Uruguay</option>
-              <option>🇧🇴 Bolivia</option>
-              <option>🇵🇾 Paraguay</option>
-              <option>🇪🇸 España</option>
-            </select>
-
-            <div className="my-5">
-              <p className="text-slate-500">
-                De <span className="line-through font-bold">$29,90</span> solo por hoy
-              </p>
-              <p className="font-black text-5xl text-[#16a34a] mt-1">
-                $6,50 <span className="text-2xl">USD</span>
-              </p>
-              <p className="text-sm font-bold text-[#dc2626] mt-1">78% DESCUENTO · Ahorras $23,40</p>
-              <p className="text-xs text-slate-500 mt-2">✅ Pago único · Acceso vitalicio</p>
-            </div>
-
-            <ul className="space-y-2 text-sm">
-              {[
-                "+2.000 entrenamientos organizados",
-                "Todas las posiciones",
-                "Todas las categorías",
-                "Entrenamientos técnicos, tácticos y preparación física",
-                "Acceso vitalicio e inmediato por e-mail",
-                "Actualizaciones semanales GRATIS",
-                "Garantía incondicional de 7 días",
-              ].map((li) => (
-                <li key={li} className="flex gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-[#16a34a] flex-shrink-0 mt-0.5" />
-                  <span>{li}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-5 border-t border-slate-200 pt-4">
-              <p className="text-xs font-black uppercase text-slate-500 mb-2">🎁 Bonos exclusivos incluidos</p>
-              {[
-                ["01", "Guía de Entrenamiento", 47],
-                ["02", "50 Ejercicios de Técnica Individual", 39],
-                ["03", "Pack de Circuitos de Preparación Física", 49],
-                ["04", "Bono Sorpresa Exclusivo", 45],
-              ].map(([n, t, p]) => (
-                <div key={n as string} className="flex items-center justify-between text-sm py-1.5 border-b border-slate-100 last:border-0 gap-2">
-                  <span className="min-w-0">
-                    <b>BONO {n}</b> · {t}
-                  </span>
-                  <span className="shrink-0 flex items-center gap-2">
-                    <span className="line-through text-slate-400 text-xs">${p}</span>
-                    <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md text-xs">INCLUIDO</span>
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <button
-              onClick={() => goCheckout("offer")}
-              className="mt-6 w-full flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-all hover:scale-[1.02] text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)] animate-pulse"
-            >
-              Quiero el Paquete Premium
-            </button>
-            <p className="mt-3 text-xs text-slate-500 text-center flex items-center justify-center gap-1.5">
-              <Lock className="w-3.5 h-3.5" /> Pago 100% seguro vía tarjeta o transferencia
-            </p>
-            <p className="mt-2 text-xs text-slate-500 text-center">
-              ✅ Acceso inmediato después de la compra! ¿Finalizaste el pedido? Revisa tu e-mail y accede ahora mismo.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Guarantee */}
-      <section className="px-5 py-14 bg-white">
-        <div className="max-w-[900px] mx-auto text-center">
-          <div className="w-64 h-64 sm:w-72 sm:h-72 mx-auto mb-6 rounded-full bg-gradient-to-br from-[#facc15] to-[#f59e0b] flex items-center justify-center shadow-[0_20px_60px_-10px_rgba(250,204,21,0.55)] hover:scale-105 transition-transform duration-500">
-            <div className="w-56 h-56 sm:w-64 sm:h-64 rounded-full bg-white flex flex-col items-center justify-center border-[6px] border-[#facc15]">
-              <ShieldCheck className="w-16 h-16 sm:w-20 sm:h-20 text-[#16a34a]" />
-              <p className="font-black text-4xl sm:text-5xl leading-none mt-2">7 DÍAS</p>
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 mt-1">Garantía Total</p>
-            </div>
-          </div>
-          <p className="text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">Compra protegida</p>
-          <h2 className="font-black uppercase text-[clamp(28px,5.5vw,44px)] leading-tight mb-4">
-            Prueba el Kit sin Ningún Riesgo
-          </h2>
-          <p className="text-slate-600 leading-relaxed max-w-2xl mx-auto mb-6 text-[clamp(15px,3.6vw,18px)]">
-            Tienes <b>7 días completos</b> para explorar los +2.000 ejercicios, los 4 bonos y todo el método. Si sientes que no es para ti, por cualquier motivo, nos escribes un email y te devolvemos <b>hasta el último céntimo</b>.
-          </p>
-          <button
-            onClick={scrollToOffer}
-            className="w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
-          >
-            Empezar sin Riesgo
-          </button>
+          <NextSectionLink to="comparacion">
+            Ver qué cambia al preparar mis sesiones
+          </NextSectionLink>
         </div>
       </section>
 
       {/* Comparison */}
-      <section className="px-5 py-14">
+      <section
+        id="comparacion"
+        tabIndex={-1}
+        aria-labelledby="comparacion-title"
+        className="px-5 py-14"
+      >
         <div className="max-w-[1100px] mx-auto">
-          <h2 className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-10">
+          <h2
+            id="comparacion-title"
+            className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-10"
+          >
             La <span className="text-[#16a34a]">diferencia</span> en el campo
           </h2>
           <div className="grid md:grid-cols-2 gap-5">
@@ -686,14 +726,60 @@ function Index() {
               </ul>
             </div>
           </div>
+          <NextSectionLink to="garantia">Conocer la garantía de 7 días</NextSectionLink>
+        </div>
+      </section>
+
+      {/* Guarantee */}
+      <section
+        id="garantia"
+        tabIndex={-1}
+        aria-labelledby="garantia-title"
+        className="px-5 py-14 bg-white"
+      >
+        <div className="max-w-[900px] mx-auto text-center">
+          <div className="w-64 h-64 sm:w-72 sm:h-72 mx-auto mb-6 rounded-full bg-gradient-to-br from-[#facc15] to-[#f59e0b] flex items-center justify-center shadow-[0_20px_60px_-10px_rgba(250,204,21,0.55)] hover:scale-105 transition-transform duration-500">
+            <div className="w-56 h-56 sm:w-64 sm:h-64 rounded-full bg-white flex flex-col items-center justify-center border-[6px] border-[#facc15]">
+              <ShieldCheck className="w-16 h-16 sm:w-20 sm:h-20 text-[#16a34a]" />
+              <p className="font-black text-4xl sm:text-5xl leading-none mt-2">7 DÍAS</p>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 mt-1">
+                Garantía Total
+              </p>
+            </div>
+          </div>
+          <p className="text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">
+            Compra protegida
+          </p>
+          <h2
+            id="garantia-title"
+            className="font-black uppercase text-[clamp(28px,5.5vw,44px)] leading-tight mb-4"
+          >
+            Prueba el Kit sin Ningún Riesgo
+          </h2>
+          <p className="text-slate-600 leading-relaxed max-w-2xl mx-auto mb-6 text-[clamp(15px,3.6vw,18px)]">
+            Tienes <b>7 días completos</b> para explorar los +2.000 ejercicios, los 4 bonos y todo
+            el método. Si sientes que no es para ti, por cualquier motivo, nos escribes un email y
+            te devolvemos <b>hasta el último céntimo</b>.
+          </p>
+          <NextSectionLink to="preguntas">Resolver mis dudas antes de decidir</NextSectionLink>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="px-5 py-14 bg-white">
+      <section
+        id="preguntas"
+        tabIndex={-1}
+        aria-labelledby="preguntas-title"
+        className="px-5 py-14 bg-white"
+      >
         <div className="max-w-[820px] mx-auto">
-          <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">FAQ</p>
-          <h2 className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-10">
+          <p className="text-center text-[#16a34a] font-black uppercase tracking-widest text-xs mb-2">
+            FAQ
+          </p>
+          <h2
+            id="preguntas-title"
+            className="text-center font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-10"
+          >
             Preguntas <span className="text-[#16a34a]">frecuentes</span>
           </h2>
           <Accordion type="single" collapsible className="w-full">
@@ -702,36 +788,158 @@ function Index() {
                 <AccordionTrigger className="text-left font-bold text-base py-4 hover:no-underline">
                   {f.q}
                 </AccordionTrigger>
-                <AccordionContent className="text-slate-600 leading-relaxed pb-4">{f.a}</AccordionContent>
+                <AccordionContent className="text-slate-600 leading-relaxed pb-4">
+                  {f.a}
+                </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
-          <button
-            onClick={scrollToOffer}
-            className="mt-10 w-full max-w-[560px] mx-auto flex items-center justify-center gap-2 bg-[#16a34a] hover:bg-[#15803d] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)]"
+          <NextSectionLink to="oferta">Ver el precio y la oferta completa</NextSectionLink>
+        </div>
+      </section>
+
+      {/* Offer / pricing */}
+      <section
+        id="oferta"
+        tabIndex={-1}
+        aria-labelledby="oferta-title"
+        className="px-5 py-14 bg-gradient-to-b from-[#0a0a0a] to-[#0f172a] text-white"
+      >
+        <div className="max-w-[720px] mx-auto text-center">
+          <p className="text-[#facc15] font-black uppercase tracking-widest text-xs mb-2">
+            🔥 Precio Especial Solo Hoy
+          </p>
+          <h2
+            id="oferta-title"
+            className="font-black uppercase text-[clamp(26px,5vw,40px)] leading-tight mb-3"
           >
-            Quiero mi Kit Completo Hoy
-          </button>
+            Todo lo que has visto, <span className="text-[#facc15]">en un solo paquete</span>
+          </h2>
+          <p className="text-slate-300 mb-6">
+            Precio promocional válido <b className="text-white">solo por hoy</b>. Mañana vuelve al
+            valor normal, no dejes escapar esta oportunidad.
+          </p>
+
+          <div className="bg-white text-[#0f172a] rounded-3xl p-6 sm:p-8 text-left shadow-2xl border-4 border-[#facc15]">
+            <div className="bg-[#dc2626] text-white text-xs font-black uppercase tracking-widest inline-block px-3 py-1 rounded-full mb-3">
+              🔥 ¡78% DE DESCUENTO!
+            </div>
+            <h3 className="font-black text-2xl mb-1">Paquete Premium</h3>
+            <p className="text-sm text-slate-500">+2.000 entrenamientos + 4 bonos exclusivos</p>
+
+            <label className="block text-xs font-bold uppercase text-slate-500 mt-4 mb-1">
+              🌎 Elige tu país
+            </label>
+            <select className="w-full border-2 border-slate-200 rounded-xl px-3 py-2.5 font-semibold bg-white">
+              <option>🇲🇽 México</option>
+              <option>🇨🇴 Colombia</option>
+              <option>🇦🇷 Argentina</option>
+              <option>🇨🇱 Chile</option>
+              <option>🇵🇪 Perú</option>
+              <option>🇧🇷 Brasil</option>
+              <option>🇺🇾 Uruguay</option>
+              <option>🇧🇴 Bolivia</option>
+              <option>🇵🇾 Paraguay</option>
+              <option>🇪🇸 España</option>
+            </select>
+
+            <div className="my-5">
+              <p className="text-slate-500">
+                De <span className="line-through font-bold">$29,90</span> solo por hoy
+              </p>
+              <p className="font-black text-5xl text-[#16a34a] mt-1">
+                $6,50 <span className="text-2xl">USD</span>
+              </p>
+              <p className="text-sm font-bold text-[#dc2626] mt-1">
+                78% DESCUENTO · Ahorras $23,40
+              </p>
+              <p className="text-xs text-slate-500 mt-2">✅ Pago único · Acceso vitalicio</p>
+            </div>
+
+            <ul className="space-y-2 text-sm">
+              {[
+                "+2.000 entrenamientos organizados",
+                "Todas las posiciones",
+                "Todas las categorías",
+                "Entrenamientos técnicos, tácticos y preparación física",
+                "Acceso vitalicio e inmediato por e-mail",
+                "Actualizaciones semanales GRATIS",
+                "Garantía incondicional de 7 días",
+              ].map((li) => (
+                <li key={li} className="flex gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-[#16a34a] flex-shrink-0 mt-0.5" />
+                  <span>{li}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-5 border-t border-slate-200 pt-4">
+              <p className="text-xs font-black uppercase text-slate-500 mb-2">
+                🎁 Bonos exclusivos incluidos
+              </p>
+              {[
+                ["01", "Guía de Entrenamiento", 47],
+                ["02", "50 Ejercicios de Técnica Individual", 39],
+                ["03", "Pack de Circuitos de Preparación Física", 49],
+                ["04", "Bono Sorpresa Exclusivo", 45],
+              ].map(([n, t, p]) => (
+                <div
+                  key={n as string}
+                  className="flex items-center justify-between text-sm py-1.5 border-b border-slate-100 last:border-0 gap-2"
+                >
+                  <span className="min-w-0">
+                    <b>BONO {n}</b> · {t}
+                  </span>
+                  <span className="shrink-0 flex items-center gap-2">
+                    <span className="line-through text-slate-400 text-xs">${p}</span>
+                    <span className="bg-[#facc15] text-[#0a0a0a] font-black px-2 py-0.5 rounded-md text-xs">
+                      INCLUIDO
+                    </span>
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => goCheckout("offer")}
+              className="mt-6 w-full flex items-center justify-center gap-2 bg-[#15803d] hover:bg-[#166534] transition-colors text-white font-black uppercase text-[clamp(15px,4vw,20px)] py-5 px-6 rounded-2xl shadow-[0_10px_30px_-6px_rgba(22,163,74,0.55)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#15803d]"
+            >
+              Quiero el Paquete Premium
+            </button>
+            <p className="mt-3 text-xs text-slate-500 text-center flex items-center justify-center gap-1.5">
+              <Lock className="w-3.5 h-3.5" /> Pago 100% seguro vía tarjeta o transferencia
+            </p>
+            <p className="mt-2 text-xs text-slate-500 text-center">
+              ✅ Acceso inmediato después de la compra! ¿Finalizaste el pedido? Revisa tu e-mail y
+              accede ahora mismo.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Footer */}
       <footer className="px-5 py-10 bg-[#0a0a0a] text-slate-400 text-xs leading-relaxed">
         <div className="max-w-[900px] mx-auto text-center space-y-3">
-          <p className="font-black text-white uppercase tracking-widest">2000 Ejercicios de Fútbol</p>
-          <p>
-            Este sitio no forma parte del sitio web de Facebook o Facebook Inc. Además, este sitio NO está patrocinado
-            por Facebook de ninguna manera. FACEBOOK™ es una marca registrada de FACEBOOK, Inc.
+          <p className="font-black text-white uppercase tracking-widest">
+            2000 Ejercicios de Fútbol
           </p>
           <p>
-            Este sitio no forma parte del sitio web de Meta Platforms, Inc. o Instagram. Además, no está patrocinado ni
-            avalado por Meta™ ni Instagram™ de ninguna manera.
+            Este sitio no forma parte del sitio web de Facebook o Facebook Inc. Además, este sitio
+            NO está patrocinado por Facebook de ninguna manera. FACEBOOK™ es una marca registrada de
+            FACEBOOK, Inc.
           </p>
           <p>
-            Los resultados mencionados son ejemplos y no garantizan ganancias o resultados idénticos. Cada persona tiene
-            un compromiso, dedicación y esfuerzo individual.
+            Este sitio no forma parte del sitio web de Meta Platforms, Inc. o Instagram. Además, no
+            está patrocinado ni avalado por Meta™ ni Instagram™ de ninguna manera.
           </p>
-          <p className="pt-2">© {new Date().getFullYear()} 2000 Ejercicios de Fútbol · Todos los derechos reservados.</p>
+          <p>
+            Los resultados mencionados son ejemplos y no garantizan ganancias o resultados
+            idénticos. Cada persona tiene un compromiso, dedicación y esfuerzo individual.
+          </p>
+          <p className="pt-2">
+            © {new Date().getFullYear()} 2000 Ejercicios de Fútbol · Todos los derechos reservados.
+          </p>
         </div>
       </footer>
 
@@ -745,6 +953,6 @@ function Index() {
           alt=""
         />
       </noscript>
-    </div>
+    </main>
   );
 }

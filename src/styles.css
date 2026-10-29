@@ -5,8 +5,36 @@
 @custom-variant dark (&:is(.dark *));
 
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.football-reading-page section[id] {
+  scroll-margin-top: 1.5rem;
+}
+
+/* Hash links focus the section so keyboard readers continue from its heading. */
+.football-reading-page section[id]:focus {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .football-reading-page .animate-pulse,
+  .football-reading-page [class*="marquee"] {
+    animation: none;
+  }
 }
 
 /* Hide Lovable badge if it ever renders */
