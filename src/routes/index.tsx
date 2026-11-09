@@ -48,6 +48,16 @@ import featPasses from "@/assets/feature-passes.jpg";
 const CHECKOUT_URL = "https://pay.hotmart.com/G107438250J?checkoutMode=10";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "+2.000 Ejercicios de Fútbol | Biblioteca de Entrenamientos" },
+      { name: "description", content: "Biblioteca con más de 2.000 entrenamientos de fútbol organizados, actualizaciones y acceso inmediato por $6,50 USD." },
+      { property: "og:title", content: "+2.000 Ejercicios de Fútbol | Biblioteca de Entrenamientos" },
+      { property: "og:description", content: "Más de 2.000 entrenamientos organizados para aplicar, con actualizaciones y acceso inmediato por $6,50 USD." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
