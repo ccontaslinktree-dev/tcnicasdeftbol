@@ -65,6 +65,12 @@ function eid() {
   return `evt_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 }
 
+const TIKTOK_EVENT_MAP: Record<string, string> = {
+  PageView: "Pageview",
+  ViewContent: "ViewContent",
+  InitiateCheckout: "InitiateCheckout",
+};
+
 function fireEvent(name: string, value?: number) {
   if (typeof window === "undefined") return;
   const event_id = eid();
@@ -72,28 +78,55 @@ function fireEvent(name: string, value?: number) {
   window.fbq?.("track", name, value ? { value, currency: "USD" } : undefined, {
     eventID: event_id,
   });
-  // CAPI relay via edge function (dedup by event_id)
-  const supaUrl = import.meta.env.VITE_SUPABASE_URL;
-  const supaKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  if (!supaUrl || !supaKey) return;
+  // TikTok Pixel (browser) — dedups with the server event via event_id
+  const tiktokEvent = TIKTOK_EVENT_MAP[name] || name;
+  // @ts-expect-error ttq global
+  window.ttq?.("track", tiktokEvent, {
+    event_id,
+    ...(value ? { value, currency: "USD" } : {}),
+  });
   const getCookie = (k: string) => {
     const m = document.cookie.match(new RegExp("(^| )" + k + "=([^;]+)"));
     return m ? decodeURIComponent(m[2]) : undefined;
   };
-  fetch(`${supaUrl}/functions/v1/meta-capi`, {
+  // Meta CAPI relay via edge function (dedup by event_id)
+  const supaUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supaKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  if (supaUrl && supaKey) {
+    fetch(`${supaUrl}/functions/v1/meta-capi`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: supaKey,
+        Authorization: `Bearer ${supaKey}`,
+      },
+      body: JSON.stringify({
+        event_name: name,
+        event_id,
+        event_source_url: window.location.href,
+        user_agent: navigator.userAgent,
+        fbp: getCookie("_fbp"),
+        fbc: getCookie("_fbc"),
+        value,
+        currency: "USD",
+      }),
+      keepalive: true,
+    }).catch(() => {});
+  }
+  // TikTok Events API relay via server route (dedup by event_id)
+  fetch("/api/public/tiktok-events", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      apikey: supaKey,
-      Authorization: `Bearer ${supaKey}`,
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      event_name: name,
+      event: tiktokEvent,
       event_id,
       event_source_url: window.location.href,
       user_agent: navigator.userAgent,
-      fbp: getCookie("_fbp"),
-      fbc: getCookie("_fbc"),
+      ttp: getCookie("_ttp"),
+      ttclid:
+        getCookie("ttclid") ||
+        new URLSearchParams(window.location.search).get("ttclid") ||
+        undefined,
       value,
       currency: "USD",
     }),
