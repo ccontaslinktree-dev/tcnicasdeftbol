@@ -46,23 +46,31 @@ export const Route = createFileRoute("/api/public/tiktok-events")({
           }
 
           const payload = {
-            pixel_code: PIXEL_CODE,
-            event,
-            event_id,
-            timestamp: new Date().toISOString(),
-            context: {
-              page: { url: event_source_url },
-              user: {
-                user_agent:
-                  user_agent || request.headers.get("user-agent") || undefined,
-                ip,
-                ttp: ttp || undefined,
+            event_source: "web",
+            event_source_id: PIXEL_CODE,
+            data: [
+              {
+                event,
+                event_id,
+                event_time: Math.floor(Date.now() / 1000),
+                timestamp: new Date().toISOString(),
+                context: {
+                  page: { url: event_source_url },
+                  user: {
+                    user_agent:
+                      user_agent ||
+                      request.headers.get("user-agent") ||
+                      undefined,
+                    ip,
+                    ttp: ttp || undefined,
+                  },
+                  ad: ttclid ? { callback: ttclid } : undefined,
+                },
+                properties: Object.keys(properties).length
+                  ? properties
+                  : undefined,
               },
-              ad: ttclid ? { callback: ttclid } : undefined,
-            },
-            properties: Object.keys(properties).length
-              ? properties
-              : undefined,
+            ],
           };
 
           const res = await fetch(
