@@ -74,17 +74,35 @@ const TIKTOK_EVENT_MAP: Record<string, string> = {
 function fireEvent(name: string, value?: number) {
   if (typeof window === "undefined") return;
   const event_id = eid();
-  // @ts-expect-error fbq global
-  window.fbq?.("track", name, value ? { value, currency: "USD" } : undefined, {
-    eventID: event_id,
-  });
-  // TikTok Pixel (browser) — dedups with the server event via event_id
+  const pixels = window as Window & {
+    fbq?: (...args: unknown[]) => void;
+    ttq?: {
+      track?: (event: string, properties: Record<string, unknown>, options: { event_id: string }) => void;
+    };
+  };
+  // A blocked or failing pixel must never interrupt the page or checkout.
+  try {
+    if (typeof pixels.fbq === "function") {
+      pixels.fbq("track", name, value !== undefined ? { value, currency: "USD" } : undefined, {
+        eventID: event_id,
+      });
+    }
+  } catch {
+    // Continue with the remaining tracking channels.
+  }
+  // TikTok exposes a queue with methods, not a callable function.
   const tiktokEvent = TIKTOK_EVENT_MAP[name] || name;
-  // @ts-expect-error ttq global
-  window.ttq?.("track", tiktokEvent, {
-    event_id,
-    ...(value ? { value, currency: "USD" } : {}),
-  });
+  try {
+    if (typeof pixels.ttq?.track === "function") {
+      pixels.ttq.track(
+        tiktokEvent,
+        value !== undefined ? { value, currency: "USD" } : {},
+        { event_id },
+      );
+    }
+  } catch {
+    // Continue to the server relays even if the browser pixel fails.
+  }
   const getCookie = (k: string) => {
     const m = document.cookie.match(new RegExp("(^| )" + k + "=([^;]+)"));
     return m ? decodeURIComponent(m[2]) : undefined;
