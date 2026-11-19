@@ -35,8 +35,6 @@ import bonusSurprise from "@/assets/optimized/bonus-surprise.webp";
 import methodList from "@/assets/optimized/method-list.webp";
 import testimonial1 from "@/assets/optimized/testimonial-1.webp";
 import testimonial2 from "@/assets/testimonial-2.webp";
-import testimonial3 from "@/assets/testimonial-3.webp";
-import testimonial4 from "@/assets/optimized/testimonial-4.webp";
 
 import featFisico from "@/assets/optimized/feature-fisico.webp";
 import featTactico from "@/assets/optimized/feature-tactico.webp";
@@ -195,7 +193,7 @@ function PackagesLink({ dark = false }: { dark?: boolean }) {
   );
 }
 
-const testimonials = [testimonial1, testimonial2, testimonial3, testimonial4];
+const trainingImages = [testimonial1, testimonial2];
 
 const faqs = [
   {
@@ -598,8 +596,23 @@ function Index() {
             Mira <span className="text-[#16a34a]">quiénes ya están entrenando</span> con nosotros
           </h2>
           <p className="text-center text-slate-600 max-w-xl mx-auto mb-10">
-            Capturas reales de jugadores, entrenadores y padres que transformaron su juego.
+            Conversaciones con clientes que adquirieron la biblioteca y experiencias en video.
           </p>
+          <div className="grid sm:grid-cols-2 gap-5 max-w-[900px] mx-auto mb-10 items-start">
+            {[{ id: 1, width: 664 }, { id: 2, width: 616 }].map(({ id, width }) => (
+              <figure key={id} className="min-w-0 rounded-2xl overflow-hidden bg-black border border-slate-200 shadow-md">
+                <img
+                  src={`/media/conversacion-${id}.webp`}
+                  width={width}
+                  height={1262}
+                  alt={`Conversación ${id} con un cliente que adquirió la biblioteca de ejercicios`}
+                  className="block w-full h-auto"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+            ))}
+          </div>
           <div className="grid sm:grid-cols-2 gap-5 max-w-[720px] mx-auto mb-10">
             {[{ id: 1, height: 800 }, { id: 2, height: 768 }].map(({ id, height }) => (
               <figure key={id} className="min-w-0 rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-md">
@@ -626,18 +639,19 @@ function Index() {
               </figure>
             ))}
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {testimonials.map((src, i) => (
+          <p className="text-center text-slate-600 text-sm font-semibold mb-4">Imágenes de entrenamientos</p>
+          <div className="grid grid-cols-2 gap-3 max-w-[560px] mx-auto">
+            {trainingImages.map((src, i) => (
               <div
                 key={i}
                 className="rounded-2xl overflow-hidden shadow-md bg-white border border-slate-200 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
               >
                 <img
                   src={src}
-                  width={[320, 474, 461, 735][i]}
-                  height={[289, 315, 626, 490][i]}
-                  alt={`Testimonio ${i + 1}`}
-                  className="w-full h-full object-cover aspect-[3/4] transition-transform duration-500 hover:scale-105"
+                  width={[320, 474][i]}
+                  height={[289, 315][i]}
+                  alt={`Imagen de un entrenamiento de fútbol ${i + 1}`}
+                  className="w-full h-full object-cover aspect-[3/2] transition-transform duration-500 hover:scale-105"
                   loading="lazy"
                   decoding="async"
                 />
