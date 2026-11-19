@@ -1,42 +1,39 @@
 import { defineTool } from "@lovable.dev/mcp-js";
-import { z } from "zod";
-
+import { plans } from "@/lib/offer";
 export default defineTool({
   name: "get_offer",
   title: "Get current offer",
-  description: "Returns the current landing page offer: product name, pricing, discount, checkout URL, and value propositions.",
+  description: "Current Fútbol con Plan plans, inclusions and checkout availability.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: () => {
     const offer = {
-      product: "+2.000 Ejercicios de Fútbol — Biblioteca Completa",
-      description:
-        "Biblioteca con más de 2.000 entrenamientos de fútbol organizados por posición y categoría: físico, táctico, dribles, agilidad, chutes, pases y más. Acceso inmediato, listo para aplicar.",
-      price_usd: 6.5,
-      original_price_usd: 29.9,
-      discount_percent: 78,
-      urgency: "Solo Hoy",
-      checkout_url: "https://pay.hotmart.com/G107438250J?checkoutMode=10",
+      product: "Fútbol con Plan",
+      currency: "USD",
+      plans: [
+        {
+          ...plans.completo,
+          checkoutUrl: plans.completo.checkoutUrl || null,
+          includes: [
+            "Biblioteca de más de 2.000 ejercicios",
+            "Guía de Entrenamiento",
+            "50 Ejercicios de Técnica Individual",
+            "Circuitos de Preparación Física",
+            "Bono Sorpresa",
+          ],
+        },
+        {
+          ...plans.basico,
+          checkoutUrl: plans.basico.checkoutUrl || null,
+          includes: ["Solo la biblioteca de más de 2.000 ejercicios por posición y categoría"],
+        },
+      ],
       guarantee_days: 7,
-      delivery: "Acceso inmediato a la biblioteca online",
-      categories: [
-        "Entrenamientos físicos",
-        "Tácticos",
-        "Dribles",
-        "Agilidad",
-        "Estrategias",
-        "Pases",
-        "Chutes",
-      ],
-      bonuses: [
-        "Bonus Sorpresa",
-        "Estadísticas y control de rendimiento",
-        "Guías de entrenamiento",
-        "Control de balón",
-      ],
+      nutrition_module: "En preparación. No incluido. Sin fecha garantizada.",
+      planning_example: "Ejemplo orientativo de cuatro semanas; no es un plan personalizado.",
     };
     return {
-      content: [{ type: "text", text: JSON.stringify(offer, null, 2) }],
+      content: [{ type: "text" as const, text: JSON.stringify(offer, null, 2) }],
       structuredContent: offer,
     };
   },

@@ -78,14 +78,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "+2.000 Ejercicios de Fútbol — Método Completo para Jugadores y Entrenadores" },
-      { name: "description", content: "Accede a +2.000 ejercicios profesionales de fútbol por posición y categoría — método completo listo para aplicar en solo 15 minutos." },
-      { property: "og:title", content: "+2.000 Ejercicios de Fútbol — Método Completo para Jugadores y Entrenadores" },
-      { property: "og:description", content: "Accede a +2.000 ejercicios profesionales de fútbol por posición y categoría — método completo listo para aplicar en solo 15 minutos." },
+      { title: "Fútbol con Plan — Entrenadores y Jugadores" },
+      { name: "description", content: "Biblioteca de fútbol por posición y categoría. Plan Completo con 4 bonos por US$ 10 o biblioteca básica por US$ 6,50." },
+      { property: "og:title", content: "Fútbol con Plan — Entrenadores y Jugadores" },
+      { property: "og:description", content: "Biblioteca de fútbol por posición y categoría. Plan Completo con 4 bonos por US$ 10 o biblioteca básica por US$ 6,50." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "+2.000 Ejercicios de Fútbol — Método Completo para Jugadores y Entrenadores" },
-      { name: "twitter:description", content: "Accede a +2.000 ejercicios profesionales de fútbol por posición y categoría — método completo listo para aplicar en solo 15 minutos." },
+      { name: "twitter:title", content: "Fútbol con Plan — Entrenadores y Jugadores" },
+      { name: "twitter:description", content: "Biblioteca de fútbol por posición y categoría. Plan Completo con 4 bonos por US$ 10 o biblioteca básica por US$ 6,50." },
     ],
     links: [
       {

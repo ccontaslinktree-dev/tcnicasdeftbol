@@ -1,18 +1,25 @@
 import { defineTool } from "@lovable.dev/mcp-js";
-
+import { plans } from "@/lib/offer";
 export default defineTool({
   name: "get_checkout_link",
-  title: "Get checkout link",
-  description: "Returns the direct checkout URL where users can purchase the +2.000 Ejercicios de Fútbol library.",
+  title: "Get checkout links",
+  description: "Checkout availability for the two current Fútbol con Plan offers.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: () => ({
     content: [
       {
-        type: "text",
-        text: "Checkout: https://pay.hotmart.com/G107438250J?checkoutMode=10",
+        type: "text" as const,
+        text: JSON.stringify({
+          completo: plans.completo.checkoutUrl || null,
+          basico: plans.basico.checkoutUrl || null,
+          status: "New Hotmart checkout URLs pending configuration",
+        }),
       },
     ],
-    structuredContent: { checkout_url: "https://pay.hotmart.com/G107438250J?checkoutMode=10" },
+    structuredContent: {
+      completo: plans.completo.checkoutUrl || null,
+      basico: plans.basico.checkoutUrl || null,
+    },
   }),
 });
