@@ -1021,8 +1021,26 @@ function Index() {
             </p>
             <h3 className="font-black text-2xl mb-2">Plan Básico</h3>
             <p className="text-slate-600 text-sm leading-relaxed">
-              Más de 2.000 ejercicios organizados por posición y categoría. Incluye solo la
-              biblioteca, sin los 4 bonos del Completo.
+              Deja de empezar de cero. Encuentra ejercicios para tu posición y categoría y lleva
+              nuevas ideas a tu próxima sesión.
+            </p>
+            <ul className="mt-5 space-y-3 text-base text-slate-700 leading-relaxed">
+              {[
+                "Más de 2.000 ejercicios de fútbol en una biblioteca organizada",
+                "Por posición: portero, defensa, mediocampo y delantero",
+                "Categorías desde Sub-8 hasta Adulto",
+                "Técnica, táctica, pases, remates, regates y preparación física",
+                "Consulta desde tu celular, tablet o computadora",
+                "Acceso inmediato por e-mail y acceso vitalicio",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 shrink-0 text-[#15803d] mt-1" aria-hidden="true" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 text-sm font-semibold text-slate-600">
+              Incluye solo la biblioteca. Los 4 bonos pertenecen al Plan Completo.
             </p>
             <p className="font-black text-4xl text-[#15803d] mt-5">US$ 6,50</p>
             <p className="text-xs text-slate-500 mt-2">Pago único · Acceso digital</p>
@@ -1031,7 +1049,7 @@ function Index() {
               onClick={() => goCheckout("oferta-basico", "basico")}
               className="mt-5 w-full border-2 border-[#15803d] text-[#15803d] font-black text-base py-4 px-5 rounded-2xl hover:bg-green-50 transition-colors"
             >
-              Quiero la biblioteca básica
+              Quiero mis +2.000 ejercicios
             </button>
           </div>
         </div>
