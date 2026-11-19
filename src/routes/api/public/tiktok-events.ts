@@ -15,7 +15,7 @@ export const Route = createFileRoute("/api/public/tiktok-events")({
           if (!token) {
             return Response.json(
               { error: "missing_tiktok_config" },
-              { status: 500 },
+              { status: 200 },
             );
           }
 
@@ -88,11 +88,11 @@ export const Route = createFileRoute("/api/public/tiktok-events")({
             code?: number;
           };
           const ok = res.ok && json?.code === 0;
-          return Response.json({ ok, tiktok: json }, { status: ok ? 200 : 502 });
+          return Response.json({ ok, tiktok: json }, { status: 200 });
         } catch (e) {
           return Response.json(
             { error: e instanceof Error ? e.message : "unknown" },
-            { status: 500 },
+            { status: 200 },
           );
         }
       },
