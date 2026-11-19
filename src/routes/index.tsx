@@ -27,23 +27,23 @@ import {
   Flame,
   Star,
 } from "lucide-react";
-import heroProduct from "@/assets/hero-product.png";
-import bonus1 from "@/assets/bonus-1.jpg";
-import bonus2 from "@/assets/bonus-2.jpg";
-import bonus3 from "@/assets/bonus-3.jpg";
-import bonusSurprise from "@/assets/bonus-surprise.png";
-import methodList from "@/assets/method-list.jpg";
-import testimonial1 from "@/assets/testimonial-1.jpg";
+import heroProduct from "@/assets/optimized/hero-product.webp";
+import bonus1 from "@/assets/optimized/bonus-1.webp";
+import bonus2 from "@/assets/optimized/bonus-2.webp";
+import bonus3 from "@/assets/optimized/bonus-3.webp";
+import bonusSurprise from "@/assets/optimized/bonus-surprise.webp";
+import methodList from "@/assets/optimized/method-list.webp";
+import testimonial1 from "@/assets/optimized/testimonial-1.webp";
 import testimonial2 from "@/assets/testimonial-2.webp";
 import testimonial3 from "@/assets/testimonial-3.webp";
-import testimonial4 from "@/assets/testimonial-4.jpg";
-import previewAsset from "@/assets/preview.mov.asset.json";
-import featFisico from "@/assets/feature-fisico.jpg";
-import featTactico from "@/assets/feature-tactico.jpg";
-import featDribles from "@/assets/feature-dribles.jpg";
-import featAgilidad from "@/assets/feature-agilidad.jpg";
-import featChutes from "@/assets/feature-chutes.jpg";
-import featPasses from "@/assets/feature-passes.jpg";
+import testimonial4 from "@/assets/optimized/testimonial-4.webp";
+
+import featFisico from "@/assets/optimized/feature-fisico.webp";
+import featTactico from "@/assets/optimized/feature-tactico.webp";
+import featDribles from "@/assets/optimized/feature-dribles.webp";
+import featAgilidad from "@/assets/optimized/feature-agilidad.webp";
+import featChutes from "@/assets/optimized/feature-chutes.webp";
+import featPasses from "@/assets/optimized/feature-passes.webp";
 
 import { plans, type PlanId } from "@/lib/offer";
 
@@ -290,11 +290,14 @@ function Index() {
           </p>
           <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-black max-w-[520px] mx-auto">
             <video
-              src={previewAsset.url}
+              src="/media/preview-futbol.mp4"
+              poster="/media/preview-poster.jpg"
+              width={720}
+              height={634}
               aria-label="Vista previa de la biblioteca de ejercicios de fútbol"
               controls
               playsInline
-              preload="metadata"
+              preload="none"
               className="w-full aspect-[3/4] object-cover"
             />
           </div>
@@ -400,7 +403,15 @@ function Index() {
                 key={i}
                 className="relative shrink-0 w-[200px] sm:w-[280px] aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border-2 border-[#facc15]/30 transition-transform duration-300 hover:scale-105 active:scale-95"
               >
-                <img src={f.img} alt={f.t} className="w-full h-full object-cover" loading="lazy" />
+                <img
+                  src={f.img}
+                  width={800}
+                  height={1000}
+                  alt={f.t}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/70 to-transparent p-3 sm:p-4">
                   <p className="font-black text-white text-xs sm:text-base uppercase tracking-wide">
                     {f.t}
@@ -448,6 +459,7 @@ function Index() {
             width={1024}
             height={1536}
             loading="lazy"
+            decoding="async"
           />
 
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
@@ -523,6 +535,8 @@ function Index() {
                   <div className="overflow-hidden rounded-2xl bg-white">
                     <img
                       src={src}
+                      width={800}
+                      height={i === 0 ? 800 : 600}
                       alt={
                         [
                           "Organización de los ejercicios de fútbol",
@@ -533,6 +547,7 @@ function Index() {
                       }
                       className="w-full object-contain sm:object-cover transition-transform duration-500 hover:scale-[1.06] active:scale-95"
                       loading="lazy"
+                      decoding="async"
                     />
                   </div>
                 </CarouselItem>
@@ -625,9 +640,12 @@ function Index() {
               >
                 <img
                   src={src}
+                  width={[320, 474, 461, 735][i]}
+                  height={[289, 315, 626, 490][i]}
                   alt={`Testimonio ${i + 1}`}
                   className="w-full h-full object-cover aspect-[3/4] transition-transform duration-500 hover:scale-105"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
             ))}
@@ -692,9 +710,12 @@ function Index() {
                 <div className="overflow-hidden">
                   <img
                     src={b.img}
+                    width={800}
+                    height={600}
                     alt={b.t}
                     className="w-full aspect-[4/3] object-cover transition-transform duration-500 group-hover:scale-110"
                     loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <div className="p-5">

@@ -188,3 +188,59 @@ div[style*="Edit with Lovable"],
     color: var(--color-foreground);
   }
 }
+
+/* Readability: darker copy on light panels and bright copy on dark sections. */
+.football-reading-page .text-slate-500,
+.football-reading-page .text-slate-600,
+.football-reading-page .text-slate-700 {
+  color: oklch(0.34 0.025 255);
+}
+.football-reading-page .text-slate-400 {
+  color: oklch(0.43 0.025 255);
+}
+.football-reading-page .text-\[\#16a34a\] {
+  color: oklch(0.43 0.12 150);
+}
+.football-reading-page .text-\[\#15803d\] {
+  color: oklch(0.39 0.105 150);
+}
+.football-reading-page .text-slate-300,
+.football-reading-page footer.text-slate-400 {
+  color: oklch(0.9 0.012 255);
+}
+.football-reading-page .text-xs {
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.football-reading-page .text-sm {
+  font-size: 1rem;
+  line-height: 1.65;
+}
+.football-reading-page p,
+.football-reading-page li {
+  text-wrap: pretty;
+}
+.football-reading-page p.text-slate-500,
+.football-reading-page p.text-slate-600,
+.football-reading-page li.text-slate-700 {
+  font-weight: 500;
+}
+.football-reading-page video {
+  background: oklch(0.1 0 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .football-reading-page *,
+  .football-reading-page *::before,
+  .football-reading-page *::after {
+    transition-duration: 0s !important;
+  }
+}
+.football-reading-page [class~="bg-[#0a0a0a]"] .text-\[\#16a34a\] {
+  color: oklch(0.78 0.18 150);
+}
+.football-reading-page .group:hover .group-hover\:text-white {
+  color: oklch(1 0 0);
+}
+.football-reading-page .text-\[13px\] {
+  font-size: 1rem;
+}

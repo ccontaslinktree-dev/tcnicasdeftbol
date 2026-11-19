@@ -79,15 +79,28 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Fútbol con Plan — Entrenadores y Jugadores" },
-      { name: "description", content: "Biblioteca de fútbol por posición y categoría. Plan Completo con 4 bonos por US$ 10 o biblioteca básica por US$ 6,50." },
+      {
+        name: "description",
+        content:
+          "Biblioteca de fútbol por posición y categoría. Plan Completo con 4 bonos por US$ 10 o biblioteca básica por US$ 6,50.",
+      },
       { property: "og:title", content: "Fútbol con Plan — Entrenadores y Jugadores" },
-      { property: "og:description", content: "Biblioteca de fútbol por posición y categoría. Plan Completo con 4 bonos por US$ 10 o biblioteca básica por US$ 6,50." },
+      {
+        property: "og:description",
+        content:
+          "Biblioteca de fútbol por posición y categoría. Plan Completo con 4 bonos por US$ 10 o biblioteca básica por US$ 6,50.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Fútbol con Plan — Entrenadores y Jugadores" },
-      { name: "twitter:description", content: "Biblioteca de fútbol por posición y categoría. Plan Completo con 4 bonos por US$ 10 o biblioteca básica por US$ 6,50." },
+      {
+        name: "twitter:description",
+        content:
+          "Biblioteca de fútbol por posición y categoría. Plan Completo con 4 bonos por US$ 10 o biblioteca básica por US$ 6,50.",
+      },
     ],
     links: [
+      { rel: "preload", as: "image", href: "/media/preview-poster.jpg" },
       {
         rel: "stylesheet",
         href: appCss,
