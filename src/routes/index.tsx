@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -179,39 +179,17 @@ function goCheckout(source: string, plan: PlanId = "completo") {
   window.location.href = checkoutUrl.toString();
 }
 
-type ReadingStage =
-  | "plan"
-  | "biblioteca"
-  | "incluye"
-  | "metodo"
-  | "como-funciona"
-  | "testimonios"
-  | "bonos"
-  | "equipo"
-  | "comparacion"
-  | "garantia"
-  | "preguntas"
-  | "oferta";
-
-function NextSectionLink({
-  to,
-  children,
-  dark = false,
-}: {
-  to: ReadingStage;
-  children: ReactNode;
-  dark?: boolean;
-}) {
+function PackagesLink({ dark = false }: { dark?: boolean }) {
   return (
     <a
-      href={`#${to}`}
+      href="#oferta"
       className={`mt-8 w-full max-w-[560px] mx-auto flex items-center justify-center gap-3 rounded-2xl px-5 py-4 sm:py-5 text-center font-bold text-base sm:text-lg leading-snug transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#15803d] ${
         dark
           ? "bg-[#facc15] hover:bg-[#eab308] text-[#0a0a0a]"
           : "bg-[#15803d] hover:bg-[#166534] text-white"
       }`}
     >
-      <span>{children}</span>
+      <span>Ver paquetes y elegir mi acceso</span>
       <ArrowDown className="w-5 h-5 shrink-0" aria-hidden="true" />
     </a>
   );
@@ -305,9 +283,7 @@ function Index() {
             Mira la biblioteca por dentro. Después, elige el Completo por US$ 10 o el Básico por US$
             6,50.
           </p>
-          <NextSectionLink to="plan">
-            Descubrir cómo me ayuda a preparar mis entrenamientos
-          </NextSectionLink>
+          <PackagesLink />
         </div>
       </section>
 
@@ -353,9 +329,7 @@ function Index() {
               </div>
             ))}
           </div>
-          <NextSectionLink to="biblioteca">
-            Explorar los entrenamientos de la biblioteca
-          </NextSectionLink>
+          <PackagesLink />
         </div>
       </section>
 
@@ -423,9 +397,7 @@ function Index() {
         </div>
 
         <div className="max-w-[900px] mx-auto px-5 mt-8 sm:mt-10 text-center">
-          <NextSectionLink to="incluye" dark>
-            Ver todo lo que voy a recibir
-          </NextSectionLink>
+          <PackagesLink dark />
         </div>
       </section>
 
@@ -507,7 +479,7 @@ function Index() {
               </div>
             ))}
           </div>
-          <NextSectionLink to="metodo">Ver el material por dentro</NextSectionLink>
+          <PackagesLink />
         </div>
       </section>
 
@@ -556,9 +528,7 @@ function Index() {
             <CarouselPrevious className="left-2 sm:-left-12" aria-label="Ver material anterior" />
             <CarouselNext className="right-2 sm:-right-12" aria-label="Ver material siguiente" />
           </Carousel>
-          <NextSectionLink to="como-funciona">
-            Entender cómo se utiliza en cada sesión
-          </NextSectionLink>
+          <PackagesLink />
         </div>
       </section>
 
@@ -606,9 +576,7 @@ function Index() {
               </div>
             ))}
           </div>
-          <NextSectionLink to="testimonios">
-            Leer las experiencias de otros jugadores y entrenadores
-          </NextSectionLink>
+          <PackagesLink />
         </div>
       </section>
 
@@ -632,6 +600,32 @@ function Index() {
           <p className="text-center text-slate-600 max-w-xl mx-auto mb-10">
             Capturas reales de jugadores, entrenadores y padres que transformaron su juego.
           </p>
+          <div className="grid sm:grid-cols-2 gap-5 max-w-[720px] mx-auto mb-10">
+            {[{ id: 1, height: 800 }, { id: 2, height: 768 }].map(({ id, height }) => (
+              <figure key={id} className="min-w-0 rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-md">
+                <video
+                  src={`/media/testimonio-${id}.mp4`}
+                  poster={`/media/testimonio-${id}.jpg`}
+                  width={480}
+                  height={height}
+                  controls
+                  playsInline
+                  preload="none"
+                  aria-label={`Testimonio en video ${id}`}
+                  className="w-full aspect-[3/5] object-contain bg-black"
+                  onPlay={(event) => {
+                    const current = event.currentTarget;
+                    current.ownerDocument.querySelectorAll("video").forEach((video) => {
+                      if (video !== current) video.pause();
+                    });
+                  }}
+                />
+                <figcaption className="px-5 py-4 text-center text-slate-800 font-bold">
+                  Dale play y escucha su experiencia
+                </figcaption>
+              </figure>
+            ))}
+          </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {testimonials.map((src, i) => (
               <div
@@ -650,7 +644,7 @@ function Index() {
               </div>
             ))}
           </div>
-          <NextSectionLink to="bonos">Conocer los 4 bonos incluidos</NextSectionLink>
+          <PackagesLink />
         </div>
       </section>
 
@@ -738,7 +732,7 @@ function Index() {
               El Plan Completo incluye la biblioteca y los 4 bonos por US$ 10.
             </p>
           </div>
-          <NextSectionLink to="equipo">Conocer el enfoque de la biblioteca</NextSectionLink>
+          <PackagesLink />
         </div>
       </section>
 
@@ -779,9 +773,7 @@ function Index() {
               <p className="text-xs uppercase text-slate-500 font-bold">Acceso inmediato</p>
             </div>
           </div>
-          <NextSectionLink to="comparacion">
-            Ver qué cambia al preparar mis sesiones
-          </NextSectionLink>
+          <PackagesLink />
         </div>
       </section>
 
@@ -833,7 +825,7 @@ function Index() {
               </ul>
             </div>
           </div>
-          <NextSectionLink to="garantia">Conocer la garantía de 7 días</NextSectionLink>
+          <PackagesLink />
         </div>
       </section>
 
@@ -868,7 +860,7 @@ function Index() {
             el método. Si sientes que no es para ti, por cualquier motivo, nos escribes un email y
             te devolvemos <b>hasta el último céntimo</b>.
           </p>
-          <NextSectionLink to="preguntas">Resolver mis dudas antes de decidir</NextSectionLink>
+          <PackagesLink />
         </div>
       </section>
 
@@ -901,7 +893,7 @@ function Index() {
               </AccordionItem>
             ))}
           </Accordion>
-          <NextSectionLink to="oferta">Ver el precio y la oferta completa</NextSectionLink>
+          <PackagesLink />
         </div>
       </section>
 
