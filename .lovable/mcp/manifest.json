@@ -15,7 +15,7 @@
       {
         "name": "get_offer",
         "title": "Get current offer",
-        "description": "Returns the current landing page offer: product name, pricing, discount, checkout URL, and value propositions.",
+        "description": "Current Fútbol con Plan plans, inclusions and checkout availability.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -30,8 +30,8 @@
       },
       {
         "name": "get_checkout_link",
-        "title": "Get checkout link",
-        "description": "Returns the direct checkout URL where users can purchase the +2.000 Ejercicios de Fútbol library.",
+        "title": "Get checkout links",
+        "description": "Checkout availability for the two current Fútbol con Plan offers.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
