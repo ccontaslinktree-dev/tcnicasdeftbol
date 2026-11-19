@@ -13,7 +13,7 @@ export default defineTool({
         text: JSON.stringify({
           completo: plans.completo.checkoutUrl || null,
           basico: plans.basico.checkoutUrl || null,
-          status: "New Hotmart checkout URLs pending configuration",
+          status: plans.completo.checkoutUrl && plans.basico.checkoutUrl ? "available" : "pending",
         }),
       },
     ],
